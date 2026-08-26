@@ -1,0 +1,157 @@
+:root {
+    --devtools-panel-bg: #0a0f11;
+    --devtools-panel-border: #1e293b;
+    --devtools-panel-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --devtools-title-color: var(--jc-accent, #6fabc5);
+    --devtools-title-accent: var(--jc-accent, #6fabc5);
+    --devtools-label-color: #94a3b8;
+    --devtools-value-color: #e2e8f0;
+    --devtools-value-type: var(--jc-accent, #6fabc5);
+    --devtools-key-badge-bg: #1e293b;
+    --devtools-key-badge-color: #e2e8f0;
+    --devtools-key-desc: #e2e8f0;
+    --devtools-btn-border: #ef4444;
+    --devtools-btn-bg: rgba(239, 68, 68, 0.15);
+    --devtools-btn-color: #f87171;
+    --devtools-btn-hover-bg: rgba(239, 68, 68, 0.3);
+    --devtools-btn-hover-color: #fca5a5;
+    --devtools-btn-hover-border: #f87171;
+}
+
+.coords-ui-entity-laser-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 6px;
+    border: 1px solid var(--devtools-btn-border);
+    border-radius: 8px;
+    background: var(--devtools-btn-bg);
+    color: var(--devtools-btn-color);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.coords-ui-entity-laser-btn:hover {
+    background: var(--devtools-btn-hover-bg);
+    color: var(--devtools-btn-hover-color);
+    border-color: var(--devtools-btn-hover-border);
+}
+
+.entity-laser-ui {
+    position: fixed;
+    top: 50%;
+    left: 24px;
+    transform: translateY(-50%);
+    z-index: 1900;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.entity-laser-ui.hidden {
+    display: none !important;
+}
+
+.entity-laser-panel {
+    min-width: 220px;
+}
+
+.entity-laser-panel-inner {
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: var(--devtools-panel-bg);
+    border: 1px solid var(--devtools-panel-border);
+    box-shadow: var(--devtools-panel-shadow);
+}
+
+.entity-laser-panel-title {
+    margin: 0 0 10px 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--devtools-title-color);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.entity-laser-panel-title i {
+    font-size: 14px;
+    opacity: 0.95;
+}
+
+.entity-laser-panel-title-accent {
+    color: var(--devtools-title-accent);
+}
+
+.entity-laser-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.entity-laser-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.entity-laser-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--devtools-label-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.entity-laser-value {
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+    color: var(--devtools-value-color);
+}
+
+.entity-laser-value-type {
+    color: var(--devtools-value-type);
+}
+
+.entity-laser-controls .entity-laser-panel-title {
+    margin-bottom: 10px;
+}
+
+.entity-laser-keys {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    align-items: center;
+}
+
+.entity-laser-key-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--devtools-title-color);
+}
+
+.entity-laser-key-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--devtools-key-badge-bg);
+    color: var(--devtools-key-badge-color);
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.entity-laser-key-desc {
+    color: var(--devtools-key-desc);
+}

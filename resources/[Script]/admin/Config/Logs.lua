@@ -1,0 +1,98 @@
+Config.DiscordLogs = { -- Post your webhooks here so we can get the Discord logs
+    joins =  'YOUR_WEBHOOK',
+    take_capture = 'YOUR_WEBHOOK',
+    leaves = 'YOUR_WEBHOOK',
+    bans = 'YOUR_WEBHOOK',
+    unbans = 'YOUR_WEBHOOK',
+    admin_actions = 'YOUR_WEBHOOK',
+    chat_logs = 'YOUR_WEBHOOK',
+    kills = 'YOUR_WEBHOOK',
+    deaths = 'YOUR_WEBHOOK',
+    explosions = 'YOUR_WEBHOOK',
+    permissions = 'YOUR_WEBHOOK',
+    txadmin = 'YOUR_WEBHOOK',
+    resource_logs = 'YOUR_WEBHOOK'
+}
+
+Config.Logs = { -- Activate or deactivate as you wish which logs you want to be active or not.
+    joins =  true,
+    leaves = true,
+    bans = true,
+    unbans = true,
+    admin_actions = {
+        enable = true,
+        kick = true,
+        ban = true,
+        unban = true,
+        revive = true,
+        spectate = true,
+        take_capture = true,
+        change_skin = true,
+        assign_job = true,
+        bring = true,
+        return_player = true,
+        giveitems = true,
+        assign_gangs = true,
+        tp = true,
+        manage_money = true,
+        assing_admin = true,
+        freeze = true,
+        kill = true,
+        clean_inventory = true,
+        ck_player = true,
+        instancia = true,
+        spawn_vehicle = true,
+        add_vehicle = true,
+        remove_vehicle = true,
+        announcement = true,
+        noclip = true,
+        server_time = true,
+        godmode = true,
+        invisible = true,
+        staff_clothing = true,
+        tag_player = true,
+        delete_vehicle = true,
+        fix_vehicle = true,
+        tpm = true,
+        copy_coords = true,
+        tuning_vehicle = true,
+        change_password = true,
+        reset_admin_time = true
+    },
+    chat_logs = true,
+    kills = true,
+    deaths = true,
+    explosions = true,
+    permissions = true,
+    txadmin = {
+        enable = true,
+        restart = true,
+        dm = true,
+        revoke = true,
+        kick = true,
+        ban = true,
+        warn = true,
+        heal = true,
+        announcement = true,
+        whitelist = true,
+    },
+    resource_logs = true
+}
+
+Config.FunctionLogs = { -- Here you can configure the identifiers you want to be displayed when the logs are generated
+    panel_logs = {
+        discord = true,
+        steam = true,
+        license = true,
+        ip = false,
+        player_name = true
+    },
+    discord_logs = {
+        discord_id = true,
+        discord_mention = true,
+        steam = true,
+        license = true,
+        ip = true,
+        player_name = true
+    }
+}

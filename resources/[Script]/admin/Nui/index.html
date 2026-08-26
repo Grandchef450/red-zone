@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="./style/settings.css">
+    <link rel="stylesheet" href="./style/announcement.css">
+    <link rel="stylesheet" href="./style/devtools.css">
+</head>
+<body>
+    <div id="announcement-notification" class="announcement-notification" aria-hidden="true">
+        <div class="announcement-notification-card">
+            <span class="announcement-notification-icon"><i class="fa-solid fa-bullhorn"></i></span>
+            <div class="announcement-notification-text">
+                <h3 class="announcement-notification-title" data-i18n="announcement_title">Anuncio Administrativo</h3>
+                <p class="announcement-notification-desc" id="announcement-notification-desc"></p>
+            </div>
+        </div>
+    </div>
+    <div id="spectate-info-panel" class="spectate-info-panel hidden" aria-hidden="true">
+        <div class="spectate-info-card">
+            <h3 class="spectate-info-title" data-i18n="spectate_info_title"><i class="fa-solid fa-eye"></i> ESPECTATE INFO</h3>
+            <div class="spectate-info-row"><span class="spectate-info-label" data-i18n="spectate_name">Name</span><span class="spectate-info-value" id="spectate-info-name">—</span></div>
+            <div class="spectate-info-row"><span class="spectate-info-label" data-i18n="spectate_id">ID</span><span class="spectate-info-value" id="spectate-info-id">—</span></div>
+            <div class="spectate-info-row"><span class="spectate-info-label" data-i18n="spectate_job">Job</span><span class="spectate-info-value" id="spectate-info-job">—</span></div>
+            <div class="spectate-info-row"><span class="spectate-info-label" data-i18n="spectate_group">Group</span><span class="spectate-info-value" id="spectate-info-group">—</span></div>
+        </div>
+    </div>
+    <div id="tablet" class="hidden">
+        <div id="must-change-credentials-screen" class="login-screen hidden">
+            <div class="login-box">
+                <div class="login-left">
+                    <img class="login-logo" src="./img/logo.png" alt="Logo">
+                    <h1 class="login-server-name" id="must-change-server-name">Servidor</h1>
+                </div>
+                <div class="login-sep"></div>
+                <div class="login-right">
+                    <div class="login-form-header">
+                        <i class="fa-solid fa-users"></i>
+                        <h2 class="login-title" data-i18n="must_change_title">Nuevo usuario y contraseña</h2>
+                        <p class="login-subtitle" data-i18n="must_change_subtitle">Usuario y contraseña</p>
+                    </div>
+                    <form id="must-change-form" class="login-form">
+                        <label class="login-field-label" for="must-change-username" data-i18n="must_change_label_username">Username</label>
+                        <input type="text" id="must-change-username" class="login-input" data-i18n-placeholder="must_change_username_placeholder" placeholder="Nuevo usuario" autocomplete="username" required minlength="2">
+                        <label class="login-field-label" for="must-change-password" data-i18n="must_change_label_password">Password</label>
+                        <div class="login-password-wrap">
+                            <input type="password" id="must-change-password" class="login-input login-input-password" data-i18n-placeholder="must_change_password_placeholder" placeholder="Nueva contraseña" autocomplete="new-password" required minlength="4">
+                            <button type="button" id="must-change-toggle-password" class="login-toggle-password" title="Mostrar / Ocultar contraseña" aria-label="Mostrar contraseña">
+                                <i class="fa-solid fa-eye" id="must-change-password-icon"></i>
+                            </button>
+                        </div>
+                        <label class="login-field-label" for="must-change-password-confirm" data-i18n="must_change_label_confirm">Confirm password</label>
+                        <div class="login-password-wrap">
+                            <input type="password" id="must-change-password-confirm" class="login-input login-input-password" data-i18n-placeholder="must_change_confirm_placeholder" placeholder="Confirmar contraseña" autocomplete="new-password" required minlength="4">
+                        </div>
+                        <p id="must-change-error" class="login-error hidden"></p>
+                        <button type="submit" class="login-btn" data-i18n="must_change_btn">Guardar y continuar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="login-screen" class="login-screen">
+            <div class="login-box">
+                <div class="login-left">
+                    <img class="login-logo" src="./img/logo.png" alt="Logo">
+                    <h1 class="login-server-name" id="login-server-name">Servidor</h1>
+                </div>
+                <div class="login-sep"></div>
+                <div class="login-right">
+                    <div class="login-form-header">
+                        <i class="fa-solid fa-users"></i>
+                        <h2 class="login-title" data-i18n="login_title">Iniciar sesión</h2>
+                        <p class="login-subtitle" data-i18n="login_subtitle">Usuario y contraseña</p>
+                    </div>
+                    <form id="login-form" class="login-form">
+                        <input type="text" id="login-user" class="login-input" data-i18n-placeholder="login_user_placeholder" placeholder="Usuario" autocomplete="username" required>
+                        <div class="login-password-wrap">
+                            <input type="password" id="login-password" class="login-input login-input-password" data-i18n-placeholder="login_password_placeholder" placeholder="Contraseña" autocomplete="current-password" required>
+                            <button type="button" id="login-toggle-password" class="login-toggle-password" title="Mostrar / Ocultar contraseña" aria-label="Mostrar contraseña">
+                                <i class="fa-solid fa-eye" id="login-password-icon"></i>
+                            </button>
+                        </div>
+                        <label class="login-remember">
+                            <input type="checkbox" id="login-remember" class="login-checkbox">
+                            <span class="login-checkbox-box"><i class="fa-solid fa-check"></i></span>
+                            <span class="login-remember-text" data-i18n="login_remember">Recordar cuenta</span>
+                        </label>
+                        <p id="login-error" class="login-error hidden" data-i18n="login_error">Usuario o contraseña incorrectos</p>
+                        <button type="submit" class="login-btn" data-i18n="login_btn">Entrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="panel" class="panel hidden">
+        <div id="welcome-overlay" class="welcome-overlay hidden" aria-hidden="true">
+            <div class="welcome-overlay-inner">
+                <p class="welcome-overlay-text" id="welcome-overlay-text"></p>
+            </div>
+        </div>
+        <aside class="sidebar">
+            <div class="logo">
+                <img class="logo-icon" src="./img/logo.png" alt="Logo">
+                <span class="logo-text">ADMIN MENU</span>
+            </div>
+
+            <ul class="menu">
+                <li data-page="dashboard" class="active">
+                    <span class="icon"><i class="fa-solid fa-house"></i></span>
+                    <span class="label" data-i18n="menu_dashboard">Dashboard</span>
+                </li>
+                <li data-page="players">
+                    <span class="icon"><i class="fa-solid fa-user"></i></span>
+                    <span class="label" data-i18n="menu_players">Players</span>
+                </li>
+                <li data-page="map">
+                    <span class="icon"><i class="fa-solid fa-map-location-dot"></i></span>
+                    <span class="label" data-i18n="menu_map">Map</span>
+                </li>
+                <li data-page="logs">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="label" data-i18n="menu_logs">Logs</span>
+                </li>
+                <li data-page="groups">
+                    <span class="icon"><i class="fa-solid fa-users"></i></span>
+                    <span class="label" data-i18n="menu_groups">Groups</span>
+                </li>
+                <li data-page="bans">
+                    <span class="icon"><i class="fa-solid fa-ban"></i></span>
+                    <span class="label" data-i18n="menu_bans">Bans</span>
+                </li>
+                <li data-page="estadisticas">
+                    <span class="icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <span class="label" data-i18n="menu_estadisticas">Estadísticas</span>
+                </li>
+                <li data-page="terminal">
+                    <span class="icon"><i class="fa-solid fa-terminal"></i></span>
+                    <span class="label" data-i18n="menu_terminal">Terminal</span>
+                </li>
+            </ul>
+            <div class="sidebar-bottom">
+                <button type="button" class="sidebar-nav-item" data-page="settings" title="Settings">
+                    <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                    <span class="label" data-i18n="menu_settings">Settings</span>
+                </button>
+                <button type="button" id="btn-logout" class="logout-btn" title="Cerrar sesión">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="logout-label" data-i18n="logout_label">Cerrar sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div id="dashboard" class="page active">
+                <section class="dashboard-section">
+                    <h2 class="dashboard-section-title"><i class="fa-solid fa-house"></i> <span data-i18n="dashboard_home">Home</span></h2>
+                    <div class="dashboard-stats">
+                        <button type="button" class="dashboard-stat-card dashboard-stat-card-btn" id="dashboard-stat-online" data-scroll-target="dashboard-activity-chart">
+                            <div class="dashboard-stat-row">
+                                <span class="dashboard-stat-icon-wrap"><i class="fa-solid fa-users"></i></span>
+                                <div class="dashboard-stat-block">
+                                    <span class="dashboard-stat-value" id="stat-online">0</span>
+                                    <span class="dashboard-stat-label" data-i18n="dashboard_current_online">Current online</span>
+                                </div>
+                            </div>
+                        </button>
+                        <button type="button" class="dashboard-stat-card dashboard-stat-card-btn" id="dashboard-stat-admins" data-scroll-target="dashboard-staff-list">
+                            <div class="dashboard-stat-row">
+                                <span class="dashboard-stat-icon-wrap"><i class="fa-solid fa-crown"></i></span>
+                                <div class="dashboard-stat-block">
+                                    <span class="dashboard-stat-value" id="stat-admins">0</span>
+                                    <span class="dashboard-stat-label" data-i18n="dashboard_online_admins">Online admins</span>
+                                </div>
+                            </div>
+                        </button>
+                        <div class="dashboard-stat-card">
+                            <div class="dashboard-stat-row">
+                                <span class="dashboard-stat-icon-wrap"><i class="fa-solid fa-user-group"></i></span>
+                                <div class="dashboard-stat-block">
+                                    <span class="dashboard-stat-value" id="stat-total-players">0</span>
+                                    <span class="dashboard-stat-label" data-i18n="dashboard_total_players">Total Players</span>
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="dashboard-stat-card">
+                            <div class="dashboard-stat-row">
+                                <span class="dashboard-stat-icon-wrap"><i class="fa-solid fa-ban"></i></span>
+                                <div class="dashboard-stat-block">
+                                    <span class="dashboard-stat-value" id="stat-bans">0</span>
+                                    <span class="dashboard-stat-label" data-i18n="dashboard_bans_count">Bans count</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-section">
+                    <div class="dashboard-actions-header">
+                        <h2 class="dashboard-section-title">
+                            <span class="dashboard-actions-dots" aria-hidden="true">
+                                <span></span><span></span><span></span>
+                                <span></span><span></span><span></span>
+                                <span></span><span></span><span></span>
+                            </span>
+                            <span data-i18n="dashboard_actions">Actions</span></h2>
+                        <button type="button" class="dashboard-btn-primary" id="btn-open-kick-actions"><i class="fa-solid fa-external-link"></i> <span data-i18n="dashboard_open_admin_menu">Open Admin Menu</span></button>
+                    </div>
+                    <div class="dashboard-actions-grid">
+                        <button type="button" class="dashboard-action-btn" data-action="announcements"><i class="fa-solid fa-bullhorn"></i><span data-i18n="dashboard_announcements">Announcements</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="noclip"><i class="fa-solid fa-shoe-prints"></i><span data-i18n="dashboard_noclip">Noclip</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="servertime"><i class="fa-solid fa-clock"></i><span data-i18n="dashboard_server_time">Server time</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="godmode"><i class="fa-solid fa-user-shield"></i><span data-i18n="dashboard_godmode">God mode</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="invisibility"><i class="fa-solid fa-eye-slash"></i><span data-i18n="dashboard_invisibility">Invisibility</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="staffclothing"><i class="fa-solid fa-shirt"></i><span data-i18n="dashboard_staff_clothing">Staff Clothing</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="tags"><i class="fa-solid fa-tag"></i><span data-i18n="dashboard_tags">Tags</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="admintag"><i class="fa-solid fa-id-badge"></i><span data-i18n="dashboard_admin_tag">Admin Tag</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="deletevehicle"><i class="fa-solid fa-trash"></i><span data-i18n="dashboard_delete_vehicle">Delete vehicle</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="fixvehicle"><i class="fa-solid fa-wrench"></i><span data-i18n="dashboard_fix_vehicle">Fix vehicle</span></button>
+                        <button type="button" class="dashboard-action-btn" data-action="infiniteammo"><i class="fa-solid fa-gun"></i><span data-i18n="dashboard_infinite_ammo">Infinite Ammo</span></button>
+                    </div>
+                </section>
+
+                <section class="dashboard-section dashboard-bottom">
+                    <div class="dashboard-activity" id="dashboard-activity-chart">
+                        <h2 class="dashboard-section-title"><i class="fa-solid fa-chart-column"></i> <span data-i18n="dashboard_staff_time_chart">Tiempo de todo el staff por día</span></h2>
+                        <p class="dashboard-activity-desc" data-i18n="dashboard_staff_time_desc">Suma del tiempo que todo el staff ha pasado administrando cada día del mes actual</p>
+                        <div class="dashboard-activity-placeholder" id="dashboard-activity-chart-inner" data-i18n="dashboard_loading">Cargando...</div>
+                    </div>
+                    <div class="dashboard-staff">
+                        <h2 class="dashboard-section-title"><i class="fa-solid fa-crown"></i> <span data-i18n="dashboard_staff_list">Staff list</span></h2>
+                        <div class="dashboard-staff-list" id="dashboard-staff-list">
+                            <div class="dashboard-staff-placeholder" data-i18n="dashboard_connect_data">Conectar datos</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="players" class="page players-page">
+                <section class="players-section" id="players-list-view">
+                    <h2 class="dashboard-section-title"><i class="fa-solid fa-user"></i> <span data-i18n="players_title">Players</span></h2>
+                    <div class="players-toolbar">
+                        <div class="players-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass players-search-icon"></i>
+                            <input type="text" id="players-search" class="players-search-input" data-i18n-placeholder="players_search_placeholder" placeholder="Search by ID or name..." autocomplete="off">
+                        </div>
+                        <div class="players-filter-btns" id="players-filter-btns" role="group" aria-label="Filter players">
+                            <span class="players-filter-pill players-filter-pill-hover" id="players-filter-pill-hover" aria-hidden="true"></span>
+                            <span class="players-filter-pill" id="players-filter-pill" aria-hidden="true"></span>
+                            <button type="button" class="players-filter-btn active" data-filter="all" data-i18n="players_filter_all">ALL</button>
+                            <button type="button" class="players-filter-btn" data-filter="online" data-i18n="players_filter_online">ONLINE</button>
+                            <button type="button" class="players-filter-btn" data-filter="offline" data-i18n="players_filter_offline">OFFLINE</button>
+                        </div>
+                    </div>
+                    <div class="players-list-wrap">
+                        <ul class="players-list" id="players-list"></ul>
+                        <div class="players-list-placeholder hidden" id="players-list-placeholder" data-i18n="players_no_players">No hay jugadores</div>
+                    </div>
+                </section>
+                <div id="player-detail-view" class="player-detail-view hidden" aria-hidden="true">
+                <div class="player-detail-panel">
+                    <aside class="player-detail-sidebar">
+                        <button type="button" class="player-detail-back" id="player-detail-back" aria-label="Volver"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="player-detail-avatar-wrap">
+                            <div class="player-detail-avatar player-detail-avatar-no-photo" id="player-detail-avatar"><i class="fa-solid fa-user player-detail-avatar-fallback-icon" id="player-detail-avatar-fallback-icon" aria-hidden="true"></i></div>
+                            <button type="button" class="player-detail-avatar-notes-btn player-detail-fn-btn" data-player-action="notes" aria-label="Notes"><i class="fa-solid fa-note-sticky"></i></button>
+                        </div>
+                        <div class="player-detail-name-wrap">
+                            <span class="player-detail-name" id="player-detail-name">—</span>
+                            <span class="player-detail-id-badge" id="player-detail-id-badge">#0</span>
+                        </div>
+                        <div class="player-detail-fields">
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-user"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_first_name">First name</span><span class="player-detail-field-value" id="player-detail-firstname">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-id-card"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_last_name">Last name</span><span class="player-detail-field-value" id="player-detail-lastname">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-briefcase"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_current_job">Current job</span><span class="player-detail-field-value" id="player-detail-job">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-ranking-star"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_job_rank">Job rank</span><span class="player-detail-field-value" id="player-detail-job-grade">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-building"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_organization">Organization</span><span class="player-detail-field-value" id="player-detail-organization">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-sack-dollar"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_money">Money</span><span class="player-detail-field-value" id="player-detail-money">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-building-columns"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_bank">Bank balance</span><span class="player-detail-field-value" id="player-detail-bank">—</span></div></div>
+                            <div class="player-detail-field"><span class="player-detail-field-icon"><i class="fa-solid fa-crown"></i></span><div class="player-detail-field-content"><span class="player-detail-field-label" data-i18n="player_detail_group">Group</span><span class="player-detail-field-value" id="player-detail-group">—</span></div></div>
+                        </div>
+                    </aside>
+                    <div class="player-detail-main">
+                        <section class="player-detail-section">
+                            <h3 class="player-detail-section-title"><i class="fa-solid fa-sliders"></i> <span data-i18n="player_detail_functions">Functions</span></h3>
+                            <div class="player-detail-functions-grid">
+                                <button type="button" class="player-detail-fn-btn" data-player-action="spectate" id="player-detail-btn-spectate"><i class="fa-solid fa-eye"></i><span data-i18n="player_spectate">Spectate player</span></button>
+                                <button type="button" class="player-detail-fn-btn player-detail-fn-btn-spectate-stop hidden" id="player-detail-btn-stop-spectate" data-player-action="stopSpectate"><i class="fa-solid fa-eye-slash"></i><span data-i18n="player_stop_spectate">Stop spectate</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="capture"><i class="fa-solid fa-camera"></i><span data-i18n="player_take_capture">Take capture</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="skin"><i class="fa-solid fa-shirt"></i><span data-i18n="player_change_skin">Change skin</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="job"><i class="fa-solid fa-briefcase"></i><span data-i18n="player_assign_job">Assign job</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="bring"><i class="fa-solid fa-hand-holding"></i><span data-i18n="player_bring">Bring here</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="return"><i class="fa-solid fa-arrow-rotate-left"></i><span data-i18n="player_return">Return player</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="items"><i class="fa-solid fa-box"></i><span data-i18n="player_give_items">Inventario</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="gang"><i class="fa-solid fa-people-group"></i><span data-i18n="player_assign_gang">Assign gang</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="goto"><i class="fa-solid fa-location-crosshairs"></i><span data-i18n="player_teleport_to">Teleport to player</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="revive"><i class="fa-solid fa-heart-pulse"></i><span data-i18n="player_revive">Revive</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="money"><i class="fa-solid fa-wallet"></i><span data-i18n="player_manage_money">Manage money</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="admin"><i class="fa-solid fa-crown"></i><span data-i18n="player_assign_admin">Assign admin</span></button>
+                                <button type="button" class="player-detail-fn-btn player-detail-fn-btn-freeze" data-player-action="freeze"><i class="fa-solid fa-snowflake"></i><span data-i18n="player_freeze">Freeze</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="kill"><i class="fa-solid fa-skull"></i><span data-i18n="player_kill">Kill</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="clearinv"><i class="fa-solid fa-trash"></i><span data-i18n="player_clear_inventory">Clear inventory</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="ck"><i class="fa-solid fa-user-xmark"></i><span data-i18n="player_ck">CK Player</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="instancia"><i class="fa-solid fa-cube"></i><span data-i18n="player_instancia">Instancia</span></button>
+                                <button type="button" class="player-detail-fn-btn" data-player-action="spawnvehicle"><i class="fa-solid fa-car-side"></i><span data-i18n="player_spawn_vehicle">Spawn vehicle</span></button>
+                                <button type="button" class="player-detail-fn-btn player-detail-fn-btn-ban" data-player-action="ban"><i class="fa-solid fa-ban"></i><span data-i18n="player_ban">Ban from server</span></button>
+                                <button type="button" class="player-detail-fn-btn player-detail-fn-btn-kick" data-player-action="kick"><i class="fa-solid fa-right-from-bracket"></i><span data-i18n="player_kick">Kick from server</span></button>
+                            </div>
+                        </section>
+                        <div class="player-detail-section-row">
+                            <section class="player-detail-section player-detail-section-half">
+                                <h3 class="player-detail-section-title"><i class="fa-solid fa-house"></i> <span data-i18n="player_properties">Properties</span></h3>
+                                <div class="player-detail-table-wrap">
+                                    <table class="player-detail-table">
+                                        <thead><tr><th data-i18n="player_apartments">Appartments</th><th data-i18n="player_house_number">House number</th></tr></thead>
+                                        <tbody id="player-detail-properties-tbody"></tbody>
+                                    </table>
+                                </div>
+                            </section>
+                            <section class="player-detail-section player-detail-section-half">
+                                <h3 class="player-detail-section-title"><i class="fa-solid fa-car"></i> <span data-i18n="player_vehicles">Vehicles</span><button type="button" class="player-detail-section-title-add" id="player-detail-add-vehicle-btn" title="Añadir vehículo al garaje" aria-label="Añadir vehículo al garaje"><i class="fa-solid fa-plus"></i></button></h3>
+                                <div class="player-detail-table-wrap player-detail-vehicles-wrap">
+                                    <table class="player-detail-table player-detail-table-vehicles-head">
+                                        <thead><tr><th data-i18n="player_vehicle_name">Vehicle name</th><th data-i18n="player_plate_number">Plate number</th><th data-i18n="player_parking">Parking</th><th class="player-detail-table-th-action"></th></tr></thead>
+                                    </table>
+                                    <div class="player-detail-vehicles-scroll">
+                                        <table class="player-detail-table player-detail-table-vehicles-body">
+                                            <tbody id="player-detail-vehicles-tbody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div id="map" class="page map-page">
+                <div class="map-layout">
+                    <div class="map-area">
+                        <div id="map-leaflet"></div>
+                        <aside class="map-player-list" id="map-player-list-panel">
+                            <button type="button" class="map-player-list-header" id="map-player-list-toggle" aria-expanded="false" aria-controls="map-player-list">
+                                <i class="fa-solid fa-users map-player-list-icon"></i>
+                                <span class="map-player-list-label" data-i18n="map_online_players">Online player list</span>
+                                <i class="fa-solid fa-chevron-down map-player-list-chevron" aria-hidden="true"></i>
+                            </button>
+                            <div class="map-player-list-inner" id="map-player-list" role="region" aria-label="Lista de jugadores"></div>
+                        </aside>
+                    </div>
+                </div>
+                <div id="map-screen-viewer-overlay" class="map-screen-viewer-overlay hidden" aria-hidden="true">
+                    <div class="map-screen-viewer-modal">
+                        <div class="map-screen-viewer-header">
+                            <h3 class="map-screen-viewer-title" id="map-screen-viewer-title">[ID] Player</h3>
+                            <span class="map-screen-viewer-live hidden" id="map-screen-viewer-live" aria-label="En directo" data-i18n="map_live"><i class="fa-solid fa-circle"></i> LIVE</span>
+                            <button type="button" class="map-screen-viewer-close" id="map-screen-viewer-close" title="Cerrar" data-i18n="map_screen_viewer_close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="map-screen-viewer-frame" id="map-screen-viewer-frame"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="logs" class="page logs-page">
+                <section class="logs-section">
+                    <h2 class="dashboard-section-title"><i class="fa-solid fa-list"></i> <span data-i18n="logs_title">Logs</span></h2>
+                    <div class="logs-toolbar">
+                        <div class="logs-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass logs-search-icon"></i>
+                            <input type="text" id="logs-search" class="logs-search-input" data-i18n-placeholder="logs_search_placeholder" placeholder="Buscar en logs..." autocomplete="off">
+                        </div>
+                        <select id="logs-type-select" class="logs-type-select" data-i18n-aria-label="logs_type_select_aria" aria-label="Tipo de log">
+                            <option value="all" data-i18n="logs_type_all">Todos los Logs</option>
+                        </select>
+                    </div>
+                    <div class="logs-list-wrap">
+                        <div class="logs-list" id="logs-list"></div>
+                        <div class="logs-list-placeholder hidden" id="logs-list-placeholder" data-i18n="logs_no_logs">No hay logs para mostrar</div>
+                    </div>
+                    <div class="logs-pagination hidden" id="logs-pagination">
+                        <button type="button" class="logs-pagination-btn" id="logs-pagination-prev" aria-label="Página anterior" data-i18n="logs_prev_page"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span class="logs-pagination-info" id="logs-pagination-info" data-i18n="logs_page_info">Página 1 de 1</span>
+                        <button type="button" class="logs-pagination-btn" id="logs-pagination-next" aria-label="Página siguiente" data-i18n="logs_next_page"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </section>
+            </div>
+            <div id="groups" class="page groups-page">
+                <section class="groups-section">
+                    <div class="groups-header">
+                        <h2 class="dashboard-section-title"><i class="fa-solid fa-users"></i> <span data-i18n="groups_title">Groups</span></h2>
+                        <button type="button" class="groups-btn-create" id="groups-btn-create"><i class="fa-solid fa-plus"></i> <span data-i18n="groups_create">Crear grupo</span></button>
+                    </div>
+                    <p class="groups-perms-summary" id="groups-perms-summary" data-i18n="groups_perms_summary">Permisos configurados: 0/0</p>
+                    <div class="groups-list" id="groups-list"></div>
+                </section>
+            </div>
+            <div id="bans" class="page bans-page">
+                <section class="bans-section">
+                    <h2 class="dashboard-section-title"><i class="fa-solid fa-ban"></i> <span data-i18n="bans_title">Bans</span></h2>
+                    <div class="bans-toolbar">
+                        <div class="bans-search-actions">
+                            <div class="bans-search-wrap">
+                                <i class="fa-solid fa-magnifying-glass bans-search-icon"></i>
+                                <input type="text" id="bans-search" class="bans-search-input" data-i18n-placeholder="bans_search_placeholder" placeholder="Buscar por nombre o identificador..." autocomplete="off">
+                            </div>
+                            <button type="button" class="bans-add-offline-btn" id="bans-add-offline-btn" data-i18n-title="bans_add_offline" title="Ban offline">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="bans-filter-btns" id="bans-filter-btns" role="group" data-i18n-aria-label="bans_filter_aria" aria-label="Filtrar baneos">
+                            <span class="bans-filter-pill bans-filter-pill-hover" id="bans-filter-pill-hover" aria-hidden="true"></span>
+                            <span class="bans-filter-pill" id="bans-filter-pill" aria-hidden="true"></span>
+                            <button type="button" class="bans-filter-btn active" data-filter="all" data-i18n="bans_filter_all">ALL</button>
+                            <button type="button" class="bans-filter-btn" data-filter="permanent" data-i18n="bans_filter_permanent">PERMANENT</button>
+                            <button type="button" class="bans-filter-btn" data-filter="date" data-i18n="bans_filter_date">DATE</button>
+                        </div>
+                    </div>
+                    <div class="bans-list-wrap">
+                        <div class="bans-list" id="bans-list"></div>
+                        <div class="bans-list-placeholder hidden" id="bans-list-placeholder">
+                            <span class="bans-list-placeholder-icon" aria-hidden="true"><i class="fa-solid fa-ban"></i></span>
+                            <span class="bans-list-placeholder-text" id="bans-list-placeholder-text" data-i18n="bans_no_bans">No hay baneos</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="terminal" class="page terminal-page">
+                <div class="terminal-layout">
+                    <section class="terminal-console-section">
+                        <h2 class="terminal-section-title" data-i18n="terminal_console"><i class="fa-solid fa-terminal"></i> Console</h2>
+                        <div class="terminal-console-wrap">
+                            <div class="terminal-output" id="terminalOutput"></div>
+                            <div class="terminal-input-wrap">
+                                <span class="terminal-prompt">$</span>
+                                <input type="text" id="terminalInput" class="terminal-input" data-i18n-placeholder="terminal_enter_command" placeholder="Enter command..." autocomplete="off" />
+                            </div>
+                        </div>
+                    </section>
+                    <section class="terminal-resources-section">
+                        <div class="terminal-resources-header">
+                            <h2 class="terminal-section-title" data-i18n="terminal_resources"><i class="fa-solid fa-cube"></i> Resources</h2>
+                        </div>
+                        <div class="terminal-resources-toolbar">
+                            <div class="terminal-resources-search-wrap">
+                                <i class="fa-solid fa-search terminal-resources-search-icon"></i>
+                                <input type="text" id="terminalResourcesSearch" class="terminal-resources-search-input" data-i18n-placeholder="terminal_search_resources" placeholder="Search resources..." autocomplete="off" />
+                            </div>
+                            <button type="button" class="terminal-refresh-btn" id="terminal-refresh-resources" title="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                        <div class="terminal-resources-list-wrap">
+                            <div class="terminal-resources-list" id="terminalResourcesList"></div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div id="estadisticas" class="page estadisticas-page">
+                <section class="estadisticas-section">
+                    <h2 class="dashboard-section-title"><i class="fa-solid fa-chart-line"></i> <span data-i18n="stats_title">Estadísticas del servidor</span></h2>
+                    <div class="estadisticas-grid">
+                        <div class="estadisticas-card estadisticas-economy">
+                            <h3 class="estadisticas-card-title"><i class="fa-solid fa-sack-dollar"></i> <span data-i18n="stats_economy">Economía</span></h3>
+                            <div class="estadisticas-economy-total">
+                                <span class="estadisticas-economy-total-label" data-i18n="stats_economy_total">Total economía (todos los jugadores)</span>
+                                <span class="estadisticas-economy-total-value" id="stat-economy-total">0</span>
+                            </div>
+                            <div class="estadisticas-top-money">
+                                <h4 class="estadisticas-subtitle" data-i18n="stats_top_money">Top 6 jugadores con más dinero</h4>
+                                <ul class="estadisticas-top-money-list" id="stat-top-money-list"></ul>
+                            </div>
+                        </div>
+                        <div class="estadisticas-stack">
+                            <div class="estadisticas-card estadisticas-reports">
+                                <h3 class="estadisticas-card-title"><i class="fa-solid fa-flag"></i> <span data-i18n="stats_reports">Reportes</span></h3>
+                                <div id="stat-reports-placeholder" class="estadisticas-reports-placeholder" data-i18n="stats_reports_not_detected">jc_reports no detectado</div>
+                                <div id="stat-reports-box" class="estadisticas-reports-box hidden">
+                                    <div class="estadisticas-reports-row"><span data-i18n="stats_total">Total</span><strong id="stat-reports-total">0</strong></div>
+                                    <div class="estadisticas-reports-row"><span data-i18n="stats_open">Abiertos</span><strong id="stat-reports-open">0</strong></div>
+                                    <div class="estadisticas-reports-row"><span data-i18n="stats_closed">Cerrados</span><strong id="stat-reports-closed">0</strong></div>
+                                    <div class="estadisticas-reports-row"><span data-i18n="stats_today">Hoy</span><strong id="stat-reports-today">0</strong></div>
+                                </div>
+                            </div>
+                            <div class="estadisticas-card estadisticas-jobs">
+                                <h3 class="estadisticas-card-title"><i class="fa-solid fa-briefcase"></i> <span data-i18n="stats_services">Servicios conectados</span></h3>
+                                <p class="estadisticas-jobs-desc" data-i18n="stats_services_desc">Personal en servicio actualmente conectado al servidor. Se muestra el número de jugadores por cada trabajo</p>
+
+                                <div class="estadisticas-jobs-grid">
+                                    <div class="estadisticas-job-pill" id="stat-job-police"><i class="fa-solid fa-shield-halved"></i><span data-i18n="stats_job_police">Policía</span><strong id="stat-job-police-n">0</strong></div>
+                                    <div class="estadisticas-job-pill" id="stat-job-ems"><i class="fa-solid fa-truck-medical"></i><span data-i18n="stats_job_ems">EMS</span><strong id="stat-job-ems-n">0</strong></div>
+                                    <div class="estadisticas-job-pill" id="stat-job-mechanic"><i class="fa-solid fa-wrench"></i><span data-i18n="stats_job_mechanic">Mecánico</span><strong id="stat-job-mechanic-n">0</strong></div>
+                                    <div class="estadisticas-job-pill" id="stat-job-taxi"><i class="fa-solid fa-taxi"></i><span data-i18n="stats_job_taxi">Taxi</span><strong id="stat-job-taxi-n">0</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estadisticas-card estadisticas-resources">
+                            <h3 class="estadisticas-card-title"><i class="fa-solid fa-cube"></i> <span data-i18n="stats_resources">Recursos</span></h3>
+                            <div class="estadisticas-resources-alert hidden" id="stat-resources-alert"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="stats_resources_alert">Muchos recursos cargados</span> (<span id="stat-resources-alert-count">0</span>)</div>
+                            <div class="estadisticas-resources-meta" id="stat-resources-meta"><span id="stat-resources-count">0</span> <span data-i18n="stats_resources_plural">recursos</span></div>
+                            <div class="estadisticas-resources-search-wrap">
+                                <input type="text" id="stat-resources-search" class="estadisticas-resources-search" data-i18n-placeholder="stats_search_resource" placeholder="Buscar recurso..." autocomplete="off">
+                            </div>
+                            <div class="estadisticas-resources-list-wrap">
+                                <ul class="estadisticas-resources-list" id="stat-resources-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="estadisticas-players-chart-card">
+                        <div class="estadisticas-players-chart-header">
+                            <div>
+                                <h3 class="estadisticas-players-chart-title" data-i18n="stats_players_chart">Jugadores conectados por hora</h3>
+                                <p class="estadisticas-players-chart-subtitle" id="stat-players-subtitle" data-i18n="stats_players_chart_subtitle">Conteo por hora durante los últimos 7 días</p>
+                            </div>
+                            <div class="estadisticas-players-chart-range-wrap">
+                                <select id="stat-players-range" class="estadisticas-players-chart-range" data-i18n-aria-label="stats_range_days" aria-label="Rango de días">
+                                    <option value="1" data-i18n="stats_last_24h">Últimas 24 horas</option>
+                                    <option value="7" selected data-i18n="stats_last_7_days">Últimos 7 días</option>
+                                    <option value="30" data-i18n="stats_last_30_days">Últimos 30 días</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="estadisticas-players-chart-stats">
+                            <div class="estadisticas-players-chart-stat">
+                                <span class="estadisticas-players-chart-stat-label" data-i18n="stats_max_connected">Máximo conectados</span>
+                                <strong class="estadisticas-players-chart-stat-value" id="stat-players-max">0</strong>
+                            </div>
+                            <div class="estadisticas-players-chart-stat">
+                                <span class="estadisticas-players-chart-stat-label" data-i18n="stats_avg_connected">Promedio conectados</span>
+                                <strong class="estadisticas-players-chart-stat-value" id="stat-players-avg">0</strong>
+                            </div>
+                        </div>
+                        <div class="estadisticas-players-chart-wrap">
+                            <canvas id="stat-players-chart"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="settings" class="page settings-page">
+                <section class="settings-section">
+                    <h2 class="dashboard-section-title"><i class="fa-solid fa-gear"></i> <span data-i18n="settings_title">Settings</span></h2>
+                    <div class="settings-layout">
+                        <div class="settings-card settings-card-perfil">
+                            <h3 class="settings-card-title"><i class="fa-solid fa-user"></i> <span data-i18n="settings_profile">Perfil</span></h3>
+                            <p class="settings-card-desc" data-i18n="settings_profile_desc">Aquí puedes cambiar tu avatar y nombre de perfil</p>
+                            <div class="settings-row settings-profile-row">
+                                <div class="settings-avatar-wrap" id="settings-avatar-wrap" data-i18n-title="settings_avatar_click_title" title="Clic para cambiar avatar">
+                                    <img id="settings-avatar-img" class="settings-avatar-img hidden" src="" alt="Avatar">
+                                    <span id="settings-avatar-placeholder" class="settings-avatar-placeholder"><i class="fa-solid fa-user"></i></span>
+                                </div>
+                                <div class="settings-profile-fields">
+                                    <div class="settings-row settings-profile-name-row">
+                                        <label class="settings-label" data-i18n="settings_profile_name">Nombre de perfil</label>
+                                        <span class="settings-value-wrap">
+                                            <span class="settings-value" id="settings-profile-name">—</span>
+                                            <button type="button" class="admin-detail-edit-icon" id="settings-edit-username-btn" data-i18n-title="admin_detail_change_username" data-i18n-aria-label="admin_detail_change_username" title="Change username" aria-label="Change username"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        </span>
+                                    </div>
+                                    <div id="settings-change-username-wrap" class="settings-change-username-wrap hidden">
+                                        <input type="text" id="settings-new-username" class="settings-input" data-i18n-placeholder="admin_detail_new_username" placeholder="New username" autocomplete="username">
+                                        <p id="settings-username-error" class="settings-password-error hidden"></p>
+                                        <div class="settings-change-username-actions">
+                                            <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="settings-username-cancel-btn"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">Cancel</span></button>
+                                            <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-btn" id="settings-username-save-btn"><i class="fa-solid fa-floppy-disk"></i><span data-i18n="save">Save</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="settings-row settings-password-row">
+                                <label class="settings-label" data-i18n="settings_password">Contraseña</label>
+                                <div class="settings-password-wrap">
+                                    <input type="password" id="settings-password-display" class="settings-input settings-input-password" value="" placeholder="••••••••" readonly>
+                                    <button type="button" id="settings-toggle-password" class="settings-toggle-password" data-i18n-title="settings_show_hide_password" title="Mostrar / Ocultar contraseña" aria-label="Mostrar contraseña">
+                                        <i class="fa-solid fa-eye-slash" id="settings-password-icon"></i>
+                                    </button>
+                                </div>
+                                <div class="settings-password-actions">
+                                    <p class="settings-forgot-text" data-i18n="settings_forgot_password">¿Has olvidado tu contraseña? ¡Puedes cambiarla haciendo clic en el botón de cambiar contraseña!</p>
+                                    <button type="button" id="settings-change-password-btn" class="groups-modal-btn groups-modal-btn-confirm settings-btn-inline" data-i18n="settings_change_password">Cambiar contraseña</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-right-column">
+                            <div class="settings-card settings-card-time">
+                                <h3 class="settings-card-title"><i class="fa-solid fa-clock"></i> <span data-i18n="settings_admin_time">Tiempo administrando el servidor</span></h3>
+                                <div class="settings-row">
+                                    <span class="settings-value settings-time-value" id="settings-admin-time">—</span>
+                                </div>
+                            </div>
+                            <div class="settings-card settings-card-rango">
+                                <h3 class="settings-card-title"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="settings_admin_rank">Rango de administración</span></h3>
+                                <div class="settings-row">
+                                    <span class="settings-value settings-rango-value" id="settings-rango">—</span>
+                                </div>
+                            </div>
+                            <div class="settings-card settings-card-commands">
+                                <h3 class="settings-card-title"><i class="fa-solid fa-terminal"></i> <span data-i18n="settings_commands">Comandos útiles</span></h3>
+                                <p class="settings-card-desc" data-i18n="settings_commands_desc">Comandos administrativos de uso frecuente en el servidor.</p>
+                                <div class="settings-commands-list">
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/adminpanel</code><span class="settings-command-desc" data-i18n="settings_cmd_adminpanel_desc">Abre el panel de administración</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/kickactions</code><span class="settings-command-desc" data-i18n="settings_cmd_kickactions_desc">Menú de acciones rápidas (noclip, TPM, invisibilidad, etc.)</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/dev</code><span class="settings-command-desc" data-i18n="settings_cmd_coords_desc">Muestra tus coordenadas actuales</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/car [modelo]</code><span class="settings-command-desc" data-i18n="settings_cmd_car_desc">Spawnear un vehículo</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/dv</code><span class="settings-command-desc" data-i18n="settings_cmd_dv_desc">Eliminar el vehículo más cercano</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/bring [id]</code><span class="settings-command-desc" data-i18n="settings_cmd_bring_desc">Traer a un jugador a tu posición</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/goto [id]</code><span class="settings-command-desc" data-i18n="settings_cmd_goto_desc">Ir a la posición de un jugador</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/noclip</code><span class="settings-command-desc" data-i18n="settings_cmd_noclip_desc">Activar o desactivar modo noclip</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/revive [id]</code><span class="settings-command-desc" data-i18n="settings_cmd_revive_desc">Revivir a un jugador</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/heal [id]</code><span class="settings-command-desc" data-i18n="settings_cmd_heal_desc">Curar a un jugador</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/clearinv [id]</code><span class="settings-command-desc" data-i18n="settings_cmd_clearinv_desc">Vaciar el inventario de un jugador</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/giveitem [id] [item] [cantidad]</code><span class="settings-command-desc" data-i18n="settings_cmd_giveitem_desc">Dar un objeto a un jugador</span></div>
+                                    <div class="settings-command-item"><code class="settings-command-cmd">/setjob [id] [trabajo] [grado]</code><span class="settings-command-desc" data-i18n="settings_cmd_setjob_desc">Establecer el trabajo de un jugador</span></div>
+                                </div>
+                            </div>
+                            <div class="settings-card settings-card-esp">
+                                <div class="settings-esp-header">
+                                    <h3 class="settings-card-title settings-esp-title"><i class="fa-solid fa-tag"></i> <span data-i18n="settings_esp_tags">ESP – Tags</span></h3>
+                                    <div class="settings-esp-distance-block">
+                                        <div class="settings-esp-distance-label-row">
+                                            <span class="settings-esp-distance-label" data-i18n="settings_esp_distance">Distancia ESP</span>
+                                            <span class="settings-esp-distance-value" id="settings-tags-distancia-display">600 m</span>
+                                        </div>
+                                        <input type="range" id="settings-tags-distancia" class="settings-esp-distance-range" min="50" max="2000" step="10" value="600">
+                                    </div>
+                                </div>
+                                <div class="settings-tags-grid">
+                                    <div class="settings-tag-item">
+                                        <div class="settings-toggle-row">
+                                            <span class="settings-toggle-label" data-i18n="settings_esp_lines">Líneas</span>
+                                            <label class="groups-toggle-wrap">
+                                                <input type="checkbox" id="settings-tags-lineas" class="groups-toggle-input">
+                                                <span class="groups-toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <p class="settings-tag-desc" data-i18n="settings_esp_lines_desc">Muestra líneas desde tu posición hasta cada jugador.</p>
+                                    </div>
+                                    <div class="settings-tag-item">
+                                        <div class="settings-toggle-row">
+                                            <span class="settings-toggle-label" data-i18n="settings_esp_boxes">Cajas</span>
+                                            <label class="groups-toggle-wrap">
+                                                <input type="checkbox" id="settings-tags-cajas" class="groups-toggle-input">
+                                                <span class="groups-toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <p class="settings-tag-desc" data-i18n="settings_esp_boxes_desc">Dibuja una caja 3D alrededor de cada jugador.</p>
+                                    </div>
+                                    <div class="settings-tag-item">
+                                        <div class="settings-toggle-row">
+                                            <span class="settings-toggle-label" data-i18n="settings_esp_names">Nombres</span>
+                                            <label class="groups-toggle-wrap">
+                                                <input type="checkbox" id="settings-tags-nombres" class="groups-toggle-input">
+                                                <span class="groups-toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <p class="settings-tag-desc" data-i18n="settings_esp_names_desc">Muestra el nombre del jugador encima de su cabeza.</p>
+                                    </div>
+                                    <div class="settings-tag-item">
+                                        <div class="settings-toggle-row">
+                                            <span class="settings-toggle-label" data-i18n="settings_esp_info">Info</span>
+                                            <label class="groups-toggle-wrap">
+                                                <input type="checkbox" id="settings-tags-info" class="groups-toggle-input">
+                                                <span class="groups-toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <p class="settings-tag-desc" data-i18n="settings_esp_info_desc">Muestra información extra como ID, distancia o salud.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-colors-panel">
+                        <h3 class="settings-colors-title"><i class="fa-solid fa-palette settings-colors-desc-icon"></i> <span data-i18n="settings_interface_color">Color de la interfaz</span></h3>
+                        <p class="settings-colors-desc" data-i18n="settings_interface_color_desc">Elige como quieres que se vea el estilo del panel administrativo</p>
+                        <input type="hidden" id="settings-color-primary-hex" value="#6fabc5">
+                        <input type="hidden" id="settings-color-secondary-hex" value="#334155">
+                        <input type="hidden" id="settings-color-tertiary-hex" value="#1e293b">
+                        <div class="settings-colors-grid" id="settings-colors-grid">
+                            <button type="button" class="settings-color-swatch selected" data-color="#6fabc5" data-default="true" data-i18n-title="settings_color_default_title" title="#6fabc5 (por defecto)"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#dc2626" title="#dc2626"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#ef4444" title="#ef4444"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#f43f5e" title="#f43f5e"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#f87171" title="#f87171"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#fb7185" title="#fb7185"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#be185d" title="#be185d"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#9d174d" title="#9d174d"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#ec4899" title="#ec4899"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#f472b6" title="#f472b6"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#c026d3" title="#c026d3"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#86198f" title="#86198f"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#d946ef" title="#d946ef"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#e879f9" title="#e879f9"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#c2410c" title="#c2410c"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#ea580c" title="#ea580c"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#f97316" title="#f97316"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#fb923c" title="#fb923c"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#ca8a04" title="#ca8a04"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#eab308" title="#eab308"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#f59e0b" title="#f59e0b"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#fbbf24" title="#fbbf24"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#facc15" title="#facc15"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#65a30d" title="#65a30d"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#84cc16" title="#84cc16"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#a3e635" title="#a3e635"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#16a34a" title="#16a34a"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#22c55e" title="#22c55e"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#15803d" title="#15803d"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#4ade80" title="#4ade80"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#10b981" title="#10b981"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#34d399" title="#34d399"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#134e4a" title="#134e4a"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0f766e" title="#0f766e"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0d9488" title="#0d9488"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#14b8a6" title="#14b8a6"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#2dd4bf" title="#2dd4bf"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#06b6d4" title="#06b6d4"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0891b2" title="#0891b2"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#155e75" title="#155e75"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#22d3ee" title="#22d3ee"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#67e8f9" title="#67e8f9"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#5eead4" title="#5eead4"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#99f6e4" title="#99f6e4"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0c4a6e" title="#0c4a6e"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0369a1" title="#0369a1"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0284c7" title="#0284c7"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#2563eb" title="#2563eb"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#1d4ed8" title="#1d4ed8"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0ea5e9" title="#0ea5e9"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#38bdf8" title="#38bdf8"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#7dd3fc" title="#7dd3fc"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#bae6fd" title="#bae6fd"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#6fabc5" title="#6fabc5"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#3730a3" title="#3730a3"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#4f46e5" title="#4f46e5"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#6366f1" title="#6366f1"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#818cf8" title="#818cf8"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#a5b4fc" title="#a5b4fc"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#5b21b6" title="#5b21b6"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#7c3aed" title="#7c3aed"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#8b5cf6" title="#8b5cf6"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#a78bfa" title="#a78bfa"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#c4b5fd" title="#c4b5fd"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#a855f7" title="#a855f7"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#c084fc" title="#c084fc"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#1c1917" title="#1c1917"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#0f172a" title="#0f172a"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#1e293b" title="#1e293b"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#334155" title="#334155"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#44403c" title="#44403c"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#475569" title="#475569"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#57534e" title="#57534e"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#64748b" title="#64748b"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#78716c" title="#78716c"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#94a3b8" title="#94a3b8"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#cbd5e1" title="#cbd5e1"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#e2e8f0" title="#e2e8f0"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#e5e7eb" title="#e5e7eb"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#f1f5f9" title="#f1f5f9"></button>
+                            <button type="button" class="settings-color-swatch" data-color="#ffffff" title="#ffffff"></button>
+                        </div>
+                    </div>
+                    <div class="settings-language-panel">
+                        <h3 class="settings-colors-title"><i class="fa-solid fa-globe settings-colors-desc-icon"></i> <span data-i18n="settings_language">Language</span></h3>
+                        <p class="settings-colors-desc" data-i18n="settings_language_desc">Choose the language for the admin panel interface.</p>
+                        <select id="settings-language-select" class="settings-language-select">
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="it">Italiano</option>
+                            <option value="pt">Português</option>
+                        </select>
+                    </div>
+                    <div class="settings-actions">
+                        <button type="button" id="settings-save-btn" class="groups-modal-btn groups-modal-btn-confirm settings-save-btn"><i class="fa-solid fa-check"></i> <span data-i18n="settings_save">Save configuration</span></button>
+                    </div>
+                </section>
+                <div id="settings-avatar-modal" class="groups-modal hidden" aria-hidden="true">
+                    <div class="groups-modal-backdrop"></div>
+                    <div class="groups-modal-box">
+                        <h3 class="groups-modal-title" data-i18n="settings_avatar_modal_title">Avatar</h3>
+                        <label class="groups-modal-label" data-i18n="settings_avatar_modal_url_label">Enlace de la imagen</label>
+                        <input type="url" id="settings-avatar-url-input" class="groups-input" data-i18n-placeholder="settings_avatar_modal_url_placeholder" placeholder="https://..." autocomplete="off">
+<div class="groups-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel" id="settings-avatar-modal-cancel" data-i18n="cancel">Cancelar</button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm" id="settings-avatar-modal-confirm" data-i18n="save">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+        </main>
+        </div>
+    </div>
+
+    <div id="groups-modal-create" class="groups-modal groups-modal-outside hidden" aria-hidden="true">
+        <div class="groups-modal-backdrop"></div>
+        <div class="groups-modal-box groups-modal-box-wide">
+            <h3 class="groups-modal-title"><i class="fa-solid fa-user-plus"></i> <span data-i18n="groups_modal_create_title">Crear nuevo grupo</span></h3>
+            <div class="groups-create-row">
+                <div class="groups-create-field">
+                    <label class="groups-modal-label" data-i18n="groups_modal_group_name">Nombre del grupo</label>
+                    <input type="text" id="groups-input-name" class="groups-input" placeholder="ej: moderador, vip, helper..." maxlength="64">
+                </div>
+                <div class="groups-create-field groups-create-field-color">
+                    <label class="groups-modal-label" data-i18n="groups_modal_group_color">Color del grupo</label>
+                    <div class="groups-color-wrap">
+                        <div class="groups-color-trigger-wrap">
+                            <div id="groups-color-preview" class="groups-color-preview" title="Color del grupo"></div>
+                            <div id="groups-color-dropdown" class="groups-color-dropdown hidden">
+                                <hex-color-picker id="groups-hex-picker"></hex-color-picker>
+                            </div>
+                        </div>
+                        <input type="text" id="groups-input-color-hex" class="groups-input groups-input-hex" placeholder="#6fabc5" maxlength="7" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div id="groups-create-perms" class="groups-perms-block"></div>
+            <div class="groups-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel" id="groups-create-cancel" data-i18n="cancel">Cancelar</button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm" id="groups-create-confirm" data-i18n="save">Guardar</button>
+            </div>
+        </div>
+    </div>
+    <div id="groups-modal-edit" class="groups-modal groups-modal-outside hidden" aria-hidden="true">
+        <div class="groups-modal-backdrop"></div>
+        <div class="groups-modal-box groups-modal-box-wide">
+            <div class="groups-edit-modal-header ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-users-gear"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="groups-modal-title" id="groups-edit-title" data-i18n="groups_modal_edit_title">Editar grupo</h3>
+                    <p class="ban-modal-desc" data-i18n="groups_modal_edit_desc">Configura qué secciones del panel puede ver este grupo.</p>
+                </div>
+                <div class="groups-edit-color-in-header">
+                    <label class="groups-modal-label" data-i18n="groups_modal_group_color">Color del grupo</label>
+                    <div class="groups-color-wrap">
+                        <div class="groups-color-trigger-wrap">
+                            <div id="groups-edit-color-preview" class="groups-color-preview" title="Color del grupo"></div>
+                            <div id="groups-edit-color-dropdown" class="groups-color-dropdown hidden">
+                                <hex-color-picker id="groups-edit-hex-picker"></hex-color-picker>
+                            </div>
+                        </div>
+                        <input type="text" id="groups-edit-input-color-hex" class="groups-input groups-input-hex" placeholder="#6fabc5" maxlength="7" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="groups-edit-grupo">
+            <div id="groups-edit-perms" class="groups-perms-block"></div>
+            <div class="groups-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel" id="groups-edit-cancel" data-i18n="cancel">Cancelar</button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm" id="groups-edit-save" data-i18n="save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-group-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-trash"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="groups_delete_confirm_title">Eliminar grupo</h3>
+                    <p class="ban-modal-desc" data-i18n="groups_delete_confirm_desc">Esta acción no se puede deshacer.</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone" id="delete-group-confirm-message" data-i18n="groups_delete_confirm_message">¿Estás seguro de que quieres eliminar permanentemente el grupo?</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="delete-group-confirm-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="delete-group-confirm-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-change-password-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header ban-modal-header-spaced">
+                <span class="ban-modal-icon"><i class="fa-solid fa-key"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="settings_change_password_modal_title">Cambiar contraseña</h3>
+                    <p class="ban-modal-desc" data-i18n="settings_change_password_modal_desc">Cambia tu contraseña actual, si no recuerdas tu contraseña contacta con el owner</p>
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="settings_current_password">Contraseña actual</label>
+            <input type="password" id="settings-modal-current-password" class="ban-modal-input" data-i18n-placeholder="settings_current_password" placeholder="Contraseña actual" autocomplete="off">
+            <label class="ban-modal-label" data-i18n="settings_new_password">Nueva contraseña</label>
+            <input type="password" id="settings-modal-new-password" class="ban-modal-input" data-i18n-placeholder="settings_new_password" placeholder="Nueva contraseña" autocomplete="new-password">
+            <label class="ban-modal-label" data-i18n="settings_repeat_password">Repetir nueva contraseña</label>
+            <input type="password" id="settings-modal-repeat-password" class="ban-modal-input" data-i18n-placeholder="settings_repeat_password" placeholder="Repetir nueva contraseña" autocomplete="new-password">
+            <p id="settings-password-error" class="settings-password-error hidden"></p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="settings-modal-password-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="settings-modal-password-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_change_btn">CAMBIAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-detail-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header admin-detail-modal-header">
+                <div class="admin-detail-header-main">
+                    <span class="ban-modal-icon"><i class="fa-solid fa-user-shield"></i></span>
+                    <div class="ban-modal-header-text">
+                        <h3 class="ban-modal-title" data-i18n="admin_detail_title">Información del admin</h3>
+                        <p class="ban-modal-desc" data-i18n="admin_detail_desc">Detalle del administrador</p>
+                    </div>
+                </div>
+                <div class="admin-detail-header-actions">
+                    <button type="button" class="admin-detail-reset-time-btn hidden" id="admin-detail-reset-time-btn" data-i18n-title="admin_detail_reset_time_title" data-i18n-aria-label="admin_detail_reset_time_title" title="" aria-label=""><i class="fa-solid fa-rotate-left"></i></button>
+                    <button type="button" class="admin-detail-logout-session-btn hidden" id="admin-detail-logout-session-btn" data-i18n-title="admin_detail_logout_session_title" data-i18n-aria-label="admin_detail_logout_session_title" title="" aria-label=""><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+            <div class="admin-detail-body">
+                <div class="admin-detail-row"><span class="admin-detail-label" data-i18n="admin_detail_name">Nombre</span><span id="admin-detail-name" class="admin-detail-value">—</span></div>
+                <div class="admin-detail-row"><span class="admin-detail-label" data-i18n="spectate_id">ID</span><span id="admin-detail-id" class="admin-detail-value">—</span></div>
+                <div class="admin-detail-row"><span class="admin-detail-label" data-i18n="admin_detail_connected_time">Tiempo conectado</span><span id="admin-detail-connected" class="admin-detail-value">—</span></div>
+                <div class="admin-detail-row"><span class="admin-detail-label" data-i18n="admin_detail_total_time">Tiempo total administrando</span><span id="admin-detail-total-time" class="admin-detail-value admin-detail-total-time">—</span></div>
+                <div class="admin-detail-section admin-detail-chart-section">
+                    <div class="admin-detail-chart-header">
+                        <span class="admin-detail-chart-title"><i class="fa-solid fa-chart-line"></i> <span data-i18n="admin_detail_time_per_day">Tiempo por día</span></span>
+                        <span class="admin-detail-chart-legend"><span class="admin-detail-chart-legend-color"></span> <span data-i18n="admin_detail_usage_legend">Uso (min/h)</span></span>
+                    </div>
+                    <div id="admin-detail-daily-chart" class="admin-detail-daily-chart"></div>
+                </div>
+                <div class="admin-detail-row admin-detail-row-with-edit">
+                    <span class="admin-detail-label" data-i18n="admin_detail_username">Usuario asignado</span>
+                    <span class="admin-detail-value-wrap">
+                        <span id="admin-detail-username" class="admin-detail-value">—</span>
+                        <button type="button" class="admin-detail-edit-icon" id="admin-detail-edit-username-btn" data-i18n-title="admin_detail_change_username" title="Cambiar usuario" aria-label="Cambiar usuario"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </span>
+                </div>
+                <div class="admin-detail-row admin-detail-row-with-edit">
+                    <span class="admin-detail-label" data-i18n="admin_detail_password">Contraseña</span>
+                    <span class="admin-detail-value-wrap">
+                        <span id="admin-detail-password" class="admin-detail-value">—</span>
+                        <button type="button" class="admin-detail-edit-icon" id="admin-detail-edit-password-btn" data-i18n-title="admin_detail_change_password" title="Cambiar contraseña" aria-label="Cambiar contraseña"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </span>
+                </div>
+                <div id="admin-detail-change-user-wrap" class="admin-detail-change-pw hidden">
+                    <label class="ban-modal-label" data-i18n="admin_detail_new_username">Nuevo usuario</label>
+                    <input type="text" id="admin-detail-new-username" class="ban-modal-input" data-i18n-placeholder="admin_detail_new_username" placeholder="Nuevo usuario" autocomplete="username">
+                    <p id="admin-detail-user-error" class="settings-password-error hidden"></p>
+                    <div class="ban-modal-actions admin-detail-change-pw-actions">
+                        <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="admin-detail-user-cancel-btn"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                    </div>
+                </div>
+                <div id="admin-detail-change-pw-wrap" class="admin-detail-change-pw hidden">
+                    <label class="ban-modal-label" data-i18n="settings_new_password">Nueva contraseña</label>
+                    <div class="admin-detail-pw-wrap">
+                        <input type="password" id="admin-detail-new-password" class="ban-modal-input admin-detail-pw-input" data-i18n-placeholder="settings_new_password" placeholder="Nueva contraseña" autocomplete="new-password">
+                        <button type="button" class="admin-detail-toggle-password" id="admin-detail-new-pw-toggle" title="Mostrar / Ocultar contraseña" aria-label="Mostrar contraseña"><i class="fa-solid fa-eye-slash" id="admin-detail-new-pw-icon"></i></button>
+                    </div>
+                    <label class="ban-modal-label" data-i18n="admin_detail_repeat_password">Repetir contraseña</label>
+                    <div class="admin-detail-pw-wrap">
+                        <input type="password" id="admin-detail-repeat-password" class="ban-modal-input admin-detail-pw-input" data-i18n-placeholder="admin_detail_repeat_password" placeholder="Repetir contraseña" autocomplete="new-password">
+                        <button type="button" class="admin-detail-toggle-password" id="admin-detail-repeat-pw-toggle" title="Mostrar / Ocultar contraseña" aria-label="Mostrar contraseña"><i class="fa-solid fa-eye-slash" id="admin-detail-repeat-pw-icon"></i></button>
+                    </div>
+                    <p id="admin-detail-pw-error" class="settings-password-error hidden"></p>
+                    <div class="ban-modal-actions admin-detail-change-pw-actions">
+                        <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="admin-detail-pw-cancel-btn"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                    </div>
+                </div>
+                <div class="admin-detail-row admin-detail-row-with-edit">
+                    <span class="admin-detail-label" data-i18n="spectate_group">Group</span>
+                    <span class="admin-detail-value-wrap">
+                        <span id="admin-detail-group" class="admin-detail-value">—</span>
+                        <button type="button" class="admin-detail-edit-icon" id="admin-detail-edit-group-btn" data-i18n-title="groups_modal_edit_title" data-i18n-aria-label="groups_modal_edit_title" title="Edit group" aria-label="Edit group"><i class="fa-solid fa-users"></i></button>
+                    </span>
+                </div>
+                <div id="admin-detail-change-group-wrap" class="admin-detail-change-pw hidden">
+                    <label class="ban-modal-label" data-i18n="spectate_group">Group</label>
+                    <select id="admin-detail-new-group" class="ban-modal-input"></select>
+                    <p id="admin-detail-group-error" class="settings-password-error hidden"></p>
+                    <div class="ban-modal-actions admin-detail-change-pw-actions">
+                        <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="admin-detail-group-cancel-btn"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">Cancel</span></button>
+                        <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-btn" id="admin-detail-group-confirm-btn"><i class="fa-solid fa-check"></i><span data-i18n="modal_apply_btn">Apply</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-btn" id="admin-detail-save-btn"><i class="fa-solid fa-floppy-disk"></i><span data-i18n="admin_detail_guardar_cambios">GUARDAR CAMBIOS</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="admin-detail-close-btn"><i class="fa-solid fa-xmark"></i><span data-i18n="settings_close">CERRAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-detail-reset-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-rotate-left"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="admin_detail_reset_time_confirm_title">Reiniciar tiempo</h3>
+                    <p class="ban-modal-desc" data-i18n="admin_detail_reset_time_confirm_subtitle">Confirmación</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone" data-i18n="admin_detail_reset_time_confirm_message">¿Reiniciar el tiempo registrado de este staff?</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="admin-detail-reset-confirm-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="admin-detail-reset-confirm-ok"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-detail-logout-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="admin_detail_logout_session_confirm_title">Cerrar sesión del admin</h3>
+                    <p class="ban-modal-desc" data-i18n="admin_detail_logout_session_confirm_subtitle">Confirmación</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone" data-i18n="admin_detail_logout_session_confirm_message">Se desactivará «recordar cuenta» y se cerrará el panel de admin en su juego.</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="admin-detail-logout-confirm-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="admin-detail-logout-confirm-ok"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ban-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-ban"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="ban_modal_title">Ban from server</h3>
+                    <p class="ban-modal-desc" data-i18n="ban_modal_desc">Impide que vuelva a conectarse con sus identificadores.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label ban-modal-label-reason" data-i18n="ban_modal_reason_label">Razón del baneo</label>
+            <textarea id="ban-modal-reason" class="ban-modal-reason" data-i18n-placeholder="ban_modal_reason_placeholder" placeholder="Escribe la razón del baneo..." rows="4"></textarea>
+            <div class="ban-modal-permanent-row">
+                <span class="ban-modal-permanent-label" data-i18n="ban_modal_permanent">Baneo permanente</span>
+                <label class="groups-toggle-wrap">
+                    <input type="checkbox" id="ban-modal-permanent" class="ban-modal-permanent-check">
+                    <span class="groups-toggle-slider"></span>
+                </label>
+            </div>
+            <div id="ban-modal-offline-fields" class="ban-modal-offline-fields hidden">
+                <label class="ban-modal-label" data-i18n="ban_modal_player_name_label">Nombre del jugador (opcional)</label>
+                <input type="text" id="ban-modal-player-name" class="ban-modal-input" data-i18n-placeholder="ban_modal_player_name_placeholder" placeholder="Nombre del jugador (opcional)" autocomplete="off">
+                <label class="ban-modal-label">
+                    <span data-i18n="ban_modal_license_label">License</span>
+                    <span class="ban-modal-required-star" aria-hidden="true">*</span>
+                </label>
+                <input type="text" id="ban-modal-license" class="ban-modal-input" data-i18n-placeholder="ban_modal_license_placeholder" placeholder="license:xxxxxxxx o xxxxxxxx" autocomplete="off">
+                <div class="ban-modal-identifiers-grid">
+                    <div class="ban-modal-identifiers-field">
+                        <label class="ban-modal-label" data-i18n="ban_modal_discord_label">Discord</label>
+                        <input type="text" id="ban-modal-discord" class="ban-modal-input" data-i18n-placeholder="ban_modal_discord_placeholder" placeholder="discord:123456789012345678" autocomplete="off">
+                    </div>
+                    <div class="ban-modal-identifiers-field">
+                        <label class="ban-modal-label" data-i18n="ban_modal_steam_label">Steam</label>
+                        <input type="text" id="ban-modal-steam" class="ban-modal-input" data-i18n-placeholder="ban_modal_steam_placeholder" placeholder="steam:110000112345678" autocomplete="off">
+                    </div>
+                    <div class="ban-modal-identifiers-field">
+                        <label class="ban-modal-label" data-i18n="ban_modal_license2_label">License2</label>
+                        <input type="text" id="ban-modal-license2" class="ban-modal-input" data-i18n-placeholder="ban_modal_license2_placeholder" placeholder="license2:xxxxxxxx o xxxxxxxx" autocomplete="off">
+                    </div>
+                    <div class="ban-modal-identifiers-field">
+                        <label class="ban-modal-label" data-i18n="ban_modal_live_label">Live/XBL</label>
+                        <input type="text" id="ban-modal-live" class="ban-modal-input" data-i18n-placeholder="ban_modal_live_placeholder" placeholder="live:xxxxxxxx o xbl:xxxxxxxx" autocomplete="off">
+                    </div>
+                    <div class="ban-modal-identifiers-field">
+                        <label class="ban-modal-label" data-i18n="ban_modal_ip_label">IP</label>
+                        <input type="text" id="ban-modal-ip" class="ban-modal-input" data-i18n-placeholder="ban_modal_ip_placeholder" placeholder="127.0.0.1" autocomplete="off">
+                    </div>
+                    <div class="ban-modal-identifiers-field">
+                        <label class="ban-modal-label" data-i18n="ban_modal_hardware_label">Hardware</label>
+                        <input type="text" id="ban-modal-hardware" class="ban-modal-input" data-i18n-placeholder="ban_modal_hardware_placeholder" placeholder="Token/HWID" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="ban_modal_expires_label">Fecha de fin del baneo</label>
+            <input type="text" id="ban-modal-expires" class="ban-modal-input" data-i18n-placeholder="ban_modal_expires_placeholder" placeholder="Seleccionar fecha y hora" readonly>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="ban-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="ban-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="ban_modal_confirm_btn">CONFIRMAR BANEO</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="kick-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="kick_modal_title">Kick from server</h3>
+                    <p class="ban-modal-desc" data-i18n="kick_modal_desc">Expulsa al jugador del servidor.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label ban-modal-label-reason" data-i18n="kick_modal_reason_label">Razón del kick</label>
+            <textarea id="kick-modal-reason" class="ban-modal-reason" data-i18n-placeholder="kick_modal_reason_placeholder" placeholder="Escribe la razón del kick..." rows="4"></textarea>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="kick-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="kick-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="kick_modal_confirm_btn">CONFIRMAR KICK</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="announcements-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-bullhorn"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_announcement_title">Anuncio administrativo</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_announcement_desc">Envía un mensaje a todos los jugadores del servidor.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label ban-modal-label-reason" data-i18n="modal_announcement_message_label">Mensaje del anuncio</label>
+            <textarea id="announcements-modal-text" class="ban-modal-reason" data-i18n-placeholder="modal_announcement_placeholder" placeholder="Escribe el anuncio..." rows="4"></textarea>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="announcements-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="announcements-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_announcement_confirm_btn">ENVIAR ANUNCIO</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="spawn-vehicle-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-car-side"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_spawn_vehicle_title">Spawn vehicle</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_spawn_vehicle_desc">Spawnea un vehículo para el jugador seleccionado.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label ban-modal-label-reason" data-i18n="modal_vehicle_model_label">Modelo del vehículo</label>
+            <input type="text" id="spawn-vehicle-modal-model" class="ban-modal-input" data-i18n-placeholder="modal_vehicle_model_placeholder" placeholder="ej. t20" autocomplete="off">
+            <div class="ban-modal-permanent-row">
+                <span class="ban-modal-permanent-label" data-i18n="modal_custom_plate">Matrícula personalizada</span>
+                <label class="groups-toggle-wrap">
+                    <input type="checkbox" id="spawn-vehicle-modal-customplate" class="ban-modal-permanent-check">
+                    <span class="groups-toggle-slider"></span>
+                </label>
+            </div>
+            <div id="spawn-vehicle-modal-plate-wrap" class="ban-modal-plate-wrap hidden">
+                <label class="ban-modal-label" data-i18n="modal_plate_label">Matrícula</label>
+                <input type="text" id="spawn-vehicle-modal-plate" class="ban-modal-input" data-i18n-placeholder="modal_plate_placeholder" placeholder="Ej. ABC 123" maxlength="8" autocomplete="off">
+            </div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="spawn-vehicle-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="spawn-vehicle-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-vehicle-garage-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-car-side"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_add_vehicle_garage_title">Añadir vehículo al garaje</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_add_vehicle_garage_desc">Añade un vehiculo en el garaje del jugador</p>
+                </div>
+            </div>
+            <label class="ban-modal-label ban-modal-label-reason" data-i18n="modal_vehicle_model_label">Modelo del vehículo</label>
+            <input type="text" id="add-vehicle-garage-modal-model" class="ban-modal-input" data-i18n-placeholder="modal_vehicle_model_placeholder" placeholder="ej. t20" autocomplete="off">
+            <div class="ban-modal-permanent-row">
+                <span class="ban-modal-permanent-label" data-i18n="modal_custom_plate">Matrícula personalizada</span>
+                <label class="groups-toggle-wrap">
+                    <input type="checkbox" id="add-vehicle-garage-modal-customplate" class="ban-modal-permanent-check">
+                    <span class="groups-toggle-slider"></span>
+                </label>
+            </div>
+            <div id="add-vehicle-garage-modal-plate-wrap" class="ban-modal-plate-wrap hidden">
+                <label class="ban-modal-label" data-i18n="modal_plate_label">Matrícula</label>
+                <input type="text" id="add-vehicle-garage-modal-plate" class="ban-modal-input" data-i18n-placeholder="modal_plate_placeholder" placeholder="Ej. ABC 123" maxlength="8" autocomplete="off">
+            </div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="add-vehicle-garage-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="add-vehicle-garage-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="player-notes-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-note-sticky"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="player_notes_modal_title">Notas administrativas</h3>
+                    <p class="ban-modal-desc" data-i18n="player_notes_modal_desc">Añade y consulta notas internas de este jugador.</p>
+                </div>
+            </div>
+            <div id="player-notes-list" class="player-notes-list"></div>
+            <div id="player-notes-empty" class="player-notes-empty" data-i18n="player_notes_empty">No hay notas para este jugador.</div>
+            <label class="ban-modal-label" data-i18n="player_notes_input_label">Nueva nota</label>
+            <textarea id="player-notes-input" class="ban-modal-reason player-notes-input" data-i18n-placeholder="player_notes_input_placeholder" placeholder="Escribe una nota administrativa..." rows="4"></textarea>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="player-notes-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-btn" id="player-notes-modal-confirm"><i class="fa-solid fa-plus"></i><span data-i18n="player_notes_add">AÑADIR NOTA</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ck-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-user-xmark"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_ck_title">CK Player</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_ck_desc">Mensaje de confirmación</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone" data-i18n="modal_ck_message">¿Estás seguro de que quieres hacerle CK a este jugador?</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="ck-confirm-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="ck-confirm-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="clearinv-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-trash"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_clearinv_title">Clear inventory</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_clearinv_desc">Mensaje de confirmación</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone clearinv-confirm-message" data-i18n="modal_clearinv_message">¿Estás seguro de que quieres vaciar el inventario de este jugador?</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="clearinv-confirm-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="clearinv-confirm-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="vehicle-delete-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-car-side"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" id="vehicle-delete-confirm-modal-title" data-i18n="modal_delete_vehicle_title">Eliminar vehículo</h3>
+                    <p class="ban-modal-desc" id="vehicle-delete-confirm-modal-desc" data-i18n="modal_delete_vehicle_desc">Confirmación de eliminación</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone vehicle-delete-confirm-message" id="vehicle-delete-confirm-modal-message" data-i18n="modal_delete_vehicle_message">¿Estás seguro de que quieres eliminar este vehículo del jugador?</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="vehicle-delete-confirm-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="vehicle-delete-confirm-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="instancia-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-cube"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_instancia_title">Instancia</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_instancia_desc">Introduce el número de instancia (bucket) donde quieres mover al jugador. 0 = mundo principal.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="modal_instancia_label">Número de instancia</label>
+            <input type="number" id="instancia-modal-bucket" class="ban-modal-input" placeholder="0" min="0" step="1" autocomplete="off">
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="instancia-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="instancia-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_move_btn">MOVER</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="unban-confirm-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-unlock"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_unban_title">Desbanear</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_unban_desc">Mensaje de confirmación</p>
+                </div>
+            </div>
+            <p class="ban-modal-desc ban-modal-desc-standalone unban-confirm-message" data-i18n="modal_unban_message">¿Estás seguro de que quieres levantar este baneo?</p>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="unban-confirm-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="unban-confirm-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="manage-money-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-wallet"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_manage_money_title">Manage money</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_manage_money_desc">Da o retira dinero en efectivo o en banco del jugador</p>
+                </div>
+            </div>
+            <div class="manage-money-row">
+                <div class="manage-money-field">
+                    <label class="ban-modal-label" data-i18n="modal_action_label">Acción</label>
+                    <select id="manage-money-modal-action" class="ban-modal-input">
+                        <option value="give" data-i18n="modal_action_give">Dar</option>
+                        <option value="withdraw" data-i18n="modal_action_withdraw">Retirar</option>
+                    </select>
+                </div>
+                <div class="manage-money-field">
+                    <label class="ban-modal-label" data-i18n="modal_money_type_label">Tipo de dinero</label>
+                    <select id="manage-money-modal-type" class="ban-modal-input">
+                        <option value="cash" data-i18n="modal_money_cash">Efectivo</option>
+                        <option value="bank" data-i18n="modal_money_bank">Banco</option>
+                        <option value="black_money" data-i18n="modal_money_black">Dinero negro</option>
+                    </select>
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="modal_amount_label">Cantidad</label>
+            <input type="number" id="manage-money-modal-amount" class="ban-modal-input" placeholder="0" min="1" step="1" autocomplete="off">
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="manage-money-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="manage-money-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="give-items-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box give-items-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-box"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_give_items_title">Give items</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_give_items_desc">Selecciona ítems para dárselos al jugador</p>
+                </div>
+            </div>
+            <div class="give-items-modal-body">
+                <div class="give-items-modal-left">
+                    <div class="give-items-search-wrap">
+                        <i class="fa-solid fa-magnifying-glass give-items-search-icon"></i>
+                        <input type="text" id="give-items-modal-search" class="ban-modal-input give-items-search" data-i18n-placeholder="modal_search_placeholder" placeholder="Buscar..." autocomplete="off">
+                    </div>
+                    <div id="give-items-modal-list" class="give-items-list"></div>
+                    <div id="give-items-modal-cart" class="give-items-cart">
+                        <div class="give-items-cart-title" data-i18n="modal_selected_items">Ítems seleccionados</div>
+                        <div id="give-items-modal-cart-list" class="give-items-cart-list"></div>
+                        <div id="give-items-modal-cart-empty" class="give-items-cart-empty">
+                            <i class="fa-solid fa-box-open give-items-cart-empty-icon"></i>
+                            <span data-i18n="modal_no_items_selected">Ningún ítem seleccionado. Haz clic en la lista para añadir</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="give-items-modal-divider"></div>
+                <div class="give-items-modal-right">
+                    <div class="give-items-inventory-title" data-i18n="modal_player_inventory">Inventario del jugador</div>
+                    <div id="give-items-modal-inventory" class="give-items-inventory-list"></div>
+                    <div id="give-items-modal-inventory-empty" class="give-items-inventory-empty" data-i18n="modal_player_inventory_empty">Sin ítems</div>
+                    <div id="give-items-modal-inventory-loading" class="give-items-inventory-loading hidden"><i class="fa-solid fa-spinner fa-spin"></i> <span data-i18n="modal_give_items_loading">Cargando...</span></div>
+                </div>
+            </div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="give-items-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="give-items-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_give_items_btn">DAR ÍTEMS</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="assign-job-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-briefcase"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_assign_job_title">Assign job</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_assign_job_desc">Asigna un trabajo y rango al jugador </p>
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="modal_job_label">Trabajo</label>
+            <div class="assign-job-select-wrap">
+                <select id="assign-job-modal-job" class="assign-job-select-native" aria-hidden="true" tabindex="-1">
+                    <option value="" data-i18n="modal_job_select_placeholder">Seleccionar trabajo...</option>
+                </select>
+                <div class="assign-job-select-trigger ban-modal-input" id="assign-job-modal-job-trigger" tabindex="0" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-label="Job">
+                    <span class="assign-job-select-trigger-text" id="assign-job-modal-job-trigger-text">Seleccionar trabajo...</span>
+                    <i class="fa-solid fa-chevron-down assign-job-select-arrow"></i>
+                </div>
+                <div class="assign-job-select-dropdown hidden" id="assign-job-modal-job-dropdown" role="listbox">
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="modal_grade_label">Rango</label>
+            <div id="assign-job-modal-grades-list" class="assign-job-grades-list"></div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="assign-job-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="assign-job-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_apply_btn">APLICAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="assign-gang-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-people-group"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_assign_gang_title">Assign gang</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_assign_gang_desc">Asigna una banda y rango al jugador.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="modal_gang_label">Banda</label>
+            <div class="assign-job-select-wrap">
+                <select id="assign-gang-modal-gang" class="assign-job-select-native" aria-hidden="true" tabindex="-1">
+                    <option value="" data-i18n="modal_gang_select_placeholder">Seleccionar banda...</option>
+                </select>
+                <div class="assign-job-select-trigger ban-modal-input" id="assign-gang-modal-gang-trigger" tabindex="0" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-label="Gang">
+                    <span class="assign-job-select-trigger-text" id="assign-gang-modal-gang-trigger-text">Seleccionar banda...</span>
+                    <i class="fa-solid fa-chevron-down assign-job-select-arrow"></i>
+                </div>
+                <div class="assign-job-select-dropdown hidden" id="assign-gang-modal-gang-dropdown" role="listbox">
+                </div>
+            </div>
+            <label class="ban-modal-label" data-i18n="modal_grade_label">Rango</label>
+            <div id="assign-gang-modal-grades-list" class="assign-job-grades-list"></div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="assign-gang-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="assign-gang-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_apply_btn">APLICAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="assign-admin-modal" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box ban-modal-box-wide">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-crown"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_assign_admin_title">Assign admin</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_assign_admin_desc">Selecciona un rango para asignar al jugador</p>
+                </div>
+            </div>
+            <div class="give-items-search-wrap">
+                <i class="fa-solid fa-magnifying-glass give-items-search-icon"></i>
+                <input type="text" id="assign-admin-modal-search" class="ban-modal-input give-items-search" data-i18n-placeholder="modal_search_placeholder" placeholder="Buscar..." autocomplete="off">
+            </div>
+            <div id="assign-admin-modal-list" class="give-items-list assign-admin-list"></div>
+            <div class="ban-modal-actions">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="assign-admin-modal-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="assign-admin-modal-confirm"><i class="fa-solid fa-check"></i><span data-i18n="modal_assign_rank_btn">ASIGNAR RANGO</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-changetime" class="ban-modal hidden" aria-hidden="true">
+        <div class="ban-modal-backdrop"></div>
+        <div class="ban-modal-box">
+            <div class="ban-modal-header">
+                <span class="ban-modal-icon"><i class="fa-solid fa-clock"></i></span>
+                <div class="ban-modal-header-text">
+                    <h3 class="ban-modal-title" data-i18n="modal_time_weather_title">Configurar tiempo y clima</h3>
+                    <p class="ban-modal-desc" data-i18n="modal_time_weather_desc">Ajusta la hora del día y el tipo de clima del servidor.</p>
+                </div>
+            </div>
+            <label class="ban-modal-label" for="time-slider" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <span data-i18n="modal_time_of_day">Hora del día</span>
+                <span id="time-value" style="font-size: 1.1rem; color: #90bed4;">12:00</span>
+            </label>
+            <input id="time-slider" type="range" min="0" max="23" value="12" class="server-time-slider" />
+            <div class="ban-modal-permanent-row" style="margin-top: 16px;">
+                <span class="ban-modal-permanent-label" data-i18n="modal_freeze_time">Congelar tiempo</span>
+                <label class="groups-toggle-wrap">
+                    <input type="checkbox" id="freeze-time-checkbox" class="ban-modal-permanent-check">
+                    <span class="groups-toggle-slider"></span>
+                </label>
+            </div>
+            <label class="ban-modal-label" for="weather-select" style="margin-top: 16px;" data-i18n="modal_weather_type">Tipo de clima</label>
+            <select id="weather-select" class="ban-modal-input">
+                <option value="EXTRASUNNY" data-i18n="weather_extrasunny">Soleado extra</option>
+                <option value="CLEAR" selected data-i18n="weather_clear">Despejado</option>
+                <option value="NEUTRAL" data-i18n="weather_neutral">Neutral</option>
+                <option value="SMOG" data-i18n="weather_smog">Neblina</option>
+                <option value="FOGGY" data-i18n="weather_foggy">Niebla</option>
+                <option value="OVERCAST" data-i18n="weather_overcast">Nublado</option>
+                <option value="CLOUDS" data-i18n="weather_clouds">Nubes</option>
+                <option value="CLEARING" data-i18n="weather_clearing">Aclarando</option>
+                <option value="RAIN" data-i18n="weather_rain">Lluvia</option>
+                <option value="THUNDER" data-i18n="weather_thunder">Tormenta</option>
+                <option value="SNOW" data-i18n="weather_snow">Nieve</option>
+                <option value="BLIZZARD" data-i18n="weather_blizzard">Nevada</option>
+                <option value="SNOWLIGHT" data-i18n="weather_snowlight">Nieve ligera</option>
+                <option value="XMAS" data-i18n="weather_xmas">Navidad</option>
+            </select>
+            <div class="ban-modal-actions" style="margin-top: 24px;">
+                <button type="button" class="groups-modal-btn groups-modal-btn-cancel ban-modal-btn" id="modal-changetime-cancel"><i class="fa-solid fa-xmark"></i><span data-i18n="cancel">CANCELAR</span></button>
+                <button type="button" class="groups-modal-btn groups-modal-btn-confirm ban-modal-confirm ban-modal-btn" id="modal-changetime-confirm"><i class="fa-solid fa-check"></i><span data-i18n="confirm">CONFIRMAR</span></button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="kick-actions" class="kick-actions hidden">
+        <div class="kick-actions-header" data-i18n="kick_actions_header">IF YOU ARE AN ADMINISTRATOR, PLEASE DO NOT ABUSE YOUR PRIVILEGES</div>
+        <div class="kick-actions-body">
+            <section class="kick-actions-section">
+                <h3 class="kick-actions-section-title"><i class="fa-solid fa-gear"></i> <span data-i18n="kick_actions_admin_panel">Admin panel</span></h3>
+                <div class="kick-actions-grid">
+                    <button type="button" class="kick-actions-btn" data-action="noclip"><i class="fa-solid fa-person-walking-dashed-line-arrow-right"></i><span data-i18n="kick_actions_noclip">Noclip</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="godmode"><i class="fa-solid fa-shield-halved"></i><span data-i18n="kick_actions_godmode">God mode</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="revive"><i class="fa-solid fa-person-circle-plus"></i><span data-i18n="kick_actions_revive">Revive</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="invisibility"><i class="fa-solid fa-eye-slash"></i><span data-i18n="kick_actions_invisibility">Invisibility</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="servertime"><i class="fa-solid fa-clock"></i><span data-i18n="kick_actions_servertime">Server time</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="staffclothing" id="kick-actions-staff-clothing-btn"><i class="fa-solid fa-shirt"></i><span data-i18n="kick_actions_staff_clothing">Staff Clothing</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="tags"><i class="fa-solid fa-tag"></i><span data-i18n="kick_actions_tags">Tags</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="tpm"><i class="fa-solid fa-person-arrow-up-from-line"></i><span data-i18n="kick_actions_teleport_me">Teleport me</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="copycoords"><i class="fa-solid fa-copy"></i><span data-i18n="kick_actions_copy_coords">Copy coords</span></button>
+                </div>
+            </section>
+            <section class="kick-actions-section">
+                <h3 class="kick-actions-section-title"><i class="fa-solid fa-car"></i> <span data-i18n="kick_actions_vehicle_control">Vehicle control</span></h3>
+                <div class="kick-actions-grid kick-actions-grid-3">
+                    <button type="button" class="kick-actions-btn" data-action="deletevehicle"><i class="fa-solid fa-trash"></i><span data-i18n="kick_actions_delete_vehicle">Delete vehicle</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="fixvehicle"><i class="fa-solid fa-wrench"></i><span data-i18n="kick_actions_fix_vehicle">Fix vehicle</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="tunevehicle"><i class="fa-solid fa-sliders"></i><span data-i18n="kick_actions_tune_vehicle">Tune vehicle</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="infiniteammo"><i class="fa-solid fa-gun"></i><span data-i18n="dashboard_infinite_ammo">Infinite Ammo</span></button>
+                    <button type="button" class="kick-actions-btn" data-action="givecarkeys"><i class="fa-solid fa-key"></i><span>Give car keys</span></button>
+                </div>
+            </section>
+            <section class="kick-actions-section">
+                <h3 class="kick-actions-section-title"><i class="fa-solid fa-keyboard"></i> <span data-i18n="kick_actions_binds">Binds</span></h3>
+                <input type="text" id="kick-actions-bind-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;">
+                <div class="kick-actions-binds">
+                    <div class="kick-actions-bind"><span data-i18n="kick_actions_noclip">Noclip</span><button type="button" class="kick-actions-bind-key" data-action="noclip">-</button></div>
+                    <div class="kick-actions-bind"><span data-i18n="kick_actions_invisibility">Invisibility</span><button type="button" class="kick-actions-bind-key" data-action="invisibility">-</button></div>
+                    <div class="kick-actions-bind"><span data-i18n="kick_actions_tpm">TPM</span><button type="button" class="kick-actions-bind-key" data-action="tpm">-</button></div>
+                    <div class="kick-actions-bind"><span data-i18n="kick_actions_delete_car">Delete car</span><button type="button" class="kick-actions-bind-key" data-action="deletecar">-</button></div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="coords-ui" class="coords-ui hidden">
+        <div class="coords-ui-inner">
+            <div class="coords-ui-header">
+                <h3 class="coords-ui-title" data-i18n="devtools_title">DEV TOOLS</h3>
+                <button type="button" class="coords-ui-close" id="coords-ui-close" aria-label="" data-i18n-aria-label="devtools_close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="coords-ui-body">
+                <section class="coords-ui-section">
+                    <h4 class="coords-ui-section-title" data-i18n="devtools_coords_section">Coords</h4>
+                    <div class="coords-ui-row">
+                        <span class="coords-ui-label" data-i18n="devtools_coords_lua">Lua (x, y, z)</span>
+                        <div class="coords-ui-value-wrap">
+                            <code class="coords-ui-value" id="coords-lua"></code>
+                            <button type="button" class="coords-ui-copy" data-copy-id="lua"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="coords-ui-row">
+                        <span class="coords-ui-label" data-i18n="devtools_coords_normal">Normal</span>
+                        <div class="coords-ui-value-wrap">
+                            <code class="coords-ui-value" id="coords-normal"></code>
+                            <button type="button" class="coords-ui-copy" data-copy-id="normal"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="coords-ui-row">
+                        <span class="coords-ui-label" data-i18n="devtools_coords_vector3">vector3</span>
+                        <div class="coords-ui-value-wrap">
+                            <code class="coords-ui-value" id="coords-vector3"></code>
+                            <button type="button" class="coords-ui-copy" data-copy-id="vector3"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="coords-ui-row">
+                        <span class="coords-ui-label" data-i18n="devtools_coords_vector4">vector4</span>
+                        <div class="coords-ui-value-wrap">
+                            <code class="coords-ui-value" id="coords-vector4"></code>
+                            <button type="button" class="coords-ui-copy" data-copy-id="vector4"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                </section>
+                <section class="coords-ui-section">
+                    <h4 class="coords-ui-section-title" data-i18n="devtools_camera_section">Camera</h4>
+                    <p class="coords-ui-section-desc" data-i18n="devtools_camera_desc">Enable free camera</p>
+                    <div class="coords-ui-toggle-row">
+                        <span class="coords-ui-toggle-label" data-i18n="devtools_camera_mode">Camera mode</span>
+                        <button type="button" class="coords-ui-toggle-btn" id="coords-ui-camera-btn" aria-pressed="false">
+                            <span class="coords-ui-toggle-slider"></span>
+                        </button>
+                    </div>
+                </section>
+                <section class="coords-ui-section">
+                    <h4 class="coords-ui-section-title" data-i18n="devtools_entity_laser_section">Entity laser</h4>
+                    <p class="coords-ui-section-desc" data-i18n="devtools_entity_laser_desc">Point at props or entities to view info or delete them</p>
+                    <button type="button" class="coords-ui-entity-laser-btn" id="coords-ui-entity-laser-btn"><i class="fa-solid fa-bullseye"></i> <span data-i18n="devtools_entity_laser_btn">Enable entity laser mode</span></button>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <iframe id="jc-capture-frame" src="capture.html" style="position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none;border:0;" title="Capture"></iframe>
+
+    <div id="entity-laser-ui" class="entity-laser-ui hidden">
+        <div class="entity-laser-panel entity-laser-panel-inner">
+            <h3 class="entity-laser-panel-title"><i class="fa-solid fa-bullseye"></i> <span data-i18n="devtools_prop_target_prop">PROP</span> <span class="entity-laser-panel-title-accent" data-i18n="devtools_prop_target_target">TARGET</span></h3>
+            <div class="entity-laser-info">
+                <div class="entity-laser-row"><span class="entity-laser-label" data-i18n="devtools_prop_target_type">Type</span><span class="entity-laser-value entity-laser-value-type" id="entity-laser-type">—</span></div>
+                <div class="entity-laser-row"><span class="entity-laser-label" data-i18n="devtools_prop_target_hash">Hash</span><span class="entity-laser-value" id="entity-laser-hash">—</span></div>
+                <div class="entity-laser-row"><span class="entity-laser-label" data-i18n="devtools_prop_target_health">Health</span><span class="entity-laser-value" id="entity-laser-health">—</span></div>
+                <div class="entity-laser-row"><span class="entity-laser-label" data-i18n="devtools_prop_target_entity_id">Entity ID</span><span class="entity-laser-value" id="entity-laser-entityid">—</span></div>
+                <div class="entity-laser-row"><span class="entity-laser-label" data-i18n="devtools_prop_target_net_id">Net ID</span><span class="entity-laser-value" id="entity-laser-netid">—</span></div>
+                <div class="entity-laser-row"><span class="entity-laser-label" data-i18n="devtools_prop_target_dist">Dist</span><span class="entity-laser-value" id="entity-laser-dist">—</span></div>
+            </div>
+        </div>
+        <div class="entity-laser-panel entity-laser-controls entity-laser-panel-inner">
+            <h3 class="entity-laser-panel-title"><i class="fa-solid fa-keyboard"></i> <span data-i18n="devtools_controls_title">CONTROLS</span></h3>
+            <div class="entity-laser-keys">
+                <div class="entity-laser-key-row"><span class="entity-laser-key-badge">ENTER</span><span class="entity-laser-key-desc" data-i18n="devtools_controls_delete">Delete</span></div>
+                <div class="entity-laser-key-row"><span class="entity-laser-key-badge">BACKSPACE</span><span class="entity-laser-key-desc" data-i18n="devtools_controls_exit">Exit</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="camera-info-ui" class="camera-info-ui hidden">
+        <input type="text" id="camera-info-key-trap" class="camera-info-key-trap" tabindex="-1" aria-hidden="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <div class="camera-info-inner">
+            <h4 class="camera-info-title"><i class="fa-solid fa-video"></i> <span data-i18n="devtools_camera_info_title">Free camera</span></h4>
+            <ul class="camera-info-list">
+                <li><span class="camera-info-key">W</span> / <span class="camera-info-key">S</span> <span data-i18n="devtools_camera_forward_back">Forward / Back</span></li>
+                <li><span class="camera-info-key">Q</span> / <span class="camera-info-key">E</span> <span data-i18n="devtools_camera_up_down">Up / Down</span></li>
+                <li><span class="camera-info-key" data-i18n="devtools_camera_mouse">Mouse</span> <span data-i18n="devtools_camera_mouse_look">Look</span></li>
+                <li><span class="camera-info-key">ESC</span> <span data-i18n="devtools_camera_exit">Exit</span></li>
+                <li><span class="camera-info-key">M</span> <span data-i18n="devtools_camera_change_speed">Change speed</span></li>
+                <li><span class="camera-info-key">Shift</span> <span data-i18n="devtools_camera_turbo">Turbo</span></li>
+                <li><span class="camera-info-mode"><i class="fa-solid fa-gauge-high"></i> <span data-i18n="devtools_camera_mode_label">Mode:</span> <strong id="camera-info-mode-label">1</strong></span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="noclip-hints" class="noclip-hints hidden">
+        <div class="noclip-hints-inner">
+            <span class="noclip-hints-key">W</span> <span data-i18n="noclip_forward">Delante</span>
+            <span class="noclip-hints-sep"></span>
+            <span class="noclip-hints-key">S</span> <span data-i18n="noclip_backward">Atrás</span>
+            <span class="noclip-hints-sep"></span>
+            <span class="noclip-hints-key">Q</span> / <span class="noclip-hints-key" data-i18n="noclip_space">Espacio</span> <span data-i18n="noclip_up">Subir</span>
+            <span class="noclip-hints-sep"></span>
+            <span class="noclip-hints-key">E</span> <span data-i18n="noclip_down">Bajar</span>
+            <span class="noclip-hints-sep"></span>
+            <span class="noclip-hints-key" data-i18n="noclip_mouse">Ratón</span> <span data-i18n="noclip_look_move">Mirar / moverte</span>
+            <span class="noclip-hints-sep"></span>
+            <span class="noclip-hints-key">M</span> <span data-i18n="noclip_speed">Velocidad</span>
+            <span class="noclip-hints-sep-h"></span>
+            <span class="noclip-hints-key">Shift</span> <span data-i18n="noclip_fast">Rápido</span>
+            <span class="noclip-hints-sep"></span>
+            <span class="noclip-hints-mode"><span data-i18n="noclip_mode">Modo: </span><strong id="noclip-hints-mode-label">Normal</strong></span>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script type="module" src="https://esm.sh/vanilla-colorful@0.7.2"></script>
+    <script type="module" src="./script/liveCaptureModule.js"></script>
+    <script src="./script/app.js"></script>
+    <script src="./script/map.js"></script>
+    <script src="./script/groups.js"></script>
+</body>
+</html>

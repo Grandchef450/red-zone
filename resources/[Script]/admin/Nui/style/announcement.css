@@ -1,0 +1,71 @@
+.announcement-notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    z-index: 99999;
+    pointer-events: none;
+    transform: translateY(-120%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease-out;
+}
+
+.announcement-notification.visible {
+    pointer-events: auto;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.announcement-notification-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    min-width: 320px;
+    max-width: 520px;
+    width: 100%;
+    background: #0a0c11;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+}
+
+.announcement-notification-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2c3e50;
+    border: 1px solid #6fabc5;
+    border-radius: 10px;
+    color: #6fabc5;
+    font-size: 22px;
+}
+
+.announcement-notification-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.announcement-notification-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.announcement-notification-desc {
+    margin: 0;
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
