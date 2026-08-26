@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CWeaponArchetypes>
+    <archetypes>
+        <Item>
+            <Name>WEAPON_CUSTOM</Name>
+            <Model>w_arena_m4</Model>
+            <Audio>AUDIO_ITEM</Audio>
+            <Slot>RIFLE</Slot>
+            <Damage>50</Damage>
+            <RateOfFire>600</RateOfFire>
+        </Item>
+    </archetypes>
+</CWeaponArchetypes>

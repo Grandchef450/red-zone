@@ -1,0 +1,18 @@
+{
+    "name": "hate-pager",
+    "private": true,
+    "version": "1.0.0",
+    "description": "fivem pager system",
+    "main": "script.js",
+    "scripts": {
+      "start": "node script.js",
+      "build": "javascript-obfuscator script.js --output script-obfuscated.js"
+    },
+    "author": "Hate",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.18.2"
+    }
+    
+  }
+  

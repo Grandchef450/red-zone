@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+body {
+    display: none; /* FiveM için varsayılan olarak gizli */
+    height: 100vh;
+    background: transparent;
+}
+
+.screen {
+    position: fixed;
+    bottom: -200px; /* Başlangıçta ekran dışında */
+    left: 50%;
+    transform: translate(-50%, 0); /* Yatayda ortalama */
+    display: flex;
+    align-items: flex-end; /* Alt hizalama */
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+    height: auto; /* 100vh yerine auto */
+    z-index: 1000;
+}
+
+.screen.active {
+    bottom: -10px; /* Ekranın alt kısmından mesafe */
+}
+
+/* Yeni popup animasyonu */
+.screen.popup {
+    animation: popupMessage 3s ease-in-out;
+}
+
+@keyframes popupMessage {
+    0% { bottom: -200px; }
+    15% { bottom: 40px; }
+    85% { bottom: 40px; }
+    100% { bottom: -200px; }
+}
+
+.pager {
+    position: relative;
+    width: 400px; /* Genişliği artır */
+    background-image: url('pager.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 20px; /* Resmin içindeki boşluklara göre ayarlayın */
+}
+
+/* Title styling */
+.pager-title {
+    margin-bottom: 2px;
+    text-align: center;
+}
+
+.pager-title h1 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+/* .rust-effect {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #923400 0%, #701800 100%);
+    opacity: 0.3;
+    border-radius: 8px;
+} */
+
+.pager-body {
+    position: relative;
+    /* background-color: #27272a; */
+    /* padding: 24px; */
+    /* border-radius: 8px; */
+    /* border: 2px solid #52525b; */
+    transform: none;
+    /* backdrop-filter: blur(4px); */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.scratches {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* .scratch-1 {
+    position: absolute;
+    top: 8px;
+    left: 20px;
+    width: 80px;
+    height: 4px;
+    background-color: #18181b;
+    transform: rotate(-45deg);
+}
+
+.scratch-2 {
+    position: absolute;
+    bottom: 40px;
+    right: 20px;
+    width: 64px;
+    height: 4px;
+    background-color: #18181b;
+    transform: rotate(12deg);
+} */
+
+.lcd-screen {
+    position: relative;
+    background-color: #000;
+    padding: 16px;
+    border-radius: 4px;
+    border: 2px solid #3f3f46;
+    transform: none;
+    margin: 10px; /* Resmin içindeki LCD ekran konumuna göre ayarlayın */
+}
+
+/* Adjust LCD content to accommodate title */
+.lcd-content {
+    background-color: #16a34a;
+    padding: 8px; /* Reduced padding from 12px */
+    border-radius: 4px;
+    min-height: 150px;
+    max-height: 150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen-scratches {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0.1;
+    z-index: 0; /* Keep scratches behind content */
+}
+
+.screen-scratch-1,
+.screen-scratch-2 {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #fff;
+}
+
+.screen-scratch-1 {
+    transform: rotate(-45deg) translateY(40px);
+}
+
+.screen-scratch-2 {
+    transform: rotate(45deg) translateY(-20px);
+}
+
+/* Reduce message display spacing */
+.message-display {
+    font-family: monospace;
+    color: #000;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 4px; /* Reduced from 8px */
+}
+
+/* Further optimize message text display */
+.message-text {
+    word-wrap: break-word;
+    font-size: 14px; /* Font boyutu ekle */
+    max-height: 54px; /* Slightly reduced from 60px */
+    line-height: 20px; /* Sabit satır yüksekliği */
+    overflow: hidden; /* scroll yerine hidden kullan */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Show 2 lines instead of 3 */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis; /* Fazla metni ... ile göster */
+}
+
+/* Make dividers thinner */
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #000;
+    opacity: 0.5;
+    margin: 4px 0; /* Reduced from 8px */
+}
+
+#messageForm {
+    position: relative;
+}
+
+/* Adjust message input */
+#messageInput {
+    width: 100%;
+    height: 36px; /* Reduced from 40px */
+    background-color: transparent;
+    color: #000;
+    font-family: monospace;
+    padding: 8px;
+    resize: none;
+    border: none;
+    outline: none;
+    font-size: 14px; /* Font boyutu ekle */
+    margin-bottom: 0; /* Alt margin'i kaldır */
+    overflow: hidden; /* Scrollbar'ı gizle */
+    scrollbar-width: none; /* Firefox için */
+    -ms-overflow-style: none; /* IE ve Edge için */
+    white-space: nowrap; /* Tek satır zorla */
+}
+
+#messageInput::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+#messageInput::-webkit-scrollbar {
+    display: none; /* Chrome, Safari ve Opera için */
+}
+
+button {
+    display: none;
+}
+
+/* .brand {
+    margin-top: 12px;
+    text-align: right;
+}
+
+.brand p {
+    color: #71717a;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: monospace;
+    letter-spacing: 0.2em;
+} */
+
+/* .screws div {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #52525b;
+    border-radius: 50%;
+}
+
+.screw.top-left { top: 8px; left: 8px; }
+.screw.top-right { top: 8px; right: 8px; }
+.screw.bottom-left { bottom: 8px; left: 8px; }
+.screw.bottom-right { bottom: 8px; right: 8px; } */
+
+/* Glitch animasyonu */
+@keyframes glitch {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.glitching {
+    animation: glitch 0.2s ease-in-out;
+}
+
+.rust-effect,
+.scratches,
+.scratch-1,
+.scratch-2,
+.screws,
+.brand {
+    display: none;
+}
+
+/* Bildirim stili */
+.notification {
+    position: fixed;
+    bottom: -200px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    transition: bottom 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.notification.show {
+    bottom: -10px;
+    animation: showAndHide 3s ease-in-out;
+}
+
+@keyframes showAndHide {
+    0% { bottom: -200px; }
+    15% { bottom: 40px; }
+    85% { bottom: 40px; }
+    100% { bottom: -200px; }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Apoc Pager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="screen">
+        <div class="pager">
+            <div class="pager-body">
+                <div class="lcd-screen">
+                    <div class="lcd-content">
+                        <!-- Pager Title -->
+                        <div class="pager-title">
+                            <h1 id="title">PAGER v1.0</h1>
+                        </div>
+                        
+                        <!-- Ekran çizikleri -->
+                        <div class="screen-scratches">
+                            <div class="screen-scratch-1"></div>
+                            <div class="screen-scratch-2"></div>
+                        </div>
+
+                        <!-- Mesaj Görüntüleme Alanı -->
+                        <div class="message-display">
+                            <p class="message-text"></p>
+                            <div class="divider"></div>
+                            <p class="message-date"></p>
+                        </div>
+
+                        <!-- Ayraç -->
+                        <div class="divider"></div>
+
+                        <!-- Mesaj Girişi -->
+                        <form id="messageForm">
+                            <textarea 
+                                id="messageInput" 
+                                placeholder="ENVOYER UN MESSAGE..."
+                            ></textarea>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bildirimler için container -->
+    <div id="notifications"></div>
+    <script src="script.js"></script>
+</body>
+</html>

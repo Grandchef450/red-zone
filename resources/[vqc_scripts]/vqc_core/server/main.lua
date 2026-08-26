@@ -1,0 +1,2 @@
+-- local table = lib.table
+

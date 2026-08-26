@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CWeaponInfoBlob>
+    <WeaponInfo>
+        <Name>WEAPON_CUSTOM</Name>
+        <AmmoType>AMMO_RIFLE</AmmoType>
+        <ClipSize>30</ClipSize>
+        <Damage>50</Damage>
+        <ReloadTime>1.5</ReloadTime>
+        <AccuracySpread>1.0</AccuracySpread>
+    </WeaponInfo>
+</CWeaponInfoBlob>

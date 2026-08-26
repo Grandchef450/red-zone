@@ -1,0 +1,21 @@
+.initial-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.initial-screen .text {
+    font-size: 2vw;
+    font-weight: 400;
+}
+
+.initial-screen .text span {
+    font-weight: 700;
+}
