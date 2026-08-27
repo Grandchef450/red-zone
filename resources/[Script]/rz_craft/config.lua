@@ -143,10 +143,50 @@ Config.Mailbox = {
 
 
 -- ═══════════════════════════════════════════════════════════════════
---  PERMISSIONS ADMIN
+--  PERMISSIONS
 --
---  À déclarer dans ton server.cfg :
---    add_ace group.admin rz_craft.admin allow
---    add_principal identifier.license:xxxxx group.admin
+--  Découpées par action plutôt qu'en un seul droit global. Un support
+--  qui dépose une compensation n'a aucune raison de pouvoir supprimer
+--  une recette. Ajouter les rôles modérateur et support plus tard ne
+--  demandera que des lignes de server.cfg, aucune modification de code.
 -- ═══════════════════════════════════════════════════════════════════
-Config.AdminAce = 'rz_craft.admin'
+Config.Ace = {
+    -- Créer, modifier, supprimer établis, recettes et facteurs
+    edit   = 'rz_craft.edit',
+
+    -- Déposer un colis dans la boîte d'un joueur (/colis)
+    mail   = 'rz_craft.mail',
+
+    -- Consulter les listes sans rien pouvoir changer
+    view   = 'rz_craft.view',
+}
+
+-- Droit qui ouvre toutes les portes, quel que soit le reste.
+Config.AceSuper = 'rz_craft.admin'
+
+---Vérifie une permission, en tenant compte du droit global.
+---@param source number
+---@param permission string  une valeur de Config.Ace
+---@return boolean
+function Config.HasAce(source, permission)
+    if IsPlayerAceAllowed(source, Config.AceSuper) then return true end
+    return IsPlayerAceAllowed(source, permission)
+end
+
+--[[
+    À déclarer dans server.cfg :
+
+    -- Le groupe admin a tout
+    add_ace group.admin rz_craft.admin allow
+
+    -- Plus tard, quand tu créeras les autres rôles :
+    -- add_ace group.moderator rz_craft.mail allow
+    -- add_ace group.moderator rz_craft.view allow
+    -- add_ace group.support   rz_craft.mail allow
+
+    -- Puis rattacher les personnes :
+    add_principal identifier.license:TA_LICENCE group.admin
+]]
+
+-- Conservé pour compatibilité avec l'ancien nommage.
+Config.AdminAce = Config.AceSuper

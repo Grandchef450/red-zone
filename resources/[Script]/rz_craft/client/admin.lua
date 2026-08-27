@@ -41,41 +41,48 @@ end, false)
 -- ═══════════════════════════════════════════════════════════════════
 
 function OpenCreator()
-    local allowed = lib.callback.await('rz_craft:isAdmin', false)
-    if not allowed then
+    local perms = lib.callback.await('rz_craft:getPermissions', false)
+
+    if not perms or not perms.view then
         return lib.notify({
             type = 'error',
             title = 'Accès refusé',
-            description = 'Permission rz_craft.admin requise.',
+            description = 'Aucune permission sur le créateur de craft.',
         })
     end
+
+    -- Un rôle en lecture seule (futur modérateur) voit les listes
+    -- mais pas les boutons de création.
+    local canEdit = perms.edit
 
     local lists = lib.callback.await('rz_craft:admin:getLists', false) or
                   { tables = {}, recipes = {}, mailPoints = {} }
 
-    lib.registerContext({
-        id    = 'rz_creator',
-        title = 'Créateur de craft',
-        options = {
-            {
-                title = 'Poser un établi',
-                description = 'Place un nouvel établi avec un prop déplaçable',
-                icon = 'fas fa-hammer',
-                onSelect = function() PlaceTable() end,
-            },
-            {
-                title = 'Poser un facteur',
-                description = 'Place le ped qui remet les colis',
-                icon = 'fas fa-box-open',
-                onSelect = function() PlaceMailPoint() end,
-            },
-            {
-                title = 'Créer une recette',
-                description = 'Niveau, ingrédients, item produit',
-                icon = 'fas fa-scroll',
-                arrow = true,
-                onSelect = function() NewRecipe() end,
-            },
+    local options = {}
+
+    if canEdit then
+        options[#options + 1] = {
+            title = 'Poser un établi',
+            description = 'Place un nouvel établi avec un prop déplaçable',
+            icon = 'fas fa-hammer',
+            onSelect = function() PlaceTable() end,
+        }
+        options[#options + 1] = {
+            title = 'Poser un facteur',
+            description = 'Place le ped qui remet les colis',
+            icon = 'fas fa-box-open',
+            onSelect = function() PlaceMailPoint() end,
+        }
+        options[#options + 1] = {
+            title = 'Créer une recette',
+            description = 'Niveau, ingrédients, item produit',
+            icon = 'fas fa-scroll',
+            arrow = true,
+            onSelect = function() NewRecipe() end,
+        }
+    end
+
+    for _, opt in ipairs({
             {
                 title = ('Établis existants (%d)'):format(#lists.tables),
                 icon = 'fas fa-list',
@@ -94,7 +101,14 @@ function OpenCreator()
                 arrow = true,
                 onSelect = function() ListMailPoints(lists) end,
             },
-        },
+        }) do
+        options[#options + 1] = opt
+    end
+
+    lib.registerContext({
+        id      = 'rz_creator',
+        title   = canEdit and 'Créateur de craft' or 'Craft — consultation',
+        options = options,
     })
 
     lib.showContext('rz_creator')

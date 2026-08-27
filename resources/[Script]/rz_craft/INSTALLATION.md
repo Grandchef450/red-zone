@@ -53,14 +53,34 @@ L'ordre compte : `rz_craft` dépend d'`ox_lib`, `ox_core`,
 
 ---
 
-## 4. Permissions admin
+## 4. Permissions
 
-Toujours dans `server.cfg` :
+Les droits sont découpés par action, pour que les rôles modérateur et
+support puissent arriver plus tard sans rien réécrire.
+
+| Permission | Ce qu'elle ouvre |
+|---|---|
+| `rz_craft.admin` | tout, quel que soit le reste |
+| `rz_craft.edit` | créer, modifier, supprimer établis, recettes, facteurs |
+| `rz_craft.mail` | déposer un colis avec `/colis` |
+| `rz_craft.view` | consulter les listes sans rien changer |
+
+Dans `server.cfg` :
 
 ```cfg
 add_ace group.admin rz_craft.admin allow
 add_principal identifier.license:TA_LICENCE group.admin
 ```
+
+Le jour où tu ajoutes tes autres rôles, il suffira de :
+
+```cfg
+add_ace group.moderator rz_craft.view allow
+add_ace group.support   rz_craft.mail allow
+```
+
+Un rôle qui n'a que `view` ouvre le créateur en consultation : les
+listes s'affichent, les boutons de création disparaissent.
 
 Pour trouver ta licence : connecte-toi et tape `status` en console serveur.
 

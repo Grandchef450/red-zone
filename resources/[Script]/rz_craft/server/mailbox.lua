@@ -138,6 +138,8 @@ end)
 
 -- ═══════════════════════════════════════════════════════════════════
 --  COMMANDE STAFF
+--  Sur rz_craft.mail, pas rz_craft.admin : le support doit pouvoir
+--  compenser un joueur sans avoir accès à l'édition des recettes.
 --  Déposer un colis à un joueur (compensation, événement, bug).
 --  Usage : /colis <id joueur> <item> <quantité> [libellé]
 -- ═══════════════════════════════════════════════════════════════════
@@ -150,7 +152,7 @@ lib.addCommand('colis', {
         { name = 'qty',    type = 'number',   help = 'Quantité' },
         { name = 'label',  type = 'string',   help = 'Libellé du colis', optional = true },
     },
-    restricted = Config.AdminAce,
+    restricted = Config.Ace.mail,
 }, function(source, args)
     local charid = GetCharId(args.target)
     if not charid then

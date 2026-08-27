@@ -8,15 +8,21 @@
     barrière qui compte est celle-ci, côté serveur.
 ]]
 
-local function isAdmin(source)
-    return IsPlayerAceAllowed(source, Config.AdminAce)
+---Droit d'édition : créer, modifier, supprimer.
+local function canEdit(source)
+    return Config.HasAce(source, Config.Ace.edit)
 end
 
-local function deny(source)
+---Droit de consultation seule.
+local function canView(source)
+    return Config.HasAce(source, Config.Ace.view) or canEdit(source)
+end
+
+local function deny(source, permission)
     TriggerClientEvent('ox_lib:notify', source, {
         type = 'error',
         title = 'Accès refusé',
-        description = 'Permission rz_craft.admin requise.',
+        description = ('Permission %s requise.'):format(permission or Config.Ace.edit),
     })
     return false
 end
@@ -34,8 +40,12 @@ end
 --  Interrogé par le client avant d'afficher quoi que ce soit.
 -- ═══════════════════════════════════════════════════════════════════
 
-lib.callback.register('rz_craft:isAdmin', function(source)
-    return isAdmin(source)
+lib.callback.register('rz_craft:getPermissions', function(source)
+    return {
+        edit = canEdit(source),
+        view = canView(source),
+        mail = Config.HasAce(source, Config.Ace.mail),
+    }
 end)
 
 
@@ -44,7 +54,7 @@ end)
 -- ═══════════════════════════════════════════════════════════════════
 
 lib.callback.register('rz_craft:admin:createTable', function(source, data)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     local id = MySQL.insert.await([[
         INSERT INTO rz_craft_tables
@@ -69,7 +79,7 @@ end)
 
 
 lib.callback.register('rz_craft:admin:updateTable', function(source, id, data)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     MySQL.prepare.await([[
         UPDATE rz_craft_tables
@@ -91,7 +101,7 @@ end)
 
 
 lib.callback.register('rz_craft:admin:deleteTable', function(source, id)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     -- ON DELETE CASCADE nettoie rz_craft_table_recipes tout seul.
     MySQL.prepare.await('DELETE FROM rz_craft_tables WHERE id = ?', { id })
@@ -107,7 +117,7 @@ end)
 -- ═══════════════════════════════════════════════════════════════════
 
 lib.callback.register('rz_craft:admin:createMailPoint', function(source, data)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     local id = MySQL.insert.await([[
         INSERT INTO rz_mailbox_points
@@ -130,7 +140,7 @@ end)
 
 
 lib.callback.register('rz_craft:admin:deleteMailPoint', function(source, id)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     MySQL.prepare.await('DELETE FROM rz_mailbox_points WHERE id = ?', { id })
     LogAction(GetCharId(source) or 0, 'admin_delete_mailpoint', { id = id })
@@ -144,7 +154,7 @@ end)
 -- ═══════════════════════════════════════════════════════════════════
 
 lib.callback.register('rz_craft:admin:createRecipe', function(source, data)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     if not data.output_item or #(data.ingredients or {}) == 0 then
         return false, 'Recette incomplète.'
@@ -186,7 +196,7 @@ end)
 
 
 lib.callback.register('rz_craft:admin:deleteRecipe', function(source, id)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     MySQL.prepare.await('DELETE FROM rz_craft_recipes WHERE id = ?', { id })
     LogAction(GetCharId(source) or 0, 'admin_delete_recipe', { id = id })
@@ -197,7 +207,7 @@ end)
 
 ---Attache ou détache une recette d'un établi.
 lib.callback.register('rz_craft:admin:toggleRecipeOnTable', function(source, tableId, recipeId)
-    if not isAdmin(source) then return deny(source) end
+    if not canEdit(source) then return deny(source, Config.Ace.edit) end
 
     local existing = MySQL.single.await(
         'SELECT 1 AS ok FROM rz_craft_table_recipes WHERE table_id = ? AND recipe_id = ?',
