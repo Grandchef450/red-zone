@@ -15,7 +15,7 @@ Configure your language using the following:
     'it' -> Italian
     'pt' -> Portuguese
 ]]
-Config.Locale = 'en' 
+Config.Locale = 'fr' 
 
 Config.ServerName = ''
 
