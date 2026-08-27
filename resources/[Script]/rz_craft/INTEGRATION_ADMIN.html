@@ -1,0 +1,68 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     REDZONE — Bouton « Craft Creator »
+
+     À COLLER dans : resources/[Script]/admin/Nui/index.html
+     JUSTE AVANT la balise fermante </body>
+
+     C'est la SEULE modification à faire dans le panneau admin.
+     Aucun fichier Lua du panneau n'est touché : le bouton appelle
+     directement le callback de la ressource rz_craft.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<script>
+(function () {
+    'use strict';
+
+    var MENU_SELECTOR = '.sidebar .menu';
+    var ITEM_ID       = 'rz-craft-creator';
+
+    function injectButton() {
+        var menu = document.querySelector(MENU_SELECTOR);
+        if (!menu || document.getElementById(ITEM_ID)) return;
+
+        var li = document.createElement('li');
+        li.id = ITEM_ID;
+        // Pas d'attribut data-page : le routeur du panneau l'ignore,
+        // on gère le clic nous-mêmes.
+        li.innerHTML =
+            '<span class="icon"><i class="fa-solid fa-hammer"></i></span>' +
+            '<span class="label">Craft Creator</span>';
+
+        li.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // 1. Refermer proprement le panneau admin.
+            //    On passe par SON callback pour qu'il remette à zéro
+            //    son propre état (focus, spectate, sous-menus).
+            fetch('https://' + GetParentResourceName() + '/close', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+                body: JSON.stringify({})
+            }).catch(function () {});
+
+            // 2. Demander à rz_craft d'ouvrir le créateur.
+            //    Une interface NUI peut appeler le callback d'une
+            //    autre ressource : rien à ajouter côté panneau.
+            fetch('https://rz_craft/openCreator', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+                body: JSON.stringify({})
+            }).catch(function () {});
+        });
+
+        menu.appendChild(li);
+    }
+
+    // La barre latérale peut être reconstruite après connexion ou
+    // changement de permissions : on réinjecte tant qu'elle manque.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectButton);
+    } else {
+        injectButton();
+    }
+
+    var observer = new MutationObserver(injectButton);
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
