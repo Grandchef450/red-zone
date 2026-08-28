@@ -3,7 +3,7 @@
     Boîte aux lettres personnelle.
 
     Une boîte physique par safe zone, mais chaque joueur n'y voit
-    que son propre courrier : le filtrage se fait sur charid côté
+    que son propre courrier : le filtrage se fait sur citizenid côté
     serveur, jamais côté client.
 
     Les colis n'expirent pas. En contrepartie, une ligne est
@@ -12,19 +12,19 @@
 ]]
 
 ---Dépose un colis pour un personnage.
----@param charid number
+---@param citizenid number
 ---@param data table { label, reason, contents = { {item, qty}, ... }, created_by? }
 ---@return number|nil parcelId
-function SendParcel(charid, data)
-    if not charid or not data or not data.contents or #data.contents == 0 then
+function SendParcel(citizenid, data)
+    if not citizenid or not data or not data.contents or #data.contents == 0 then
         return nil
     end
 
     local id = MySQL.insert.await([[
-        INSERT INTO rz_mailbox (charid, label, reason, contents, created_by)
+        INSERT INTO rz_mailbox (citizenid, label, reason, contents, created_by)
         VALUES (?, ?, ?, ?, ?)
     ]], {
-        charid,
+        citizenid,
         data.label or 'Colis',
         data.reason or 'autre',
         json.encode(data.contents),
@@ -34,7 +34,7 @@ function SendParcel(charid, data)
     -- Notification si le joueur est en ligne
     for _, playerId in ipairs(GetPlayers()) do
         local src = tonumber(playerId)
-        if GetCharId(src) == charid then
+        if GetCharId(src) == citizenid then
             TriggerClientEvent('ox_lib:notify', src, {
                 type        = 'inform',
                 title       = 'Nouveau colis',
@@ -53,8 +53,8 @@ exports('SendParcel', SendParcel)
 
 ---Liste les colis en attente du joueur.
 lib.callback.register('rz_craft:getMail', function(source, pointId)
-    local charid = GetCharId(source)
-    if not charid then return {} end
+    local citizenid = GetCharId(source)
+    if not citizenid then return {} end
 
     -- Vérification de proximité : on ne consulte pas son courrier
     -- depuis l'autre bout de la carte.
@@ -68,10 +68,10 @@ lib.callback.register('rz_craft:getMail', function(source, pointId)
     local rows = MySQL.query.await([[
         SELECT id, label, reason, contents, created_at
         FROM rz_mailbox
-        WHERE charid = ? AND claimed_at IS NULL
+        WHERE citizenid = ? AND claimed_at IS NULL
         ORDER BY created_at ASC
         LIMIT ?
-    ]], { charid, Config.Mailbox.maxParcelsShown }) or {}
+    ]], { citizenid, Config.Mailbox.maxParcelsShown }) or {}
 
     for _, r in ipairs(rows) do
         r.contents = json.decode(r.contents)
@@ -83,8 +83,8 @@ end)
 
 ---Récupère un colis.
 lib.callback.register('rz_craft:claimParcel', function(source, parcelId, pointId)
-    local charid = GetCharId(source)
-    if not charid then return false, 'Personnage introuvable.' end
+    local citizenid = GetCharId(source)
+    if not citizenid then return false, 'Personnage introuvable.' end
 
     local point = Cache.mailPoints[pointId]
     if not point then return false, 'Boîte introuvable.' end
@@ -93,12 +93,12 @@ lib.callback.register('rz_craft:claimParcel', function(source, parcelId, pointId
     local dist = #(GetEntityCoords(ped) - vec3(point.x, point.y, point.z))
     if dist > 3.0 then return false, 'Trop loin de la boîte aux lettres.' end
 
-    -- Le filtre sur charid est ce qui empêche d'ouvrir le courrier
+    -- Le filtre sur citizenid est ce qui empêche d'ouvrir le courrier
     -- d'un autre joueur en envoyant un id arbitraire.
     local parcel = MySQL.single.await([[
         SELECT id, label, contents FROM rz_mailbox
-        WHERE id = ? AND charid = ? AND claimed_at IS NULL
-    ]], { parcelId, charid })
+        WHERE id = ? AND citizenid = ? AND claimed_at IS NULL
+    ]], { parcelId, citizenid })
 
     if not parcel then return false, 'Colis introuvable.' end
 
@@ -117,7 +117,7 @@ lib.callback.register('rz_craft:claimParcel', function(source, parcelId, pointId
 
     MySQL.prepare.await('DELETE FROM rz_mailbox WHERE id = ?', { parcel.id })
 
-    LogAction(charid, 'mail_claim', { parcel = parcel.label, contents = contents })
+    LogAction(citizenid, 'mail_claim', { parcel = parcel.label, contents = contents })
 
     return true, parcel.label
 end)
@@ -125,12 +125,12 @@ end)
 
 ---Nombre de colis en attente — pour l'indicateur sur le blip.
 lib.callback.register('rz_craft:getMailCount', function(source)
-    local charid = GetCharId(source)
-    if not charid then return 0 end
+    local citizenid = GetCharId(source)
+    if not citizenid then return 0 end
 
     local row = MySQL.single.await(
-        'SELECT COUNT(*) AS n FROM rz_mailbox WHERE charid = ? AND claimed_at IS NULL',
-        { charid })
+        'SELECT COUNT(*) AS n FROM rz_mailbox WHERE citizenid = ? AND claimed_at IS NULL',
+        { citizenid })
 
     return row and row.n or 0
 end)
@@ -154,13 +154,13 @@ lib.addCommand('colis', {
     },
     restricted = Config.Ace.mail,
 }, function(source, args)
-    local charid = GetCharId(args.target)
-    if not charid then
+    local citizenid = GetCharId(args.target)
+    if not citizenid then
         return TriggerClientEvent('ox_lib:notify', source, {
             type = 'error', description = 'Joueur introuvable.' })
     end
 
-    SendParcel(charid, {
+    SendParcel(citizenid, {
         label      = args.label or 'Compensation du staff',
         reason     = 'compensation',
         contents   = { { item = args.item, qty = args.qty } },

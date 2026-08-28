@@ -207,7 +207,7 @@ RegisterNetEvent('rz_craft:rebuildWorld', BuildWorld)
 
 AddEventHandler('onClientResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then return end
-    Wait(1000) -- laisse ox_target et ox_core s'initialiser
+    Wait(1000) -- laisse ox_target et qbx_core s'initialiser
     BuildWorld()
 end)
 

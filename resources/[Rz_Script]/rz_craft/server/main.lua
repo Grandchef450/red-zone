@@ -76,58 +76,60 @@ function LoadAll()
 end
 
 
----Récupère le charId ox_core d'une source.
+---Récupère le citizenid Qbox d'une source.
+---C'est une CHAÎNE (ex. 'ABC12345'), pas un entier : les colonnes
+---de la base sont en VARCHAR(50), pas en INT.
 ---@param source number
----@return number|nil
+---@return string|nil
 function GetCharId(source)
-    local player = Ox.GetPlayer(source)
-    return player and player.charId or nil
+    local player = exports.qbx_core:GetPlayer(source)
+    return player and player.PlayerData and player.PlayerData.citizenid or nil
 end
 
 
 ---Progression d'un joueur dans une catégorie.
----@param charid number
+---@param citizenid number
 ---@param category string
 ---@return table { level, xp, total_crafted }
-function GetProgress(charid, category)
+function GetProgress(citizenid, category)
     local row = MySQL.single.await(
-        'SELECT level, xp, total_crafted FROM rz_player_crafting WHERE charid = ? AND category = ?',
-        { charid, category }
+        'SELECT level, xp, total_crafted FROM rz_player_crafting WHERE citizenid = ? AND category = ?',
+        { citizenid, category }
     )
     return row or { level = 0, xp = 0, total_crafted = 0 }
 end
 
 
 ---Ajoute de l'XP et recalcule le niveau.
----@param charid number
+---@param citizenid number
 ---@param category string
 ---@param amount number
 ---@return number newLevel, boolean leveledUp
-function AddXp(charid, category, amount)
-    local p        = GetProgress(charid, category)
+function AddXp(citizenid, category, amount)
+    local p        = GetProgress(citizenid, category)
     local newXp    = p.xp + amount
     local newLevel = Config.GetLevelFromXp(newXp)
 
     MySQL.prepare.await([[
-        INSERT INTO rz_player_crafting (charid, category, level, xp, total_crafted)
+        INSERT INTO rz_player_crafting (citizenid, category, level, xp, total_crafted)
         VALUES (?, ?, ?, ?, 1)
         ON DUPLICATE KEY UPDATE
             level = VALUES(level),
             xp = VALUES(xp),
             total_crafted = total_crafted + 1
-    ]], { charid, category, newLevel, newXp })
+    ]], { citizenid, category, newLevel, newXp })
 
     return newLevel, newLevel > p.level
 end
 
 
 ---Écrit une ligne de journal.
----@param charid number
+---@param citizenid number
 ---@param action string
 ---@param detail table
-function LogAction(charid, action, detail)
-    MySQL.prepare('INSERT INTO rz_craft_logs (charid, action, detail) VALUES (?, ?, ?)',
-        { charid, action, json.encode(detail or {}) })
+function LogAction(citizenid, action, detail)
+    MySQL.prepare('INSERT INTO rz_craft_logs (citizenid, action, detail) VALUES (?, ?, ?)',
+        { citizenid, action, json.encode(detail or {}) })
 end
 
 
@@ -187,7 +189,7 @@ AddEventHandler('onResourceStart', function(resource)
             local recipe = Cache.recipes[s.recipe_id]
             local label  = recipe and recipe.output_item or 'craft inconnu'
 
-            SendParcel(s.charid, {
+            SendParcel(s.citizenid, {
                 label    = ('Craft interrompu — %s'):format(label),
                 reason   = 'craft_crash',
                 contents = { { item = Config.Capsules.item, qty = s.capsules_paid } },

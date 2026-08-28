@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div id="app" class="hidden">
+    <div class="header">
+        <span class="title">RZ — Reports <span id="role-badge" class="badge"></span></span>
+        <button id="close" class="x">&times;</button>
+    </div>
+
+    <div class="body">
+        <!-- Colonne gauche -->
+        <div class="left">
+            <!-- Formulaire nouveau report (joueur) -->
+            <div class="new-report" id="new-report">
+                <div class="nr-title">Nouveau report</div>
+                <select id="nr-cat"></select>
+                <textarea id="nr-msg" placeholder="Décris ton problème…" maxlength="500"></textarea>
+                <button id="nr-send">Envoyer</button>
+            </div>
+
+            <!-- Filtres staff -->
+            <div class="filters hidden" id="filters">
+                <button class="f-btn active" data-f="all">Tous</button>
+                <button class="f-btn" data-f="open">Ouverts</button>
+                <button class="f-btn" data-f="claimed">Pris</button>
+                <button class="f-btn" data-f="closed">Fermés</button>
+            </div>
+
+            <div class="list" id="list"></div>
+        </div>
+
+        <!-- Colonne droite : détail / thread -->
+        <div class="right">
+            <div class="detail-empty" id="detail-empty">Sélectionne un report.</div>
+            <div class="detail hidden" id="detail">
+                <div class="d-head">
+                    <div>
+                        <div class="d-title" id="d-title"></div>
+                        <div class="d-sub" id="d-sub"></div>
+                    </div>
+                    <div class="d-actions" id="d-actions"></div>
+                </div>
+                <div class="thread" id="thread"></div>
+                <div class="reply-bar" id="reply-bar">
+                    <input type="text" id="reply-input" placeholder="Écrire un message…" maxlength="500">
+                    <button id="reply-send">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

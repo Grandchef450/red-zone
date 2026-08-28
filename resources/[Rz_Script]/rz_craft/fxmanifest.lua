@@ -8,7 +8,6 @@ version '0.1.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
-    '@ox_core/lib/init.lua',
     'config.lua',
 }
 
@@ -39,7 +38,7 @@ ox_libs {
 
 dependencies {
     'ox_lib',
-    'ox_core',
+    'qbx_core',
     'ox_inventory',
     'ox_target',
     'oxmysql',

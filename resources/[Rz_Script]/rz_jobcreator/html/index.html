@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RZ Job Creator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+
+        <!-- Sidebar : liste des jobs -->
+        <aside class="sidebar">
+            <div class="brand">RZ<span>JOBS</span></div>
+            <button id="new-job" class="new-job">+ Nouveau job</button>
+            <div class="job-list" id="job-list"></div>
+            <div class="sidebar-foot">
+                <button id="close-btn" class="close-btn">Fermer (Échap)</button>
+            </div>
+        </aside>
+
+        <!-- Editeur -->
+        <main class="editor">
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">⚙</div>
+                <div>Sélectionne un job à gauche, ou crée-en un nouveau.</div>
+            </div>
+
+            <div class="editor-inner hidden" id="editor-inner">
+
+                <!-- En-tete -->
+                <header class="ed-header">
+                    <div class="ed-id">
+                        <label>Nom interne <small>(a-z, 0-9, _)</small></label>
+                        <input type="text" id="job-name" placeholder="police" maxlength="30">
+                    </div>
+                    <div class="ed-label">
+                        <label>Libellé affiché</label>
+                        <input type="text" id="job-label" placeholder="LSPD">
+                    </div>
+                    <div class="ed-actions">
+                        <button id="btn-save" class="btn btn-save">Enregistrer</button>
+                        <button id="btn-export" class="btn btn-ghost">Export JSON</button>
+                        <button id="btn-delete" class="btn btn-danger">Supprimer</button>
+                    </div>
+                </header>
+
+                <div class="sections">
+
+                    <!-- GRADES -->
+                    <section class="card">
+                        <div class="card-head">
+                            <h3>Grades &amp; salaires</h3>
+                            <button class="add-btn" data-add="grade">+ Grade</button>
+                        </div>
+                        <div class="list" id="list-grades"></div>
+                    </section>
+
+                    <!-- VEHICULES -->
+                    <section class="card">
+                        <div class="card-head">
+                            <h3>Spawns de véhicules</h3>
+                            <button class="add-btn add-here" data-add="vehicle">+ Ajouter ici</button>
+                        </div>
+                        <div class="list" id="list-vehicles"></div>
+                    </section>
+
+                    <!-- BLIPS -->
+                    <section class="card">
+                        <div class="card-head">
+                            <h3>Blips / zones map</h3>
+                            <div class="head-actions">
+                                <button class="mini-btn" id="btn-preview">Aperçu map</button>
+                                <button class="add-btn add-here" data-add="blip">+ Ajouter ici</button>
+                            </div>
+                        </div>
+                        <div class="list" id="list-blips"></div>
+                    </section>
+
+                    <!-- BOSS -->
+                    <section class="card">
+                        <div class="card-head">
+                            <h3>Menu patron (boss)</h3>
+                            <button class="add-btn add-here" data-add="boss">Définir ici</button>
+                        </div>
+                        <div class="list" id="list-boss"></div>
+                    </section>
+
+                    <!-- STASH -->
+                    <section class="card">
+                        <div class="card-head">
+                            <h3>Stashs (coffres)</h3>
+                            <button class="add-btn add-here" data-add="stash">+ Ajouter ici</button>
+                        </div>
+                        <div class="list" id="list-stashes"></div>
+                    </section>
+
+                    <!-- VESTIAIRE -->
+                    <section class="card">
+                        <div class="card-head">
+                            <h3>Vestiaires</h3>
+                            <button class="add-btn add-here" data-add="wardrobe">+ Ajouter ici</button>
+                        </div>
+                        <div class="list" id="list-wardrobes"></div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- Overlay export -->
+        <div class="export-overlay hidden" id="export-overlay">
+            <div class="export-box">
+                <div class="export-head">
+                    <span>Export JSON — <span id="export-name"></span></span>
+                    <button id="export-close" class="export-x">&times;</button>
+                </div>
+                <textarea id="export-text" readonly spellcheck="false"></textarea>
+                <div class="export-actions">
+                    <button class="btn btn-save" id="export-copy">Copier</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

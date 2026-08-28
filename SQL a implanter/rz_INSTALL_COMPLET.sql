@@ -1,6 +1,9 @@
 -- ═══════════════════════════════════════════════════════════════════
 --  REDZONE SURVIVAL — Installation complète de la base de données
---  Généré le 27 août 2026
+--  Généré le 27 août 2026 · adapté à Qbox le 28 août 2026
+--
+--  Framework : Qbox (qbx_core). Les colonnes d'identification sont
+--  des VARCHAR(50) contenant le citizenid, pas des entiers.
 --
 --  Ce fichier réunit les trois scripts dans le bon ordre.
 --  Un seul import à faire : phpMyAdmin > Importer > ce fichier.
@@ -192,13 +195,13 @@ CREATE TABLE IF NOT EXISTS `rz_trader_offers` (
 --  entre joueurs, et donc à faire vivre les peds troqueurs.
 -- ───────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `rz_player_crafting` (
-    `charid`         INT UNSIGNED NOT NULL,           -- ox_core : characters.charId
+    `citizenid`      VARCHAR(50)  NOT NULL,           -- Qbox : players.citizenid
     `category`       VARCHAR(32)  NOT NULL,
     `level`          INT          NOT NULL DEFAULT 0,
     `xp`             INT          NOT NULL DEFAULT 0,
     `total_crafted`  INT          NOT NULL DEFAULT 0,
 
-    PRIMARY KEY (`charid`, `category`)
+    PRIMARY KEY (`citizenid`, `category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -210,13 +213,13 @@ CREATE TABLE IF NOT EXISTS `rz_player_crafting` (
 -- ───────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `rz_craft_logs` (
     `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `charid`         INT UNSIGNED NOT NULL,
+    `citizenid`     VARCHAR(50)  NOT NULL,
     `action`         VARCHAR(32)  NOT NULL,           -- 'craft','trade_buy','trade_sell','admin_edit'
     `detail`         JSON         DEFAULT NULL,
     `created_at`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (`id`),
-    KEY `idx_char_date` (`charid`, `created_at`)
+    KEY `idx_char_date` (`citizenid`, `created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -533,7 +536,7 @@ INSERT INTO `rz_item_values` (`item`, `capsule_value`) VALUES
 -- ───────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `rz_craft_sessions` (
     `id`              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `charid`          INT UNSIGNED NOT NULL,
+    `citizenid`     VARCHAR(50)  NOT NULL,
     `recipe_id`       INT UNSIGNED NOT NULL,
     `table_id`        INT UNSIGNED NOT NULL,
 
@@ -554,7 +557,7 @@ CREATE TABLE IF NOT EXISTS `rz_craft_sessions` (
                       NOT NULL DEFAULT 'en_cours',
 
     PRIMARY KEY (`id`),
-    KEY `idx_char_status` (`charid`, `status`),
+    KEY `idx_char_status` (`citizenid`, `status`),
     KEY `idx_status_ends` (`status`, `ends_at`),
     CONSTRAINT `fk_sess_recipe` FOREIGN KEY (`recipe_id`)
         REFERENCES `rz_craft_recipes`(`id`) ON DELETE CASCADE
@@ -573,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `rz_craft_sessions` (
 -- ───────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `rz_mailbox` (
     `id`            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `charid`        INT UNSIGNED NOT NULL,
+    `citizenid`     VARCHAR(50)  NOT NULL,
 
     `label`         VARCHAR(96)  NOT NULL,   -- « Craft interrompu — Plaque de kevlar »
     `reason`        ENUM('craft_annule','craft_crash','craft_deconnexion',
@@ -590,7 +593,7 @@ CREATE TABLE IF NOT EXISTS `rz_mailbox` (
     `created_by`    VARCHAR(64)  DEFAULT NULL,
 
     PRIMARY KEY (`id`),
-    KEY `idx_char_unclaimed` (`charid`, `claimed_at`)
+    KEY `idx_char_unclaimed` (`citizenid`, `claimed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -637,7 +640,7 @@ CREATE TABLE IF NOT EXISTS `rz_mailbox_points` (
 
 -- Colis en attente pour un joueur.
 -- SELECT id, label, contents, created_at FROM rz_mailbox
--- WHERE charid = ? AND claimed_at IS NULL ORDER BY created_at;
+-- WHERE citizenid = ? AND claimed_at IS NULL ORDER BY created_at;
 
 -- Les colis n'expirent pas. La ligne est SUPPRIMÉE au retrait,
 -- ce qui empêche la table de gonfler. La trace reste dans rz_craft_logs.

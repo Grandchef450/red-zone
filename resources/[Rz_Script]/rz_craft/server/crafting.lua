@@ -168,8 +168,8 @@ lib.callback.register('rz_craft:getTableRecipes', function(source, tableId)
     local craftTable = Cache.tables[tableId]
     if not craftTable then return end
 
-    local charid = GetCharId(source)
-    if not charid then return end
+    local citizenid = GetCharId(source)
+    if not citizenid then return end
 
     local ok = isNearTable(source, craftTable, Config.CraftZone.tolerance)
     if not ok then return end
@@ -181,7 +181,7 @@ lib.callback.register('rz_craft:getTableRecipes', function(source, tableId)
         local recipe = Cache.recipes[recipeId]
         if recipe then
             if not progress[recipe.category] then
-                progress[recipe.category] = GetProgress(charid, recipe.category)
+                progress[recipe.category] = GetProgress(citizenid, recipe.category)
             end
             local p = progress[recipe.category]
 
@@ -251,8 +251,8 @@ lib.callback.register('rz_craft:start', function(source, tableId, recipeId, quan
         return false, 'Tu as déjà un craft en cours.'
     end
 
-    local charid = GetCharId(source)
-    if not charid then return false, 'Personnage introuvable.' end
+    local citizenid = GetCharId(source)
+    if not citizenid then return false, 'Personnage introuvable.' end
 
     local craftTable = Cache.tables[tableId]
     local recipe     = Cache.recipes[recipeId]
@@ -275,7 +275,7 @@ lib.callback.register('rz_craft:start', function(source, tableId, recipeId, quan
     if not near then return false, 'Trop loin de l\'établi.' end
 
     -- Niveau
-    local p = GetProgress(charid, recipe.category)
+    local p = GetProgress(citizenid, recipe.category)
     if p.level < recipe.required_level then
         return false, ('Niveau %s requis : %d (tu es %d).')
             :format(recipe.category, recipe.required_level, p.level)
@@ -316,13 +316,13 @@ lib.callback.register('rz_craft:start', function(source, tableId, recipeId, quan
 
     local sessionId = MySQL.insert.await([[
         INSERT INTO rz_craft_sessions
-            (charid, recipe_id, table_id, quantity, reserved_items, capsules_paid, ends_at)
+            (citizenid, recipe_id, table_id, quantity, reserved_items, capsules_paid, ends_at)
         VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?))
-    ]], { charid, recipeId, tableId, quantity, json.encode(toReserve), totalCost, endsAt })
+    ]], { citizenid, recipeId, tableId, quantity, json.encode(toReserve), totalCost, endsAt })
 
     Sessions[source] = {
         id         = sessionId,
-        charid     = charid,
+        citizenid     = citizenid,
         recipeId   = recipeId,
         tableId    = tableId,
         quantity   = quantity,
@@ -332,7 +332,7 @@ lib.callback.register('rz_craft:start', function(source, tableId, recipeId, quan
 
     reserve(source, recipe.ingredients, quantity)
 
-    LogAction(charid, 'craft_start', {
+    LogAction(citizenid, 'craft_start', {
         recipe = recipe.output_item, qty = quantity, capsules = totalCost,
     })
 
@@ -401,14 +401,14 @@ function CancelCraft(source, reason, message)
     local label  = recipe and recipe.output_item or 'craft'
 
     if s.capsules > 0 then
-        SendParcel(s.charid, {
+        SendParcel(s.citizenid, {
             label    = ('Craft annulé — %s'):format(label),
             reason   = reason or 'craft_annule',
             contents = { { item = Config.Capsules.item, qty = s.capsules } },
         })
     end
 
-    LogAction(s.charid, 'craft_cancel', { recipe = label, reason = reason })
+    LogAction(s.citizenid, 'craft_cancel', { recipe = label, reason = reason })
 
     TriggerClientEvent('rz_craft:cancelled', source, message, s.capsules)
 end
@@ -462,7 +462,7 @@ function CompleteCraft(source)
 
     if not added then
         -- Inventaire plein : l'item part en colis plutôt que d'être perdu
-        SendParcel(s.charid, {
+        SendParcel(s.citizenid, {
             label    = ('Inventaire plein — %s'):format(recipe.output_item),
             reason   = 'craft_annule',
             contents = { { item = recipe.output_item, qty = produced } },
@@ -471,11 +471,11 @@ function CompleteCraft(source)
 
     -- XP
     local xp = (recipe.xp_gain or 10) * s.quantity
-    local newLevel, leveledUp = AddXp(s.charid, recipe.category, xp)
+    local newLevel, leveledUp = AddXp(s.citizenid, recipe.category, xp)
 
     MySQL.prepare("UPDATE rz_craft_sessions SET status = 'termine' WHERE id = ?", { s.id })
 
-    LogAction(s.charid, 'craft_done', {
+    LogAction(s.citizenid, 'craft_done', {
         recipe = recipe.output_item, qty = produced, xp = xp, level = newLevel,
     })
 
@@ -508,14 +508,14 @@ function HandleDisconnect(source)
     local label  = recipe and recipe.output_item or 'craft'
 
     if s.capsules > 0 then
-        SendParcel(s.charid, {
+        SendParcel(s.citizenid, {
             label    = ('Craft interrompu — %s'):format(label),
             reason   = 'craft_deconnexion',
             contents = { { item = Config.Capsules.item, qty = s.capsules } },
         })
     end
 
-    LogAction(s.charid, 'craft_disconnect', { recipe = label })
+    LogAction(s.citizenid, 'craft_disconnect', { recipe = label })
 end
 
 AddEventHandler('playerDropped', function()
