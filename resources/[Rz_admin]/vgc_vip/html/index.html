@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <div class="window">
+
+            <!-- Header -->
+            <div class="header">
+                <div class="h-left">
+                    <div class="h-logo">✦ <b>VGC</b> STORE</div>
+                    <div class="h-tier" id="h-tier">Aucun VIP</div>
+                </div>
+                <nav class="h-nav" id="h-nav">
+                    <button class="hn-btn active" data-tab="store">Boutique VIP</button>
+                    <button class="hn-btn" data-tab="peds">Mes Peds</button>
+                    <button class="hn-btn" data-tab="wardrobe">Vestiaire</button>
+                    <button class="hn-btn" data-tab="revive">Réanimation</button>
+                    <button class="hn-btn" data-tab="shop">Matériaux</button>
+                </nav>
+                <div class="h-right">
+                    <div class="h-money" id="h-money">0 $</div>
+                    <button class="h-close" id="btn-close">✕</button>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="body">
+                <div class="tab active" id="tab-store"></div>
+                <div class="tab" id="tab-peds"></div>
+                <div class="tab" id="tab-wardrobe"></div>
+                <div class="tab" id="tab-revive"></div>
+                <div class="tab" id="tab-shop"></div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
