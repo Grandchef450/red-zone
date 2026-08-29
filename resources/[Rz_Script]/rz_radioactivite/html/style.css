@@ -1,0 +1,95 @@
+/* ═══════════════════════════════════════════════════════════════
+   RedZone — surimpression de la zone contaminée
+
+   Quatre couches empilées, chacune avec son rôle :
+     dark     assombrit, même en plein jour
+     veil     teinte rouge uniforme
+     vignette rouge saturé sur les bords, laisse le centre lisible
+     grain    bruit de compteur Geiger
+
+   La vignette est ce qui évite l'écueil du « filtre rouge sur tout
+   l'écran » : le joueur voit encore où il marche.
+   ═══════════════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; }
+
+body {
+    background: transparent;
+    overflow: hidden;
+    user-select: none;
+}
+
+.rad {
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.1s ease;
+    pointer-events: none;
+}
+
+.rad.on { opacity: 1; }
+
+.layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.dark {
+    background: #000;
+    opacity: 0;
+    transition: opacity .8s ease;
+}
+
+.veil {
+    background: #8b0000;
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity .8s ease;
+}
+
+.vignette {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(120, 0, 0, 0)    38%,
+        rgba(120, 0, 0, .35)  62%,
+        rgba(90, 0, 0, .72)   82%,
+        rgba(45, 0, 0, .92)  100%
+    );
+    opacity: 0;
+    transition: opacity .8s ease;
+}
+
+/* Bruit : une trame SVG répétée, animée par petits sauts.
+   Moins coûteux qu'une image et sans fichier à charger. */
+.grain {
+    opacity: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    animation: shift .28s steps(4) infinite;
+    transition: opacity .8s ease;
+}
+
+@keyframes shift {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-3px, 2px); }
+    50%  { transform: translate(2px, -3px); }
+    75%  { transform: translate(-2px, -2px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Sursaut à chaque prise de dégâts */
+.rad.pulse .veil { animation: pulse .5s ease; }
+
+@keyframes pulse {
+    0%, 100% { filter: none; }
+    40%      { filter: brightness(2.4) saturate(1.8); }
+}
+
+/* Liseré vert discret quand un filtre est actif */
+.rad.masked::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 3px solid rgba(74, 222, 128, .22);
+    box-shadow: inset 0 0 60px rgba(74, 222, 128, .12);
+}

@@ -1705,4 +1705,54 @@ return {
 			image = 'radio.png',
 		},
 	},
+
+	-- ─── PROTECTION RADIOLOGIQUE ───────────────────────────
+	['cartouche_filtre'] = {
+		label = 'Cartouche de filtre',
+		weight = 250,
+		description = 'Charbon actif comprimé. Ne sert qu\'à fabriquer des masques.',
+		client = {
+			image = 'cartouche_filtre.png',
+		},
+	},
+	['masque_simple'] = {
+		label = 'Masque simple',
+		weight = 400,
+		stack = false,
+		durability = true,
+		description = '15 minutes de protection par charge. 5 charges.',
+		client = {
+			image = 'masque_simple.png',
+		},
+	},
+	['masque_chimique'] = {
+		label = 'Masque chimique',
+		weight = 600,
+		stack = false,
+		durability = true,
+		description = '30 minutes de protection par charge. 5 charges.',
+		client = {
+			image = 'masque_chimique.png',
+		},
+	},
+	['masque_cartouche'] = {
+		label = 'Masque à cartouche',
+		weight = 800,
+		stack = false,
+		durability = true,
+		description = '45 minutes de protection par charge. 5 charges.',
+		client = {
+			image = 'masque_cartouche.png',
+		},
+	},
+	['masque_double_cartouche'] = {
+		label = 'Masque à double cartouche',
+		weight = 1000,
+		stack = false,
+		durability = true,
+		description = '1 heure de protection par charge. 5 charges.',
+		client = {
+			image = 'masque_double_cartouche.png',
+		},
+	},
 }
