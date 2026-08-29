@@ -361,6 +361,9 @@ return {
 			},
 		},
 
+		-- ⚠️  MODÈLE PROVISOIRE : l'inox utilise une machette en
+		--     attendant un vrai .ydr. Une seule ligne à changer dans
+		--     weapons.meta le jour où tu le trouves.
 		['katana_inox'] = {
 			label = 'Katana en inox',
 			weight = 1450,
@@ -402,6 +405,17 @@ return {
 			rzTier = 'melee',
 			client = {
 				image = 'katana_or.png',
+			},
+		},
+
+		['katana_diamant'] = {
+			label = 'Katana diamant',
+			weight = 1250,
+			durability = 0.03,
+			model = 'WEAPON_KATANA_DIAMANT',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_diamant.png',
 			},
 		},
 

@@ -1354,7 +1354,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_SURVIE</Name>
-        <Model>w_me_machette_lr_b</Model>
+        <Model>w_me_katana_survie</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -1487,7 +1487,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_CUIVRE</Name>
-        <Model>w_me_machette_lr_c</Model>
+        <Model>w_me_katana_cuivre</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -1620,7 +1620,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_ACIER</Name>
-        <Model>w_me_machette_lr_b</Model>
+        <Model>w_me_katana_acier</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -1753,7 +1753,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_ALUMINIUM</Name>
-        <Model>w_me_machette_lr_c</Model>
+        <Model>w_me_katana_aluminium</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -1886,7 +1886,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_MAGNESIUM</Name>
-        <Model>w_me_machette_lr_b</Model>
+        <Model>w_me_katana_magnesium</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -2019,7 +2019,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_CERAMIQUE</Name>
-        <Model>w_me_machette_lr_c</Model>
+        <Model>w_me_katana_ceramique</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -2285,7 +2285,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_CARBONE</Name>
-        <Model>w_me_machette_lr_c</Model>
+        <Model>w_me_katana_carbone</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -2418,7 +2418,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_ARGENT</Name>
-        <Model>w_me_machette_lr_b</Model>
+        <Model>w_me_katana_argent</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -2551,7 +2551,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_OR</Name>
-        <Model>w_me_machette_lr_c</Model>
+        <Model>w_me_katana_or</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
@@ -2655,6 +2655,139 @@
         <MPPickupHash>PICKUP_WEAPON_MACHETE</MPPickupHash>
         <HumanNameHash>WEAPON_KATANA_OR</HumanNameHash>
         <StatName>KATANA_OR</StatName>
+        <KnockdownCount value="0" />
+        <KillshotImpulseScale value="1.000000" />
+        <NmShotTuningSet>Normal</NmShotTuningSet>
+        <AttachPoints />
+        <GunFeedBone />
+        <TargetSequenceGroup />
+        <WeaponFlags>CarriedInHand Melee UsableOnFoot AnimReload AnimCrouchFire OnlyFireOneShot AllowCloseQuarterKills DisableLeftHandIkWhenOnFoot</WeaponFlags>
+        <TintSpecValues ref="TINT_DEFAULT" />
+        <FiringPatternAliases ref="NULL" />
+        <ReloadUpperBodyFixupExpressionData>Default</ReloadUpperBodyFixupExpressionData>
+        <AmmoDiminishingRate value="0" />
+        <AimingBreathingAdditiveWeight value="0.000000" />
+        <FiringBreathingAdditiveWeight value="0.000000" />
+        <StealthAimingBreathingAdditiveWeight value="0.000000" />
+        <StealthFiringBreathingAdditiveWeight value="0.000000" />
+        <AimingLeanAdditiveWeight value="0.000000" />
+        <FiringLeanAdditiveWeight value="0.000000" />
+        <StealthAimingLeanAdditiveWeight value="0.000000" />
+        <StealthFiringLeanAdditiveWeight value="0.000000" />
+        <MeleeDamageMultiplier value="1.000000" />
+        <MeleeRightFistTargetHealthDamageScaler value="1.000000" />
+        <AirborneAircraftLockOnMultiplier value="1.000000" />
+        <ArmouredVehicleGlassDamageOverride value="-1.000000" />
+        <CamerasReadyForUse>
+          <FirstPersonScopeCameraHash />
+        </CamerasReadyForUse>
+      </Item>
+      <Item type="CWeaponInfo">
+        <Name>WEAPON_KATANA_DIAMANT</Name>
+        <Model>w_me_katana_diamand</Model>
+        <Audio>AUDIO_ITEM_MACHETE</Audio>
+        <Slot>SLOT_MACHETE</Slot>
+        <DamageType>MELEE</DamageType>
+        <Explosion>
+          <Default>DONTCARE</Default>
+          <HitCar>DONTCARE</HitCar>
+          <HitTruck>DONTCARE</HitTruck>
+          <HitBike>DONTCARE</HitBike>
+          <HitBoat>DONTCARE</HitBoat>
+          <HitPlane>DONTCARE</HitPlane>
+        </Explosion>
+        <FireType>MELEE</FireType>
+        <WheelSlot>WHEEL_UNARMED_MELEE</WheelSlot>
+        <Group>GROUP_MELEE</Group>
+        <AmmoInfo />
+        <AimingInfo ref="RIFLE_STANDARD" />
+        <ClipSize value="0" />
+        <AccuracySpread value="0.000000" />
+        <AccurateModeAccuracyModifier value="0.500000" />
+        <RunAndGunAccuracyModifier value="2.000000" />
+        <RecoilAccuracyMax value="1.000000" />
+        <RecoilErrorTime value="0.000000" />
+        <RecoilRecoveryRate value="1.000000" />
+        <RecoilAccuracyToAllowHeadShotAI value="1000.000000" />
+        <MinHeadShotDistanceAI value="1000.000000" />
+        <MaxHeadShotDistanceAI value="1000.000000" />
+        <HeadShotDamageModifierAI value="0.000000" />
+        <RecoilAccuracyToAllowHeadShotPlayer value="1000.000000" />
+        <MinHeadShotDistancePlayer value="1000.000000" />
+        <MaxHeadShotDistancePlayer value="1000.000000" />
+        <HeadShotDamageModifierPlayer value="0.000000" />
+        <Damage value="80.000000" />
+        <DamageTime value="0.000000" />
+        <DamageTimeInVehicle value="0.000000" />
+        <DamageTimeInVehicleHeadShot value="0.000000" />
+        <HitLimbsDamageModifier value="0.500000" />
+        <NetworkHitLimbsDamageModifier value="0.800000" />
+        <LightlyArmouredDamageModifier value="0.750000" />
+        <lightlyArmouredDamageModifierPlayer value="0.750000" />
+        <VehicleDamageModifier value="1.000000" />
+        <Force value="50.000000" />
+        <ForceHitPed value="150.000000" />
+        <ForceHitVehicle value="150.000000" />
+        <ForceHitFlyingHeli value="200.000000" />
+        <OverrideForces />
+        <ForceMaxStrengthMult value="1.000000" />
+        <ForceFalloffRangeStart value="0.000000" />
+        <ForceFalloffRangeEnd value="50.000000" />
+        <ForceFalloffMin value="1.000000" />
+        <ProjectileForce value="0.000000" />
+        <FragImpulse value="600.000000" />
+        <Penetration value="0.000000" />
+        <VerticalLaunchAdjustment value="0.000000" />
+        <DropForwardVelocity value="0.000000" />
+        <Speed value="0.000000" />
+        <BulletsInBatch value="1" />
+        <BatchSpread value="0.000000" />
+        <ReloadTimeMP value="-1.000000" />
+        <ReloadTimeSP value="-1.000000" />
+        <VehicleReloadTime value="1.000000" />
+        <AnimReloadRate value="1.000000" />
+        <BulletsPerAnimLoop value="1" />
+        <TimeBetweenShots value="0.000000" />
+        <TimeLeftBetweenShotsWhereShouldFireIsCached value="-1.000000" />
+        <SpinUpTime value="0.000000" />
+        <SpinTime value="0.000000" />
+        <SpinDownTime value="0.000000" />
+        <AlternateWaitTime value="-1.000000" />
+        <BulletBendingNearRadius value="0.000000" />
+        <BulletBendingFarRadius value="0.000000" />
+        <BulletBendingZoomedRadius value="0.000000" />
+        <FirstPersonAimingBoneOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonScopeOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonScopeAttachmentOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonDrivebyIKOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonRNGOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonRNGRotationOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonLTOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonLTRotationOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonScopeRotationOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonAsThirdPersonIdleOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonAsThirdPersonRNGOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonAsThirdPersonLTOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonAsThirdPersonScopeOffset x="0.000000" y="0.000000" z="0.000000" />
+        <FirstPersonAsThirdPersonWeaponBlockedOffset x="0.000000" y="0.000000" z="0.000000" />
+        <ZoomFactorForAccurateMode value="1.000000" />
+        <RecoilShakeAmplitude value="0.000000" />
+        <ExplosionShakeAmplitude value="-1.000000" />
+        <ReticuleHudPosition x="0.000000" y="0.000000" />
+        <AiAimOffset x="0.000000" y="0.000000" z="0.000000" />
+        <AiShootOffset x="0.000000" y="0.000000" z="0.000000" />
+        <TorsoAimOffset x="0.000000" y="0.000000" />
+        <TorsoCrouchedAimOffset x="0.000000" y="0.000000" />
+        <LeftHandIkOffset x="0.000000" y="0.000000" z="0.000000" />
+        <ReticuleMinSizeStanding value="1.000000" />
+        <ReticuleMinSizeCrouched value="1.000000" />
+        <ReticuleScale value="1.000000" />
+        <ReticuleStyleHash />
+        <FirstPersonReticuleStyleHash />
+        <PickupHash>PICKUP_WEAPON_MACHETE</PickupHash>
+        <MPPickupHash>PICKUP_WEAPON_MACHETE</MPPickupHash>
+        <HumanNameHash>WEAPON_KATANA_DIAMANT</HumanNameHash>
+        <StatName>KATANA_DIAMANT</StatName>
         <KnockdownCount value="0" />
         <KillshotImpulseScale value="1.000000" />
         <NmShotTuningSet>Normal</NmShotTuningSet>

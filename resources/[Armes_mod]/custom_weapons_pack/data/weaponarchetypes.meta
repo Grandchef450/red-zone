@@ -33,12 +33,57 @@
     </Item>
     <Item>
       <fClipSetHash />
+      <ModelName>w_me_katana_survie</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_cuivre</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_acier</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_aluminium</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_magnesium</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_ceramique</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
       <ModelName>w_me_machette_lr_b</ModelName>
       <PhysicsDictionaryName />
     </Item>
     <Item>
       <fClipSetHash />
-      <ModelName>w_me_machette_lr_c</ModelName>
+      <ModelName>w_me_katana_carbone</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_argent</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_or</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_katana_diamand</ModelName>
       <PhysicsDictionaryName />
     </Item>
     <Item>
