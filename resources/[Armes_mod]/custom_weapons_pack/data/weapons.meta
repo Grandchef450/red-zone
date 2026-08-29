@@ -2152,7 +2152,7 @@
       </Item>
       <Item type="CWeaponInfo">
         <Name>WEAPON_KATANA_INOX</Name>
-        <Model>w_me_machette_lr_b</Model>
+        <Model>w_me_katana_inox</Model>
         <Audio>AUDIO_ITEM_MACHETE</Audio>
         <Slot>SLOT_MACHETE</Slot>
         <DamageType>MELEE</DamageType>
