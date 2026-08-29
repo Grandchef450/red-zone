@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CWeaponAnimations>
-    <animations />
-</CWeaponAnimations>
+<!--
+  Vide volontairement : les haches héritent des animations de la
+  hachette vanilla via <Slot>SLOT_HATCHET</Slot> dans weapons.meta.
+-->
+<CWeaponAnimationsSets>
+  <WeaponAnimationsSets />
+</CWeaponAnimationsSets>

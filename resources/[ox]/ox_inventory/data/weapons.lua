@@ -1,673 +1,131 @@
+--[[
+    REDZONE SURVIVAL — weapons.lua
+    Réorganisé le 29 août 2026
+
+    Les 108 armes sont INCHANGÉES : mêmes noms, mêmes poids,
+    mêmes munitions, même durabilité. Seul leur ORDRE change,
+    et un champ `rzTier` est ajouté à chacune.
+
+    À QUOI SERT rzTier
+    C'est une étiquette lisible par n'importe quel script :
+
+        for name, data in pairs(exports.ox_inventory:Items()) do
+            if data.rzTier == 'event' then ... end
+        end
+
+    Ton futur script d'airdrop pourra donc tirer au hasard
+    dans le palier « event » sans qu'on ait à maintenir une
+    deuxième liste ailleurs. ox_inventory ignore les champs
+    qu'il ne connaît pas : aucun risque.
+]]
+
 return {
 	Weapons = {
-		['WEAPON_BATTLERIFLE'] = {
-			label = 'Battle Rifle',
-			weight = 3300,
-			durability = 0.03,
-			ammoname = 'ammo-rifle2',
-		},
 
-		['WEAPON_SNOWLAUNCHER'] = {
-			label = 'Snowball Launcher',
-			weight = 1000,
-			durability = 0.03,
-			ammoname = 'WEAPON_SNOWBALL',
-		},
-
-		['WEAPON_TECPISTOL'] = {
-			label = 'Tactical SMG',
-			weight = 1500,
-			durability = 0.075,
-			ammoname = 'ammo-9',
-		},
-
-		['WEAPON_ADVANCEDRIFLE'] = {
-			label = 'Advanced Rifle',
-			weight = 3100,
-			durability = 0.03,
-			ammoname = 'ammo-rifle',
-		},
-
-		['WEAPON_APPISTOL'] = {
-			label = 'AP Pistol',
-			weight = 1400,
-			durability = 0.1,
-			ammoname = 'ammo-9',
-		},
-
-		['WEAPON_ASSAULTRIFLE'] = {
-			label = 'Assault Rifle',
-			weight = 4500,
-			durability = 0.03,
-			ammoname = 'ammo-rifle2',
-		},
-
-		['WEAPON_ASSAULTRIFLE_MK2'] = {
-			label = 'Assault Rifle MK2',
-			weight = 2950,
-			durability = 0.03,
-			ammoname = 'ammo-rifle2',
-		},
-
-		['WEAPON_ASSAULTSHOTGUN'] = {
-			label = 'Assault Shotgun',
-			weight = 5200,
-			durability = 0.05,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_ASSAULTSMG'] = {
-			label = 'Assault SMG',
-			weight = 2900,
-			durability = 0.05,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_BALL'] = {
-			label = 'Ball',
-			weight = 149,
-			throwable = true,
-		},
+		-- ═══════════════════════════════════════════════════════
+		--  CORPS À CORPS
+		--
+		-- Disponibles partout. Les équivalents craftables de ton tableau
+		-- (couteau de survie, hache, lance) sont des items séparés :
+		-- ceux-ci sont les armes trouvées, pas fabriquées.
+		-- ═══════════════════════════════════════════════════════
 
 		['WEAPON_BAT'] = {
 			label = 'Bat',
 			weight = 1134,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_BATTLEAXE'] = {
 			label = 'Battle Axe',
 			weight = 6500,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_BOTTLE'] = {
 			label = 'Bottle',
 			weight = 350,
 			durability = 0.1,
-		},
-
-		['WEAPON_BULLPUPRIFLE'] = {
-			label = 'Bullpup Rifle',
-			weight = 2900,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_BULLPUPRIFLE_MK2'] = {
-			label = 'Bullpup Rifle MK2',
-			weight = 2900,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_BULLPUPSHOTGUN'] = {
-			label = 'Bullpup Shotgun',
-			weight = 3100,
-			durability = 0.2,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_BZGAS'] = {
-			label = 'BZ Gas',
-			weight = 600,
-			throwable = true,
-		},
-
-		['WEAPON_CARBINERIFLE'] = {
-			label = 'Carbine Rifle',
-			weight = 3100,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_CARBINERIFLE_MK2'] = {
-			label = 'Carbine Rifle MK2',
-			weight = 3000,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_CERAMICPISTOL'] = {
-			label = 'Ceramic Pistol',
-			weight = 800,
-			durability = 0.2,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_PISTOLXM3'] = {
-			label = 'WM 29 Pistol',
-			weight = 969,
-			durability = 0.2,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_COMBATMG'] = {
-			label = 'Combat MG',
-			weight = 7500,
-			durability = 0.02,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_COMBATMG_MK2'] = {
-			label = 'Combat MG MK2',
-			weight = 8000,
-			durability = 0.02,
-			ammoname = 'ammo-rifle2'
-		},
-
-		['WEAPON_COMBATPDW'] = {
-			label = 'Combat PDW',
-			weight = 2300,
-			durability = 0.1,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_COMBATPISTOL'] = {
-			label = 'Combat Pistol',
-			weight = 785,
-			durability = 0.2,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_COMBATSHOTGUN'] = {
-			label = 'Combat Shotgun',
-			weight = 4400,
-			durability = 0.2,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_COMPACTLAUNCHER'] = {
-			label = 'Compact Grenade Launcher',
-			weight = 2500,
-			durability = 0.05,
-			ammoname = 'ammo-grenade'
-		},
-
-		['WEAPON_COMPACTRIFLE'] = {
-			label = 'Compact Rifle',
-			weight = 3600,
-			durability = 0.05,
-			ammoname = 'ammo-rifle2'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_CROWBAR'] = {
 			label = 'Crowbar',
 			weight = 2500,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_DAGGER'] = {
 			label = 'Dagger',
 			weight = 800,
 			durability = 0.1,
-		},
-
-		['WEAPON_DBSHOTGUN'] = {
-			label = 'Double Barrel Shotgun',
-			weight = 3175,
-			durability = 0.4,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_DOUBLEACTION'] = {
-			label = 'Double Action Revolver',
-			weight = 940,
-			durability = 0.2,
-			ammoname = 'ammo-38'
-		},
-
-		['WEAPON_EMPLAUNCHER'] = {
-			label = 'Compact EMP Launcher',
-			weight = 2750,
-			durability = 0.2,
-			ammoname = 'ammo-emp'
-		},
-
-		['WEAPON_FIREEXTINGUISHER'] = {
-			label = 'Fire Extinguisher',
-			weight = 8616,
-            durability = 0.006
-		},
-
-		['WEAPON_FIREWORK'] = {
-			label = 'Firework Launcher',
-			weight = 1000,
-			durability = 0.5,
-			ammoname = 'ammo-firework'
-		},
-
-		['WEAPON_FLARE'] = {
-			label = 'Flare',
-			weight = 250,
-			throwable = true,
-		},
-
-		['WEAPON_FLAREGUN'] = {
-			label = 'Flare Gun',
-			weight = 1000,
-			durability = 0.5,
-			ammoname = 'ammo-flare'
-		},
-
-		['WEAPON_FLASHLIGHT'] = {
-			label = 'Flashlight',
-			weight = 125,
-			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_GOLFCLUB'] = {
 			label = 'Golf Club',
 			weight = 330,
 			durability = 0.1,
-		},
-
-		['WEAPON_GRENADE'] = {
-			label = 'Grenade',
-			weight = 400,
-			throwable = true,
-		},
-
-		['WEAPON_GRENADELAUNCHER'] = {
-			label = 'Grenade Launcher',
-			weight = 6500,
-			durability = 0.05,
-			ammoname = 'ammo-grenade'
-		},
-
-		['WEAPON_GUSENBERG'] = {
-			label = 'Gusenberg',
-			weight = 4900,
-			durability = 0.04,
-			ammoname = 'ammo-45'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_HAMMER'] = {
 			label = 'Hammer',
 			weight = 1200,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_HATCHET'] = {
 			label = 'Hatchet',
 			weight = 1000,
 			durability = 0.1,
-		},
-
-		['WEAPON_HEAVYRIFLE'] = {
-			label = 'Heavy Rifle',
-			weight = 3300,
-			durability = 0.2,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_HAZARDCAN'] = {
-			label = 'Hazard Can',
-			weight = 12000,
-		},
-
-		['WEAPON_METALDETECTOR'] = {
-			label = 'Metal Detector',
-			weight = 1200,
-		},
-
-		['WEAPON_HOMINGLAUNCHER'] = {
-			label = 'Homing Launcher',
-			weight = 10000,
-			durability = 0.6,
-			ammoname = 'ammo-rocket'
-		},
-
-		['WEAPON_FERTILIZERCAN'] = {
-			label = 'Fertilizer Can',
-			weight = 12000,
-		},
-
-		['WEAPON_HEAVYPISTOL'] = {
-			label = 'Heavy Pistol',
-			weight = 1100,
-			durability = 0.2,
-			ammoname = 'ammo-45'
-		},
-
-		['WEAPON_HEAVYSHOTGUN'] = {
-			label = 'Heavy Shotgun',
-			weight = 3600,
-			durability = 0.1,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_HEAVYSNIPER'] = {
-			label = 'Heavy Sniper',
-			weight = 12700,
-			durability = 0.5,
-			ammoname = 'ammo-heavysniper'
-		},
-
-		['WEAPON_HEAVYSNIPER_MK2'] = {
-			label = 'Heavy Sniper MK2',
-			weight = 14000,
-			durability = 0.5,
-			ammoname = 'ammo-heavysniper'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_KNIFE'] = {
 			label = 'Knife',
 			weight = 300,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_KNUCKLE'] = {
 			label = 'Knuckle Dusters',
 			weight = 300,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_MACHETE'] = {
 			label = 'Machete',
 			weight = 1000,
 			durability = 0.1,
-		},
-
-		['WEAPON_MACHINEPISTOL'] = {
-			label = 'Machine Pistol',
-			weight = 1400,
-			durability = 0.05,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_MARKSMANPISTOL'] = {
-			label = 'Marksman Pistol',
-			weight = 1588,
-			durability = 0.5,
-			ammoname = 'ammo-22'
-		},
-
-		['WEAPON_MARKSMANRIFLE'] = {
-			label = 'Marksman Rifle',
-			weight = 7500,
-			durability = 0.4,
-			ammoname = 'ammo-sniper'
-		},
-
-		['WEAPON_MARKSMANRIFLE_MK2'] = {
-			label = 'Marksman Rifle MK2',
-			weight = 4000,
-			durability = 0.4,
-			ammoname = 'ammo-sniper'
-		},
-
-		['WEAPON_MG'] = {
-			label = 'Machine Gun',
-			weight = 9000,
-			durability = 0.02,
-			ammoname = 'ammo-rifle2'
-		},
-
-		['WEAPON_MINIGUN'] = {
-			label = 'Minigun',
-			weight = 38500,
-			durability = 0.1,
-			ammoname = 'ammo-rifle2'
-		},
-
-		['WEAPON_MICROSMG'] = {
-			label = 'Micro SMG',
-			weight = 3000,
-			durability = 0.1,
-			ammoname = 'ammo-45'
-		},
-
-		['WEAPON_MILITARYRIFLE'] = {
-			label = 'Military Rifle',
-			weight = 3600,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_MINISMG'] = {
-			label = 'Mini SMG',
-			weight = 1270,
-			durability = 0.05,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_MOLOTOV'] = {
-			label = 'Molotov',
-			weight = 1800,
-			throwable = true,
-		},
-
-		['WEAPON_MUSKET'] = {
-			label = 'Musket',
-			weight = 4500,
-			durability = 0.5,
-			ammoname = 'ammo-musket'
-		},
-
-		['WEAPON_NAVYREVOLVER'] = {
-			label = 'Navy Revolver',
-			weight = 4000,
-			durability = 0.2,
-			ammoname = 'ammo-44'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_NIGHTSTICK'] = {
 			label = 'Nightstick',
 			weight = 1000,
 			durability = 0.1,
-		},
-
-		['WEAPON_PETROLCAN'] = {
-			label = 'Jerry Can',
-			weight = 4000,
-		},
-
-		['WEAPON_GADGETPISTOL'] = {
-			label = 'Perico Pistol',
-			weight = 1750,
-			durability = 0.1,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_PIPEBOMB'] = {
-			label = 'Pipe Bomb',
-			weight = 1800,
-			throwable = true,
-		},
-
-		['WEAPON_PISTOL'] = {
-			label = 'Pistol',
-			weight = 1130,
-			durability = 0.1,
-			ammoname = 'ammo-9',
-		},
-
-		['WEAPON_PISTOL50'] = {
-			label = 'Pistol .50',
-			weight = 2000,
-			durability = 0.1,
-			ammoname = 'ammo-50'
-		},
-
-		['WEAPON_PISTOL_MK2'] = {
-			label = 'Pistol MK2',
-			weight = 1000,
-			durability = 0.5,
-			ammoname = 'ammo-9'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_POOLCUE'] = {
 			label = 'Pool Cue',
 			weight = 146,
 			durability = 0.1,
-		},
-
-		['WEAPON_CANDYCANE'] = {
-			label = 'Candy Cane',
-			weight = 85,
-			durability = 0.1,
-		},
-
-		['WEAPON_PROXMINE'] = {
-			label = 'Proximity Mine',
-			weight = 2500,
-			throwable = true,
-		},
-
-		['WEAPON_PUMPSHOTGUN'] = {
-			label = 'Pump Shotgun',
-			weight = 3400,
-			durability = 0.1,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_PUMPSHOTGUN_MK2'] = {
-			label = 'Pump Shotgun MK2',
-			weight = 3200,
-			durability = 0.1,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_RAILGUN'] = {
-			label = 'Railgun',
-			weight = 3570,
-			durability = 0.5,
-			ammoname = 'ammo-railgun'
-		},
-
-		['WEAPON_RAILGUNXM3'] = {
-			label = 'Railgun XM3',
-			weight = 3570,
-			durability = 0.5,
-			ammoname = 'ammo-railgun'
-		},
-
-		['WEAPON_RAYCARBINE'] = {
-			label = 'Unholy Hellbringer',
-			weight = 3620,
-			durability = 0.2,
-			ammoname = 'ammo-laser'
-		},
-
-		['WEAPON_RAYPISTOL'] = {
-			label = 'Up-n-Atomizer',
-			weight = 1540,
-			durability = 0.5
-		},
-
-		['WEAPON_REVOLVER'] = {
-			label = 'Revolver',
-			weight = 2260,
-			durability = 0.1,
-			ammoname = 'ammo-44'
-		},
-
-		['WEAPON_REVOLVER_MK2'] = {
-			label = 'Revolver MK2',
-			weight = 2600,
-			durability = 0.1,
-			ammoname = 'ammo-44'
-		},
-
-		['WEAPON_RPG'] = {
-			label = 'RPG',
-			weight = 5000,
-			durability = 0.3,
-			ammoname = 'ammo-rocket'
-		},
-
-		['WEAPON_SAWNOFFSHOTGUN'] = {
-			label = 'Sawn Off Shotgun',
-			weight = 2380,
-			durability = 0.1,
-			ammoname = 'ammo-shotgun'
-		},
-
-		['WEAPON_SMG'] = {
-			label = 'SMG',
-			weight = 3084,
-			durability = 0.8,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_SMG_MK2'] = {
-			label = 'SMG Mk2',
-			weight = 2700,
-			durability = 0.05,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_SMOKEGRENADE'] = {
-			label = 'Smoke Grenade',
-			weight = 600,
-			throwable = true,
-		},
-
-		['WEAPON_SNIPERRIFLE'] = {
-			label = 'Sniper Rifle',
-			weight = 5000,
-			durability = 0.5,
-			ammoname = 'ammo-sniper'
-		},
-
-		['WEAPON_SNOWBALL'] = {
-			label = 'Snow Ball',
-			weight = 5,
-			throwable = true,
-		},
-
-		['WEAPON_SNSPISTOL'] = {
-			label = 'SNS Pistol',
-			weight = 465,
-			durability = 0.1,
-			ammoname = 'ammo-45'
-		},
-
-		['WEAPON_SNSPISTOL_MK2'] = {
-			label = 'SNS Pistol MK2',
-			weight = 465,
-			durability = 0.1,
-			ammoname = 'ammo-45'
-		},
-
-		['WEAPON_SPECIALCARBINE'] = {
-			label = 'Special Carbine',
-			weight = 3000,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_SPECIALCARBINE_MK2'] = {
-			label = 'Special Carbine MK2',
-			weight = 3370,
-			durability = 0.03,
-			ammoname = 'ammo-rifle'
-		},
-
-		['WEAPON_STICKYBOMB'] = {
-			label = 'Sticky Bomb',
-			weight = 1000,
-			throwable = true,
+			rzTier = 'melee',
 		},
 
 		['WEAPON_STONE_HATCHET'] = {
 			label = 'Stone Hatchet',
 			weight = 800,
 			durability = 0.1,
-		},
-
-		['WEAPON_STUNGUN'] = {
-			label = 'Tazer',
-			weight = 227,
-			durability = 0.1,
-		},
-
-		['WEAPON_AUTOSHOTGUN'] = {
-			label = 'Sweeper Shotgun',
-			weight = 4400,
-			durability = 0.05,
-			ammoname = 'ammo-shotgun'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_SWITCHBLADE'] = {
@@ -675,49 +133,1141 @@ return {
 			weight = 300,
 			durability = 0.1,
 			anim = { 'anim@melee@switchblade@holster', 'unholster', 200, 'anim@melee@switchblade@holster', 'holster', 600 },
-		},
-
-		['WEAPON_VINTAGEPISTOL'] = {
-			label = 'Vintage Pistol',
-			weight = 700,
-			durability = 0.1,
-			ammoname = 'ammo-9'
-		},
-
-		['WEAPON_RAYMINIGUN'] = {
-			label = 'Widowmaker',
-			weight = 7000,
-			durability = 0.1,
-			ammoname = 'ammo-laser'
+			rzTier = 'melee',
 		},
 
 		['WEAPON_WRENCH'] = {
 			label = 'Wrench',
 			weight = 2500,
 			durability = 0.1,
+			rzTier = 'melee',
 		},
 
-		['WEAPON_PRECISIONRIFLE'] = {
-			label = 'Precision Rifle',
-			weight = 4800,
+
+
+		-- ═══════════════════════════════════════════════════════
+		--  HACHES CRAFTABLES  —  armes blanches de l'arbre de craft
+		--
+		--  Le nom de l'item ne change PAS : les recettes continuent
+		--  de produire « hache_survie ». Le champ `model` pointe vers
+		--  le hash de l'arme, déclarée dans custom_weapons_pack.
+		--
+		--  ⚠️  Ces quatre entrées doivent être RETIRÉES de items.lua,
+		--  sinon items.lua les écrase au chargement et elles
+		--  redeviennent de simples objets inertes.
+		-- ═══════════════════════════════════════════════════════
+
+		['hache_survie'] = {
+			label = 'Hache de survie',
+			weight = 1500,
+			durability = 0.12,
+			model = 'WEAPON_HACHE_SURVIE',
+			rzTier = 'melee',
+			client = {
+				image = 'hache_survie.png',
+			},
+		},
+
+		['hache_acier'] = {
+			label = 'Hache en acier',
+			weight = 1600,
+			durability = 0.08,
+			model = 'WEAPON_HACHE_ACIER',
+			rzTier = 'melee',
+			client = {
+				image = 'hache_acier.png',
+			},
+		},
+
+		['hache_aluminium'] = {
+			label = 'Hache en aluminium',
+			weight = 1300,
+			durability = 0.06,
+			model = 'WEAPON_HACHE_ALUMINIUM',
+			rzTier = 'melee',
+			client = {
+				image = 'hache_aluminium.png',
+			},
+		},
+
+		['hache_inox'] = {
+			label = 'Hache en inox',
+			weight = 1700,
+			durability = 0.04,
+			model = 'WEAPON_HACHE_INOX',
+			rzTier = 'melee',
+			client = {
+				image = 'hache_inox.png',
+			},
+		},
+
+
+		-- ─── ARMES DE CONTACT BRICOLÉES ────────────────────────
+		--  Les deux battes utilisent des modèles que je n'ai pas pu
+		--  voir : si le disque de scie et le barbelé sont inversés,
+		--  échange les valeurs `model` dans le pack d'armes.
+
+		['batte_barbelee'] = {
+			label = 'Batte barbelée',
+			weight = 2200,
+			durability = 0.09,
+			model = 'WEAPON_BATTE_BARBELEE',
+			rzTier = 'melee',
+			client = {
+				image = 'batte_barbelee.png',
+			},
+		},
+
+		['batte_scie'] = {
+			label = 'Batte à disque de scie',
+			weight = 2500,
+			durability = 0.07,
+			model = 'WEAPON_BATTE_SCIE',
+			rzTier = 'melee',
+			client = {
+				image = 'batte_scie.png',
+			},
+		},
+
+		-- ─── ARMES DE POING ────────────────────────────────────
+		--  Toutes utilisent le modèle vanilla w_me_knuckle : elles
+		--  se ressemblent donc à l'écran. Seuls les dégâts, le poids
+		--  et la durabilité les distinguent.
+
+		['poing_americain'] = {
+			label = 'Poing américain',
+			weight = 400,
+			durability = 0.10,
+			model = 'WEAPON_POING_AMERICAIN',
+			rzTier = 'melee',
+			client = {
+				image = 'poing_americain.png',
+			},
+		},
+
+		['gant_fer'] = {
+			label = 'Gants ferrés',
+			weight = 700,
+			durability = 0.08,
+			model = 'WEAPON_GANT_FER',
+			rzTier = 'melee',
+			client = {
+				image = 'gant_fer.png',
+			},
+		},
+
+		['gant_aluminium'] = {
+			label = 'Gants en aluminium',
+			weight = 500,
+			durability = 0.06,
+			model = 'WEAPON_GANT_ALUMINIUM',
+			rzTier = 'melee',
+			client = {
+				image = 'gant_aluminium.png',
+			},
+		},
+
+		['gant_inox'] = {
+			label = 'Gants en inox',
+			weight = 800,
+			durability = 0.04,
+			model = 'WEAPON_GANT_INOX',
+			rzTier = 'melee',
+			client = {
+				image = 'gant_inox.png',
+			},
+		},
+
+
+		-- ─── KATANAS ───────────────────────────────────────────
+		--  Les dix frappent EXACTEMENT pareil : 80 de dégâts,
+		--  soit le double d'une machette. Ce qui les sépare, ce
+		--  sont le POIDS et la DURABILITÉ.
+		--
+		--  Le carbone est le plus léger et le plus endurant ;
+		--  l'or est lourd et se marque vite. Un joueur choisit
+		--  donc sa lame selon ce qu'il porte déjà et selon la
+		--  durée de sa sortie, pas selon sa puissance.
+		--
+		--  ⚠️  Les dix partagent DEUX modèles de machette, en
+		--  alternance : ils forment cinq paires identiques à
+		--  l'écran. Aucun modèle de katana n'existe ni dans ton
+		--  archive ni dans GTA.
+		-- ═══════════════════════════════════════════════════════
+
+		['katana_survie'] = {
+			label = 'Katana de fortune',
+			weight = 1200,
+			durability = 0.16,
+			model = 'WEAPON_KATANA_SURVIE',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_survie.png',
+			},
+		},
+
+		['katana_cuivre'] = {
+			label = 'Katana en cuivre',
+			weight = 1600,
+			durability = 0.12,
+			model = 'WEAPON_KATANA_CUIVRE',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_cuivre.png',
+			},
+		},
+
+		['katana_acier'] = {
+			label = 'Katana en acier',
+			weight = 1400,
+			durability = 0.08,
+			model = 'WEAPON_KATANA_ACIER',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_acier.png',
+			},
+		},
+
+		['katana_aluminium'] = {
+			label = 'Katana en aluminium',
+			weight = 1000,
+			durability = 0.1,
+			model = 'WEAPON_KATANA_ALUMINIUM',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_aluminium.png',
+			},
+		},
+
+		['katana_magnesium'] = {
+			label = 'Katana en magnésium',
+			weight = 1050,
+			durability = 0.08,
+			model = 'WEAPON_KATANA_MAGNESIUM',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_magnesium.png',
+			},
+		},
+
+		['katana_ceramique'] = {
+			label = 'Katana en céramique',
+			weight = 1100,
+			durability = 0.07,
+			model = 'WEAPON_KATANA_CERAMIQUE',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_ceramique.png',
+			},
+		},
+
+		['katana_inox'] = {
+			label = 'Katana en inox',
+			weight = 1450,
+			durability = 0.045,
+			model = 'WEAPON_KATANA_INOX',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_inox.png',
+			},
+		},
+
+		['katana_carbone'] = {
+			label = 'Katana en carbone',
+			weight = 900,
+			durability = 0.04,
+			model = 'WEAPON_KATANA_CARBONE',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_carbone.png',
+			},
+		},
+
+		['katana_argent'] = {
+			label = 'Katana en argent',
+			weight = 1650,
+			durability = 0.06,
+			model = 'WEAPON_KATANA_ARGENT',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_argent.png',
+			},
+		},
+
+		['katana_or'] = {
+			label = 'Katana en or',
+			weight = 1900,
+			durability = 0.06,
+			model = 'WEAPON_KATANA_OR',
+			rzTier = 'melee',
+			client = {
+				image = 'katana_or.png',
+			},
+		},
+
+		-- ─── COUTEAUX CSGO ─────────────────────────────────────
+		--  Neuf lames converties de REMPLACEMENT en ADDON.
+		--
+		--  Dans l'archive d'origine, les neuf portaient le même
+		--  nom de fichier — w_me_knife_01, le couteau vanilla.
+		--  Elles s'écrasaient mutuellement : impossible d'en
+		--  installer plus d'une. Et Shadow dagger visait
+		--  w_me_knuckle, ce qui aurait transformé tes quatre
+		--  armes de poing en dague.
+		--
+		--  Dégâts uniformes à 45 : au-dessus d'une machette
+		--  vanilla (40), loin sous un katana (80). Ce sont des
+		--  lames de prestige — leur valeur tient à la rareté,
+		--  pas à la puissance.
+		-- ═══════════════════════════════════════════════════════
+
+		['couteau_bayonet'] = {
+			label = 'Baïonnette',
+			weight = 700,
+			durability = 0.06,
+			model = 'WEAPON_COUTEAU_BAYONET',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_bayonet.png',
+			},
+		},
+
+		['couteau_papillon'] = {
+			label = 'Couteau papillon',
+			weight = 450,
+			durability = 0.07,
+			model = 'WEAPON_COUTEAU_PAPILLON',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_papillon.png',
+			},
+		},
+
+		['couteau_flip'] = {
+			label = 'Couteau à cran',
+			weight = 420,
+			durability = 0.08,
+			model = 'WEAPON_COUTEAU_FLIP',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_flip.png',
+			},
+		},
+
+		['couteau_gut'] = {
+			label = 'Couteau à dépecer',
+			weight = 500,
+			durability = 0.07,
+			model = 'WEAPON_COUTEAU_GUT',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_gut.png',
+			},
+		},
+
+		['couteau_huntsman'] = {
+			label = 'Couteau de chasse',
+			weight = 650,
+			durability = 0.05,
+			model = 'WEAPON_COUTEAU_HUNTSMAN',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_huntsman.png',
+			},
+		},
+
+		['couteau_karambit'] = {
+			label = 'Karambit',
+			weight = 400,
+			durability = 0.07,
+			model = 'WEAPON_COUTEAU_KARAMBIT',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_karambit.png',
+			},
+		},
+
+		['dague_ombre'] = {
+			label = 'Dagues de l\'ombre',
+			weight = 550,
+			durability = 0.06,
+			model = 'WEAPON_DAGUE_OMBRE',
+			rzTier = 'event',
+			client = {
+				image = 'dague_ombre.png',
+			},
+		},
+
+		['couteau_ct'] = {
+			label = 'Couteau tactique',
+			weight = 600,
+			durability = 0.06,
+			model = 'WEAPON_COUTEAU_CT',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_ct.png',
+			},
+		},
+
+		['couteau_t'] = {
+			label = 'Couteau de rue',
+			weight = 580,
+			durability = 0.09,
+			model = 'WEAPON_COUTEAU_T',
+			rzTier = 'event',
+			client = {
+				image = 'couteau_t.png',
+			},
+		},
+		-- ═══════════════════════════════════════════════════════
+		--  OUTILS
+		--
+		-- Pas des armes de combat. Aucune raison de les rationner.
+		-- ═══════════════════════════════════════════════════════
+
+		['WEAPON_FLASHLIGHT'] = {
+			label = 'Flashlight',
+			weight = 125,
+			durability = 0.1,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_FIREEXTINGUISHER'] = {
+			label = 'Fire Extinguisher',
+			weight = 8616,
+            durability = 0.006,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_PETROLCAN'] = {
+			label = 'Jerry Can',
+			weight = 4000,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_HAZARDCAN'] = {
+			label = 'Hazard Can',
+			weight = 12000,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_FERTILIZERCAN'] = {
+			label = 'Fertilizer Can',
+			weight = 12000,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_METALDETECTOR'] = {
+			label = 'Metal Detector',
+			weight = 1200,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_FLARE'] = {
+			label = 'Flare',
+			weight = 250,
+			throwable = true,
+			rzTier = 'outil',
+		},
+
+		['WEAPON_FLAREGUN'] = {
+			label = 'Flare Gun',
+			weight = 1000,
+			durability = 0.5,
+			ammoname = 'ammo-flare',
+			rzTier = 'outil',
+		},
+
+
+		-- ═══════════════════════════════════════════════════════
+		--  VILLE  —  trouvable, troquable, lootable en zone urbaine
+		--
+		-- Armes de poing, petits fusils à pompe et automatiques d'époque.
+		-- La Gusenberg EST la Thompson de la guerre.
+		-- 
+		-- C'est ce palier que doivent contenir tes tables de loot
+		-- urbaines, tes épaves et tes peds troqueurs.
+		-- ═══════════════════════════════════════════════════════
+
+		['WEAPON_PISTOL'] = {
+			label = 'Pistol',
+			weight = 1130,
+			durability = 0.1,
+			ammoname = 'ammo-9',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_COMBATPISTOL'] = {
+			label = 'Combat Pistol',
+			weight = 785,
+			durability = 0.2,
+			ammoname = 'ammo-9',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_SNSPISTOL'] = {
+			label = 'SNS Pistol',
+			weight = 465,
+			durability = 0.1,
+			ammoname = 'ammo-45',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_VINTAGEPISTOL'] = {
+			label = 'Vintage Pistol',
+			weight = 700,
+			durability = 0.1,
+			ammoname = 'ammo-9',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_CERAMICPISTOL'] = {
+			label = 'Ceramic Pistol',
+			weight = 800,
+			durability = 0.2,
+			ammoname = 'ammo-9',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_HEAVYPISTOL'] = {
+			label = 'Heavy Pistol',
+			weight = 1100,
+			durability = 0.2,
+			ammoname = 'ammo-45',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_PISTOL50'] = {
+			label = 'Pistol .50',
+			weight = 2000,
+			durability = 0.1,
+			ammoname = 'ammo-50',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_REVOLVER'] = {
+			label = 'Revolver',
+			weight = 2260,
+			durability = 0.1,
+			ammoname = 'ammo-44',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_DOUBLEACTION'] = {
+			label = 'Double Action Revolver',
+			weight = 940,
+			durability = 0.2,
+			ammoname = 'ammo-38',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_NAVYREVOLVER'] = {
+			label = 'Navy Revolver',
+			weight = 4000,
+			durability = 0.2,
+			ammoname = 'ammo-44',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_MARKSMANPISTOL'] = {
+			label = 'Marksman Pistol',
+			weight = 1588,
+			durability = 0.5,
+			ammoname = 'ammo-22',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_MUSKET'] = {
+			label = 'Musket',
+			weight = 4500,
+			durability = 0.5,
+			ammoname = 'ammo-musket',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_SAWNOFFSHOTGUN'] = {
+			label = 'Sawn Off Shotgun',
+			weight = 2380,
+			durability = 0.1,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_DBSHOTGUN'] = {
+			label = 'Double Barrel Shotgun',
+			weight = 3175,
 			durability = 0.4,
-			ammoname = 'ammo-sniper'
+			ammoname = 'ammo-shotgun',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_PUMPSHOTGUN'] = {
+			label = 'Pump Shotgun',
+			weight = 3400,
+			durability = 0.1,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_GUSENBERG'] = {
+			label = 'Gusenberg',
+			weight = 4900,
+			durability = 0.04,
+			ammoname = 'ammo-45',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_MICROSMG'] = {
+			label = 'Micro SMG',
+			weight = 3000,
+			durability = 0.1,
+			ammoname = 'ammo-45',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_MACHINEPISTOL'] = {
+			label = 'Machine Pistol',
+			weight = 1400,
+			durability = 0.05,
+			ammoname = 'ammo-9',
+			rzTier = 'ville',
+		},
+
+		['WEAPON_MOLOTOV'] = {
+			label = 'Molotov',
+			weight = 1800,
+			throwable = true,
+			rzTier = 'ville',
+		},
+
+		['WEAPON_PIPEBOMB'] = {
+			label = 'Pipe Bomb',
+			weight = 1800,
+			throwable = true,
+			rzTier = 'ville',
+		},
+
+		['WEAPON_SMOKEGRENADE'] = {
+			label = 'Smoke Grenade',
+			weight = 600,
+			throwable = true,
+			rzTier = 'ville',
+		},
+
+		['WEAPON_STUNGUN'] = {
+			label = 'Tazer',
+			weight = 227,
+			durability = 0.1,
+			rzTier = 'ville',
+		},
+
+
+		-- ═══════════════════════════════════════════════════════
+		--  EVENT ET AIRDROP  —  ne jamais mettre en ville
+		--
+		-- Tout l'armement moderne. Ces armes n'ont AUCUNE raison
+		-- d'apparaître dans une épave ou chez un marchand : elles se
+		-- gagnent, et c'est ce qui fait leur prix.
+		-- ═══════════════════════════════════════════════════════
+
+		['WEAPON_ASSAULTRIFLE'] = {
+			label = 'Assault Rifle',
+			weight = 4500,
+			durability = 0.03,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'event',
+		},
+
+		['WEAPON_ASSAULTRIFLE_MK2'] = {
+			label = 'Assault Rifle MK2',
+			weight = 2950,
+			durability = 0.03,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'event',
+		},
+
+		['WEAPON_CARBINERIFLE'] = {
+			label = 'Carbine Rifle',
+			weight = 3100,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_CARBINERIFLE_MK2'] = {
+			label = 'Carbine Rifle MK2',
+			weight = 3000,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_ADVANCEDRIFLE'] = {
+			label = 'Advanced Rifle',
+			weight = 3100,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_SPECIALCARBINE'] = {
+			label = 'Special Carbine',
+			weight = 3000,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_SPECIALCARBINE_MK2'] = {
+			label = 'Special Carbine MK2',
+			weight = 3370,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_BULLPUPRIFLE'] = {
+			label = 'Bullpup Rifle',
+			weight = 2900,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_BULLPUPRIFLE_MK2'] = {
+			label = 'Bullpup Rifle MK2',
+			weight = 2900,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_COMPACTRIFLE'] = {
+			label = 'Compact Rifle',
+			weight = 3600,
+			durability = 0.05,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'event',
+		},
+
+		['WEAPON_MILITARYRIFLE'] = {
+			label = 'Military Rifle',
+			weight = 3600,
+			durability = 0.03,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_HEAVYRIFLE'] = {
+			label = 'Heavy Rifle',
+			weight = 3300,
+			durability = 0.2,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_BATTLERIFLE'] = {
+			label = 'Battle Rifle',
+			weight = 3300,
+			durability = 0.03,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'event',
 		},
 
 		['WEAPON_TACTICALRIFLE'] = {
 			label = 'Tactical Rifle',
 			weight = 3400,
 			durability = 0.03,
-			ammoname = 'ammo-rifle'
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_SMG'] = {
+			label = 'SMG',
+			weight = 3084,
+			durability = 0.8,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_SMG_MK2'] = {
+			label = 'SMG Mk2',
+			weight = 2700,
+			durability = 0.05,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_ASSAULTSMG'] = {
+			label = 'Assault SMG',
+			weight = 2900,
+			durability = 0.05,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_COMBATPDW'] = {
+			label = 'Combat PDW',
+			weight = 2300,
+			durability = 0.1,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_MINISMG'] = {
+			label = 'Mini SMG',
+			weight = 1270,
+			durability = 0.05,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_TECPISTOL'] = {
+			label = 'Tactical SMG',
+			weight = 1500,
+			durability = 0.075,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_APPISTOL'] = {
+			label = 'AP Pistol',
+			weight = 1400,
+			durability = 0.1,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_GADGETPISTOL'] = {
+			label = 'Perico Pistol',
+			weight = 1750,
+			durability = 0.1,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_PISTOLXM3'] = {
+			label = 'WM 29 Pistol',
+			weight = 969,
+			durability = 0.2,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_PISTOL_MK2'] = {
+			label = 'Pistol MK2',
+			weight = 1000,
+			durability = 0.5,
+			ammoname = 'ammo-9',
+			rzTier = 'event',
+		},
+
+		['WEAPON_SNSPISTOL_MK2'] = {
+			label = 'SNS Pistol MK2',
+			weight = 465,
+			durability = 0.1,
+			ammoname = 'ammo-45',
+			rzTier = 'event',
+		},
+
+		['WEAPON_REVOLVER_MK2'] = {
+			label = 'Revolver MK2',
+			weight = 2600,
+			durability = 0.1,
+			ammoname = 'ammo-44',
+			rzTier = 'event',
+		},
+
+		['WEAPON_COMBATSHOTGUN'] = {
+			label = 'Combat Shotgun',
+			weight = 4400,
+			durability = 0.2,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'event',
+		},
+
+		['WEAPON_HEAVYSHOTGUN'] = {
+			label = 'Heavy Shotgun',
+			weight = 3600,
+			durability = 0.1,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'event',
+		},
+
+		['WEAPON_ASSAULTSHOTGUN'] = {
+			label = 'Assault Shotgun',
+			weight = 5200,
+			durability = 0.05,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'event',
+		},
+
+		['WEAPON_BULLPUPSHOTGUN'] = {
+			label = 'Bullpup Shotgun',
+			weight = 3100,
+			durability = 0.2,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'event',
+		},
+
+		['WEAPON_PUMPSHOTGUN_MK2'] = {
+			label = 'Pump Shotgun MK2',
+			weight = 3200,
+			durability = 0.1,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'event',
+		},
+
+		['WEAPON_AUTOSHOTGUN'] = {
+			label = 'Sweeper Shotgun',
+			weight = 4400,
+			durability = 0.05,
+			ammoname = 'ammo-shotgun',
+			rzTier = 'event',
+		},
+
+		['WEAPON_SNIPERRIFLE'] = {
+			label = 'Sniper Rifle',
+			weight = 5000,
+			durability = 0.5,
+			ammoname = 'ammo-sniper',
+			rzTier = 'event',
+		},
+
+		['WEAPON_MARKSMANRIFLE'] = {
+			label = 'Marksman Rifle',
+			weight = 7500,
+			durability = 0.4,
+			ammoname = 'ammo-sniper',
+			rzTier = 'event',
+		},
+
+		['WEAPON_MARKSMANRIFLE_MK2'] = {
+			label = 'Marksman Rifle MK2',
+			weight = 4000,
+			durability = 0.4,
+			ammoname = 'ammo-sniper',
+			rzTier = 'event',
+		},
+
+		['WEAPON_PRECISIONRIFLE'] = {
+			label = 'Precision Rifle',
+			weight = 4800,
+			durability = 0.4,
+			ammoname = 'ammo-sniper',
+			rzTier = 'event',
+		},
+
+		['WEAPON_HEAVYSNIPER'] = {
+			label = 'Heavy Sniper',
+			weight = 12700,
+			durability = 0.5,
+			ammoname = 'ammo-heavysniper',
+			rzTier = 'event',
+		},
+
+		['WEAPON_HEAVYSNIPER_MK2'] = {
+			label = 'Heavy Sniper MK2',
+			weight = 14000,
+			durability = 0.5,
+			ammoname = 'ammo-heavysniper',
+			rzTier = 'event',
+		},
+
+		['WEAPON_GRENADE'] = {
+			label = 'Grenade',
+			weight = 400,
+			throwable = true,
+			rzTier = 'event',
+		},
+
+		['WEAPON_STICKYBOMB'] = {
+			label = 'Sticky Bomb',
+			weight = 1000,
+			throwable = true,
+			rzTier = 'event',
+		},
+
+		['WEAPON_PROXMINE'] = {
+			label = 'Proximity Mine',
+			weight = 2500,
+			throwable = true,
+			rzTier = 'event',
+		},
+
+		['WEAPON_MG'] = {
+			label = 'Machine Gun',
+			weight = 9000,
+			durability = 0.02,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'event',
+		},
+
+		['WEAPON_COMBATMG'] = {
+			label = 'Combat MG',
+			weight = 7500,
+			durability = 0.02,
+			ammoname = 'ammo-rifle',
+			rzTier = 'event',
+		},
+
+		['WEAPON_COMBATMG_MK2'] = {
+			label = 'Combat MG MK2',
+			weight = 8000,
+			durability = 0.02,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'event',
+		},
+
+
+		-- ═══════════════════════════════════════════════════════
+		--  RETIRÉES DU SERVEUR
+		--
+		-- Lance-roquettes, miniguns, armes laser, boules de neige.
+		-- Hors thème ou hors échelle. Elles restent déclarées pour
+		-- qu'un admin puisse les invoquer, mais ne doivent figurer
+		-- dans AUCUNE table de loot.
+		-- ═══════════════════════════════════════════════════════
+
+		['WEAPON_RPG'] = {
+			label = 'RPG',
+			weight = 5000,
+			durability = 0.3,
+			ammoname = 'ammo-rocket',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_HOMINGLAUNCHER'] = {
+			label = 'Homing Launcher',
+			weight = 10000,
+			durability = 0.6,
+			ammoname = 'ammo-rocket',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_GRENADELAUNCHER'] = {
+			label = 'Grenade Launcher',
+			weight = 6500,
+			durability = 0.05,
+			ammoname = 'ammo-grenade',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_COMPACTLAUNCHER'] = {
+			label = 'Compact Grenade Launcher',
+			weight = 2500,
+			durability = 0.05,
+			ammoname = 'ammo-grenade',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_MINIGUN'] = {
+			label = 'Minigun',
+			weight = 38500,
+			durability = 0.1,
+			ammoname = 'ammo-rifle2',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_RAILGUN'] = {
+			label = 'Railgun',
+			weight = 3570,
+			durability = 0.5,
+			ammoname = 'ammo-railgun',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_RAILGUNXM3'] = {
+			label = 'Railgun XM3',
+			weight = 3570,
+			durability = 0.5,
+			ammoname = 'ammo-railgun',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_EMPLAUNCHER'] = {
+			label = 'Compact EMP Launcher',
+			weight = 2750,
+			durability = 0.2,
+			ammoname = 'ammo-emp',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_RAYCARBINE'] = {
+			label = 'Unholy Hellbringer',
+			weight = 3620,
+			durability = 0.2,
+			ammoname = 'ammo-laser',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_RAYPISTOL'] = {
+			label = 'Up-n-Atomizer',
+			weight = 1540,
+			durability = 0.5,
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_RAYMINIGUN'] = {
+			label = 'Widowmaker',
+			weight = 7000,
+			durability = 0.1,
+			ammoname = 'ammo-laser',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_SNOWLAUNCHER'] = {
+			label = 'Snowball Launcher',
+			weight = 1000,
+			durability = 0.03,
+			ammoname = 'WEAPON_SNOWBALL',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_SNOWBALL'] = {
+			label = 'Snow Ball',
+			weight = 5,
+			throwable = true,
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_BALL'] = {
+			label = 'Ball',
+			weight = 149,
+			throwable = true,
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_FIREWORK'] = {
+			label = 'Firework Launcher',
+			weight = 1000,
+			durability = 0.5,
+			ammoname = 'ammo-firework',
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_CANDYCANE'] = {
+			label = 'Candy Cane',
+			weight = 85,
+			durability = 0.1,
+			rzTier = 'interdit',
+		},
+
+		['WEAPON_BZGAS'] = {
+			label = 'BZ Gas',
+			weight = 600,
+			throwable = true,
+			rzTier = 'interdit',
 		},
 
 		['WEAPON_TEARGAS'] = {
 			label = 'Tear Gas',
 			weight = 600,
 			throwable = true,
+			rzTier = 'interdit',
 		},
-	},
 
+	},
 	Components = {
 		['at_flashlight'] = {
 			label = 'Tactical Flashlight',

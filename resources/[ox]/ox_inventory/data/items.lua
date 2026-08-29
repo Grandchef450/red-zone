@@ -951,14 +951,6 @@ return {
 			image = 'lance_survie.png',
 		},
 	},
-	['hache_survie'] = {
-		label = 'Hache de survie',
-		weight = 1500,
-		stack = false,
-		client = {
-			image = 'hache_survie.png',
-		},
-	},
 	['aiguisoir_survie'] = {
 		label = 'Aiguisoir de survie',
 		weight = 400,
@@ -1076,14 +1068,6 @@ return {
 		stack = false,
 		client = {
 			image = 'canne_peche.png',
-		},
-	},
-	['hache_acier'] = {
-		label = 'Hache en acier',
-		weight = 1600,
-		stack = false,
-		client = {
-			image = 'hache_acier.png',
 		},
 	},
 	['aiguisoir_avance'] = {
@@ -1214,14 +1198,6 @@ return {
 		stack = false,
 		client = {
 			image = 'lance_aluminium.png',
-		},
-	},
-	['hache_aluminium'] = {
-		label = 'Hache en aluminium',
-		weight = 1300,
-		stack = false,
-		client = {
-			image = 'hache_aluminium.png',
 		},
 	},
 	['canne_peche_carbone'] = {
@@ -1361,14 +1337,6 @@ return {
 		stack = false,
 		client = {
 			image = 'couteau_inox.png',
-		},
-	},
-	['hache_inox'] = {
-		label = 'Hache en inox',
-		weight = 1700,
-		stack = false,
-		client = {
-			image = 'hache_inox.png',
 		},
 	},
 	['canne_peche_fibre_verre'] = {
@@ -1753,6 +1721,36 @@ return {
 		description = '1 heure de protection par charge. 5 charges.',
 		client = {
 			image = 'masque_double_cartouche.png',
+		},
+	},
+
+	-- ─── SECOURS ───────────────────────────────────────────
+	['epipen'] = {
+		label = 'Épipen',
+		weight = 120,
+		stack = true,
+		close = true,
+		description = 'Injection d\'adrénaline. Le seul objet capable de ramener quelqu\'un à terre — mais il ne rend presque rien.',
+		client = {
+			image = 'epinefrine.png',
+		},
+	},
+
+	-- ─── PÊCHE ─────────────────────────────────────────────
+	['ver_de_terre'] = {
+		label = 'Ver de terre',
+		weight = 15,
+		description = 'Appât de base. Se ramasse en creusant la terre humide.',
+		client = {
+			image = 'ver_de_terre.png',
+		},
+	},
+	['appat_artificiel'] = {
+		label = 'Appât artificiel',
+		weight = 40,
+		description = 'Leurre en plastique et fil de nylon. Trois fois plus efficace qu\'un ver.',
+		client = {
+			image = 'appat_artificiel.png',
 		},
 	},
 }

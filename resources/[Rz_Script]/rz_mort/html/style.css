@@ -1,0 +1,135 @@
+/* ═══════════════════════════════════════════════════════════════
+   RedZone — écran d'agonie
+
+   Repris du script deathscreen d'origine, dont j'ai gardé l'idée
+   de l'électrocardiogramme et jeté le reste :
+
+     • jQuery chargé depuis un CDN → supprimé, tout est en JS natif
+     • Google Fonts en ligne       → supprimé, polices système
+     • 1,4 Mo de polices .ttf      → supprimé, une seule servait
+     • 292 Ko d'image inutilisée   → supprimé
+     • `* { animation: fadein }`   → supprimé, il animait TOUT
+
+   Résultat : zéro requête réseau, zéro fichier lourd.
+   ═══════════════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: transparent;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+.screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 9, 11, .78);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .9s ease, visibility .9s;
+    pointer-events: none;
+}
+
+.screen.on {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Vignette : resserre le regard vers le centre */
+.vig {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 25%,
+        rgba(0, 0, 0, .55) 70%,
+        rgba(0, 0, 0, .9) 100%
+    );
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    bottom: 12vh;
+    transform: translateX(-50%);
+    width: min(620px, 90vw);
+    text-align: center;
+}
+
+.state {
+    color: #f60d54;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    text-shadow: 0 0 14px rgba(246, 13, 84, .5);
+}
+
+.screen.recover .state { color: #4ade80; text-shadow: 0 0 14px rgba(74, 222, 128, .5); }
+
+/* ─── ÉLECTROCARDIOGRAMME ─────────────────────────────────────
+   Le tracé défile en boucle. stroke-dasharray crée le segment
+   visible, l'animation le fait glisser d'un bout à l'autre. */
+.ecg {
+    height: 90px;
+    margin: 4px 0 -14px;
+    overflow: hidden;
+}
+
+.ecg svg { width: 100%; height: 100%; }
+
+#line {
+    fill: none;
+    stroke: #f60d54;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-dasharray: 281;
+    filter: drop-shadow(0 0 6px rgba(246, 13, 84, .65));
+    animation: sweep 2.5s infinite linear;
+}
+
+.screen.recover #line {
+    stroke: #4ade80;
+    filter: drop-shadow(0 0 6px rgba(74, 222, 128, .65));
+    animation-duration: 1.4s;   /* le cœur repart plus vite */
+}
+
+@keyframes sweep {
+    from { stroke-dashoffset: 814; }
+    to   { stroke-dashoffset: -814; }
+}
+
+/* Le rythme ralentit à mesure que le temps s'épuise : réglé
+   depuis le JS via --beat. */
+.screen.slow #line { animation-duration: var(--beat, 2.5s); }
+
+.timer {
+    color: #fff;
+    font-size: 46px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    line-height: 1;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, .8);
+    font-variant-numeric: tabular-nums;   /* les chiffres ne sautent pas */
+}
+
+.screen.critical .timer { color: #f60d54; animation: throb 1s infinite; }
+
+@keyframes throb {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .45; }
+}
+
+.hint {
+    margin-top: 14px;
+    color: rgba(255, 255, 255, .42);
+    font-size: 12px;
+    letter-spacing: 1.6px;
+}
+
+.hint b {
+    color: rgba(255, 255, 255, .8);
+    font-weight: 600;
+}

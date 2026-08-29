@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Écran d'agonie.
+         Repris du script deathscreen, reconstruit sans jQuery ni
+         police externe : tout est local, rien ne se charge en ligne. -->
+    <div id="screen" class="screen">
+        <div class="vig"></div>
+
+        <div class="center">
+            <p id="state" class="state">TU ES À TERRE</p>
+
+            <!-- Électrocardiogramme. Le tracé s'aplatit à mesure
+                 que le temps s'épuise. -->
+            <div class="ecg">
+                <svg viewBox="0 0 600 140" preserveAspectRatio="none">
+                    <path id="line" d="M0,70 L200,70 Q207,45 212,68 T217,74 220,66 223,71 t6,30 7,-52 T240,102 247,84 s2,-9 8,-8 1,1 6,-8 T272,74 c5,3 7,-5 8,-14 s2,8 7,9 h305" />
+                </svg>
+            </div>
+
+            <p id="timer" class="timer">0:00</p>
+            <p id="hint"  class="hint"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

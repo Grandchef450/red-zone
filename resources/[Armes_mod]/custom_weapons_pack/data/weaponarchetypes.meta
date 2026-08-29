@@ -1,13 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CWeaponArchetypes>
-    <archetypes>
-        <Item>
-            <Name>WEAPON_CUSTOM</Name>
-            <Model>w_arena_m4</Model>
-            <Audio>AUDIO_ITEM</Audio>
-            <Slot>RIFLE</Slot>
-            <Damage>50</Damage>
-            <RateOfFire>600</RateOfFire>
-        </Item>
-    </archetypes>
-</CWeaponArchetypes>
+<!--
+  REDZONE — Déclaration des modèles de haches.
+  Chaque .ydr du dossier stream doit apparaître ici, sinon GTA
+  ignore le fichier et l'arme reste invisible dans la main.
+-->
+<CWeaponModelInfo__InitDataList>
+  <InitDatas>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_hatchette_b</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_hatchet_b</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_battleaxe_b</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_bat_c</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_bat_d</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_machette_lr_b</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_machette_lr_c</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_bayonet</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_papillon</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_flip</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_gut</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_huntsman</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_karambit</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_ombre</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_ct</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+    <Item>
+      <fClipSetHash />
+      <ModelName>w_me_csgo_t</ModelName>
+      <PhysicsDictionaryName />
+    </Item>
+  </InitDatas>
+  <txdRelationships />
+</CWeaponModelInfo__InitDataList>
