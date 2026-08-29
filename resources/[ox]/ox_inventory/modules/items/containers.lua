@@ -63,14 +63,22 @@ end
 
 -- ─── SACS À DOS ───────────────────────────────────────────────
 -- maxWeight est en GRAMMES. Règle appliquée : 1 slot ≈ 1,5 kg,
--- soit la même densité que la capacité du joueur (120 kg pour
--- environ 80 slots utiles).
+-- la même densité que la capacité du joueur.
+--
+-- L'usure de ces sacs est gérée par la ressource rz_sacs : ils
+-- s'abîment à chaque ouverture, jamais avec le temps.
 setContainerProperties('sac_survie_12',  { slots = 12,  maxWeight = 18000  })
+setContainerProperties('sac_cafe_20',    { slots = 20,  maxWeight = 30000  })
+setContainerProperties('sac_survie_24',  { slots = 24,  maxWeight = 36000  })
 setContainerProperties('sac_survie_32',  { slots = 32,  maxWeight = 48000  })
+setContainerProperties('sac_medical_50', { slots = 50,  maxWeight = 75000  })
 setContainerProperties('sac_survie_64',  { slots = 64,  maxWeight = 96000  })
 setContainerProperties('sac_survie_72',  { slots = 72,  maxWeight = 108000 })
 setContainerProperties('sac_survie_104', { slots = 104, maxWeight = 156000 })
 setContainerProperties('sac_survie_134', { slots = 134, maxWeight = 201000 })
+setContainerProperties('sac_survie_158', { slots = 158, maxWeight = 237000 })
+setContainerProperties('sac_survie_172', { slots = 172, maxWeight = 258000 })
+setContainerProperties('sac_survie_200', { slots = 200, maxWeight = 300000 })
 
 
 -- ─── COFFRES DE SÉCURITÉ ──────────────────────────────────────

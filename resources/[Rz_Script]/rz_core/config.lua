@@ -13,11 +13,16 @@ Config.Debug = false
 --  Si tu veux un jour quelques épaves qui roulent, 0.02 suffit.
 -- ═══════════════════════════════════════════════════════════════════
 Config.Density = {
-    vehicles       = 0.0,   -- trafic
-    parkedVehicles = 0.0,   -- voitures garées
+    vehicles       = 0.0,   -- trafic : aucune voiture ne roule
     randomVehicles = 0.0,   -- véhicules aléatoires
     peds           = 0.0,   -- passants
     scenarioPeds   = 0.0,   -- PNJ en animation (bancs, téléphone, balayage)
+
+    -- Voitures garées : 0.0, le décor d'épaves vient de la map
+    -- Apocalypse_Mapping. Le loot passe par rz_epaves, qui rend
+    -- fouillables les props d'épave déjà posés — bien plus cohérent
+    -- que des berlines intactes apparues au milieu des ruines.
+    parkedVehicles = 0.0,
 }
 
 -- Types de circulation à supprimer complètement.
@@ -29,6 +34,26 @@ Config.World = {
     noAmbientCops   = true,
     noDispatch      = true,   -- police, ambulances, pompiers, hélicos
     noWantedLevel   = true,
+}
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  RESPAWN DU LOOT DES VÉHICULES
+--
+--  Les bennes se régénèrent seules via le convar du server.cfg :
+--      setr inventory:cleartime 45
+--
+--  Les coffres de véhicule, eux, ne suivent pas ce délai : ox_inventory
+--  ne les libère que si le véhicule disparaît. Ce module force la
+--  libération après le même délai.
+--
+--  Note : avec parkedVehicles à 0.0 il n'y a quasiment aucun véhicule
+--  ambiant sur la carte. Ce module ne sert donc qu'aux véhicules des
+--  joueurs. La vraie récupération passe par rz_epaves.
+-- ═══════════════════════════════════════════════════════════════════
+Config.LootRespawn = {
+    enabled = true,
+    minutes = 45,   -- doit rester aligné sur inventory:cleartime
 }
 
 

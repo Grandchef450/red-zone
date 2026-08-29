@@ -18,14 +18,6 @@
 return {
 
 	-- ─── DÉPART ────────────────────────────────────────
-	['sac_survie_12'] = {
-		label = 'Petit sac à dos de survie (12)',
-		weight = 1200,
-		stack = false,
-		client = {
-			image = 'sac_survie_12.png',
-		},
-	},
 	['couteau_suisse'] = {
 		label = 'Couteau suisse',
 		weight = 200,
@@ -854,14 +846,6 @@ return {
 	},
 
 	-- ─── CRAFT PHASE 1 ─────────────────────────────────
-	['sac_survie_32'] = {
-		label = 'Sac à dos moyen (32)',
-		weight = 2000,
-		stack = false,
-		client = {
-			image = 'sac_survie_32.png',
-		},
-	},
 	['allumettes'] = {
 		label = 'Allumettes',
 		weight = 50,
@@ -1062,14 +1046,6 @@ return {
 	},
 
 	-- ─── CRAFT PHASE 2 ─────────────────────────────────
-	['sac_survie_64'] = {
-		label = 'Sac à dos moyen (64)',
-		weight = 2600,
-		stack = false,
-		client = {
-			image = 'sac_survie_64.png',
-		},
-	},
 	['chaudron_cuivre'] = {
 		label = 'Chaudron en cuivre',
 		weight = 2600,
@@ -1216,14 +1192,6 @@ return {
 	},
 
 	-- ─── CRAFT PHASE 3 ─────────────────────────────────
-	['sac_survie_72'] = {
-		label = 'Sac à dos large (72)',
-		weight = 3000,
-		stack = false,
-		client = {
-			image = 'sac_survie_72.png',
-		},
-	},
 	['chaudron_fonte'] = {
 		label = 'Chaudron en fonte',
 		weight = 3500,
@@ -1364,14 +1332,6 @@ return {
 	},
 
 	-- ─── CRAFT PHASE 4 ─────────────────────────────────
-	['sac_survie_104'] = {
-		label = 'Sac à dos large (104)',
-		weight = 3600,
-		stack = false,
-		client = {
-			image = 'sac_survie_104.png',
-		},
-	},
 	['chaudron_fonte_electrique'] = {
 		label = 'Chaudron en fonte électrique',
 		weight = 5000,
@@ -1461,14 +1421,6 @@ return {
 	},
 
 	-- ─── CRAFT PHASE 5 ─────────────────────────────────
-	['sac_survie_134'] = {
-		label = 'Sac à dos grand (134)',
-		weight = 4200,
-		stack = false,
-		client = {
-			image = 'sac_survie_134.png',
-		},
-	},
 	['plaque_kevlar_avancee'] = {
 		label = 'Plaque de kevlar avancée',
 		weight = 600,
@@ -1530,6 +1482,116 @@ return {
 		stack = false,
 		client = {
 			image = 'grenade_fragmentation.png',
+		},
+	},
+
+	-- ─── SACS À DOS ────────────────────────────────────
+	['sac_survie_12'] = {
+		label = 'Sac à dos de survie (12)',
+		weight = 1200,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_de_suivie_12P.png',
+		},
+	},
+	['sac_cafe_20'] = {
+		label = 'Sac de café (20)',
+		weight = 1400,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'sac_de_cafe_20p.png',
+		},
+	},
+	['sac_survie_24'] = {
+		label = 'Petit sac à dos (24)',
+		weight = 1600,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_petit_24P.png',
+		},
+	},
+	['sac_survie_32'] = {
+		label = 'Sac à dos moyen (32)',
+		weight = 2000,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_moyen_32P.png',
+		},
+	},
+	['sac_medical_50'] = {
+		label = 'Sac médical (50)',
+		weight = 2300,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'sac_medical_50p.png',
+		},
+	},
+	['sac_survie_64'] = {
+		label = 'Sac à dos moyen (64)',
+		weight = 2600,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_moyen_64P.png',
+		},
+	},
+	['sac_survie_72'] = {
+		label = 'Sac à dos très grand (72)',
+		weight = 3000,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_tres_grand_72P.png',
+		},
+	},
+	['sac_survie_104'] = {
+		label = 'Sac de randonneur survie (104)',
+		weight = 3600,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_Randonneur_survie_104P.png',
+		},
+	},
+	['sac_survie_134'] = {
+		label = 'Sac de randonneur petit (134)',
+		weight = 4200,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_Randonneur_petit_134P.png',
+		},
+	},
+	['sac_survie_158'] = {
+		label = 'Sac de randonneur moyen (158)',
+		weight = 4600,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_Randonneur_moyen_158P.png',
+		},
+	},
+	['sac_survie_172'] = {
+		label = 'Sac de randonneur grand (172)',
+		weight = 5000,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_Randonneur_grand_172P.png',
+		},
+	},
+	['sac_survie_200'] = {
+		label = 'Sac de randonneur très grand (200)',
+		weight = 5600,
+		stack = false,
+		durability = true,
+		client = {
+			image = 'Sac_a_dos_Randonneurs_tres_grand_200P.png',
 		},
 	},
 
@@ -1630,6 +1692,17 @@ return {
 		stack = false,
 		client = {
 			image = 'coffre_boutique_134_35j.png',
+		},
+	},
+
+	-- ─── COMMUNICATION ─────────────────────────────────────
+	['pager'] = {
+		label = 'Pager',
+		weight = 180,
+		stack = false,
+		description = 'Émetteur-récepteur de messages courts. Choisis une fréquence : tous ceux qui l\'écoutent te liront.',
+		client = {
+			image = 'radio.png',
 		},
 	},
 }

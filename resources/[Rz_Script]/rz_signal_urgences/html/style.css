@@ -1,0 +1,123 @@
+/* ═══════════════════════════════════════════════════════════════
+   RedZone — bandeau des signaux d'urgence
+
+   Esprit écran LCD monochrome : le pager du survivant, pas une
+   interface de smartphone. Fond transparent, aucun élément
+   interactif — le joueur ne clique jamais dessus.
+   ═══════════════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Courier New', Consolas, monospace;
+    user-select: none;
+}
+
+.signal {
+    position: fixed;
+    top: -140px;                 /* hors écran au repos */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 520px;
+    opacity: 0;
+    transition: top .45s cubic-bezier(.2, .9, .3, 1), opacity .35s ease;
+    pointer-events: none;
+}
+
+.signal.visible {
+    top: 24px;
+    opacity: 1;
+}
+
+.frame {
+    background: linear-gradient(180deg, #14161a 0%, #0b0d10 100%);
+    border: 2px solid var(--accent, #4ade80);
+    border-radius: 6px;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, .8),
+        0 8px 28px rgba(0, 0, 0, .65),
+        inset 0 0 22px rgba(0, 0, 0, .55);
+    overflow: hidden;
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 12px;
+    background: var(--accent, #4ade80);
+    color: #0b0d10;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.screen {
+    position: relative;
+    padding: 16px 18px 14px;
+    min-height: 62px;
+}
+
+/* Lignes de balayage : trahit l'écran cathodique bon marché */
+.scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        180deg,
+        rgba(255, 255, 255, .035) 0px,
+        rgba(255, 255, 255, .035) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
+
+.message {
+    position: relative;
+    color: var(--accent, #4ade80);
+    font-size: 16px;
+    line-height: 1.45;
+    letter-spacing: .6px;
+    text-shadow: 0 0 8px currentColor;
+    word-break: break-word;
+}
+
+.sender {
+    position: relative;
+    margin-top: 9px;
+    color: rgba(255, 255, 255, .38);
+    font-size: 10px;
+    letter-spacing: 1.6px;
+}
+
+.time {
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+/* Barre de vie du message : indique le temps restant à l'écran */
+.bar {
+    height: 2px;
+    background: var(--accent, #4ade80);
+    width: 100%;
+    transform-origin: left center;
+}
+
+.bar.running {
+    animation: drain linear forwards;
+}
+
+@keyframes drain {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+
+/* Scintillement bref à l'arrivée du message */
+.frame.flicker { animation: flicker .28s steps(2) 2; }
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .55; }
+}

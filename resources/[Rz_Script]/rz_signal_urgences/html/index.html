@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Bandeau LCD des signaux d'urgence.
+         Masqué par défaut : il n'apparaît qu'à la réception. -->
+    <div id="signal" class="signal">
+        <div class="frame">
+            <div class="head">
+                <span id="label" class="label">SIGNAL</span>
+                <span id="time" class="time"></span>
+            </div>
+
+            <div class="screen">
+                <div class="scanlines"></div>
+                <p id="message" class="message"></p>
+                <p id="sender" class="sender"></p>
+            </div>
+
+            <div id="bar" class="bar"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
