@@ -143,11 +143,19 @@
          le démarrage automatique et l'écran reste noir. C'est une
          règle des navigateurs, pas un réglage de FiveM.
          ═══════════════════════════════════════════════════════════ -->
-    <div class="video-background video-container noselect">
-        <video autoplay muted loop playsinline preload="auto">
-            <source src="video/intro_zombie.mp4" type="video/mp4">
-        </video>
-    </div>
+    <!-- ═══════════════════════════════════════════════════════════
+         VIDÉO DE FOND — CONTENEUR VIDE
+
+         Le contenu est construit par script/video-loader.js selon
+         le mode choisi dans script/video-config.js :
+
+           'local'    → une balise <video> sur un fichier du serveur
+           'youtube'  → une iframe YouTube
+           'aucune'   → fond noir
+
+         Un seul réglage à changer pour basculer de l'un à l'autre.
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="video-background video-container noselect"></div>
     
        <div class="background noselect" class="noselect">
         <div class="img-center" class="noselect">
@@ -167,6 +175,9 @@
         </div>
     </div>
 
+    <!-- La configuration doit être lue AVANT le chargeur -->
+    <script src="script/video-config.js"></script>
+    <script src="script/video-loader.js"></script>
     <script src="script/main.js"></script>
     
 </body>

@@ -57,6 +57,12 @@ server_script 'server.lua'
 files {
     'index.html',
     'css/style.css',
+    -- ─── VIDÉO ─────────────────────────────────────────────────
+    -- video-config.js contient le mode ('local' ou 'youtube').
+    -- video-loader.js construit l'élément correspondant.
+    'script/video-config.js',
+    'script/video-loader.js',
+
     'script/main.js',
 
     -- ─── VIDÉO DE FOND ─────────────────────────────────────────
