@@ -117,18 +117,44 @@
     </div>
 </div>
     
+    <!-- ═══════════════════════════════════════════════════════════
+         VIDÉO DE FOND — FICHIER LOCAL
+         Modifié le 30 août 2026
+
+         L'iframe YouTube d'origine est remplacée par une balise
+         video native. Le CSS prévoyait DÉJÀ cette balise, ligne
+         131 de style.css : le script était conçu ainsi, quelqu'un
+         l'a remplacé par YouTube en cours de route.
+
+         ─── LE SON DE LA VIDÉO ───────────────────────────────────
+
+         Ta vidéo a une piste audio, mais on ne l'entendra JAMAIS :
+         l'attribut `muted` la coupe côté navigateur. Inutile de
+         retirer le son du fichier.
+
+         C'est Apocalypse2.mp3 qui joue, et lui seul. Les deux
+         systèmes sont indépendants : main.js pilote l'audio par
+         getElementById("loading"), qui vise la balise <audio> et
+         ne touche pas à la vidéo. Les flèches haut/bas et la
+         touche espace continuent donc de contrôler la musique
+         sans jamais affecter l'image.
+
+         ⚠️  NE RETIRE PAS `muted`. Sans lui, le navigateur refuse
+         le démarrage automatique et l'écran reste noir. C'est une
+         règle des navigateurs, pas un réglage de FiveM.
+         ═══════════════════════════════════════════════════════════ -->
     <div class="video-background video-container noselect">
-        <iframe width="150%" height="150%" src="https://www.youtube.com/embed/_nzMxd_rOuw?controls=0&amp;showinfo=0&amp;rel=0&amp;autoplay=1&amp;loop=1&amp;mute=1" frameborder="0"></iframe>
-        </div>
-        
-        <!--Video is changable. When you are inserting the video make sure that it is in embed format 
-           video I used: https://www.youtube.com/watch?v=x-1Sza1i_YI&ab_channel=guillaumelagorio
-           Video that I used is completly FREE provided by author for this loading screen
-        -->
+        <video autoplay muted loop playsinline preload="auto">
+            <source src="video/fond.mp4" type="video/mp4">
+        </video>
+    </div>
     
        <div class="background noselect" class="noselect">
         <div class="img-center" class="noselect">
-            <img src="logo2/.png" width="300">
+            <!-- Corrigé : le chemin d'origine était "logo2/.png", avec le
+                 point et le slash inversés. Il ne pointait sur rien,
+                 donc le logo central ne s'affichait pas. -->
+            <img src="logo/logo2.png" width="300">
         </div>
        </div>
 

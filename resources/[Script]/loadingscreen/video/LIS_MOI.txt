@@ -1,0 +1,45 @@
+═══════════════════════════════════════════════════════════════
+  DÉPOSE TA VIDÉO ICI
+═══════════════════════════════════════════════════════════════
+
+Nom attendu :   fond.mp4
+Format :        MP4, codec H.264
+
+C'est le seul format lu de façon fiable par le navigateur intégré
+de FiveM. Un MKV, un AVI ou un WebM ne s'affichera pas.
+
+
+  LE SON
+
+Ta vidéo peut garder sa piste audio : on ne l'entendra jamais.
+La balise video est en `muted`, le navigateur la coupe.
+
+C'est song/Apocalypse2.mp3 qui joue, et lui seul.
+
+
+  RÉGLAGES HANDBRAKE POUR DU 1080p
+
+  Préréglage      Fast 1080p30
+  Onglet Video    H.264 · Avg Bitrate 2500 · 2-Pass coché
+  Onglet Audio    supprimer la piste (allège le fichier)
+  Onglet Summary  MP4 · Web Optimized coché
+
+« Web Optimized » déplace les métadonnées au début du fichier :
+la lecture démarre avant la fin du téléchargement. Sur un écran
+de chargement, ça change tout.
+
+Vingt secondes en boucle donnent environ 6 à 8 Mo.
+
+
+  SI TU CHANGES LE NOM DU FICHIER
+
+Il faut le changer à DEUX endroits :
+  • index.html, dans <source src="video/...">
+  • fxmanifest.lua, dans la liste files
+
+Les deux doivent correspondre exactement, sinon écran noir.
+
+
+  UNE FOIS LA VIDÉO EN PLACE
+
+Supprime ce fichier, il ne sert qu'à marquer le dossier.
