@@ -7,7 +7,18 @@ else
 end
 
 local table = lib.table
-local player = Ox.GetPlayer()
+
+-- RÉÉCRIT POUR QBOX — RedZone, 30 août 2026
+--
+-- La ligne d'origine était :  local player = Ox.GetPlayer()
+--
+-- Elle s'exécutait SANS CONDITION, même avec Config.FrameWork = 'qb'.
+-- Une fois ox_core sorti du dossier resources, la table globale Ox
+-- n'existe plus et le script plantait dès son chargement :
+--   « attempt to index a nil value (global 'Ox') »
+--
+-- Faim, soif et stress viennent désormais des métadonnées Qbox.
+local PlayerData = {}
 local playerState = LocalPlayer.state -- Access client's own StateBag
 
 local thirst, stress, hunger, voice, currentId, oxygen, playertalking = 999, 0, 999, 2, 999, 100, false
@@ -94,32 +105,128 @@ RegisterNetEvent('seatbelt:client:ToggleSeatbelt', function()
     seatbeltOn = not seatbeltOn
 end)
 
-AddEventHandler('ox:statusTick', function(statuses)
-    if thirst ~= player.getStatus('thirst') or hunger ~= player.getStatus('hunger') then
-        TriggerEvent('hud:client:UpdateNeeds', player.getStatus('hunger') , player.getStatus('thirst'))
+-- ═══════════════════════════════════════════════════════════════
+--  FAIM, SOIF ET STRESS
+--
+--  ox_core émettait « ox:statusTick » avec un objet joueur exposant
+--  getStatus(). Qbox n'a pas d'équivalent : ces valeurs vivent dans
+--  les MÉTADONNÉES du personnage, mises à jour par qbx_core.
+--
+--  On écoute donc son événement de rafraîchissement, et on lit les
+--  valeurs directement.
+-- ═══════════════════════════════════════════════════════════════
+
+---Met à jour la barre de faim, de soif et de stress.
+local function refreshNeeds(meta)
+    if not meta then return end
+
+    local newHunger = tonumber(meta.hunger) or hunger
+    local newThirst = tonumber(meta.thirst) or thirst
+    local newStress = tonumber(meta.stress) or stress
+
+    if newThirst ~= thirst or newHunger ~= hunger then
+        TriggerEvent('hud:client:UpdateNeeds', newHunger, newThirst)
     end
-    if stress ~= player.getStatus('stress') then
-        TriggerEvent('hud:client:UpdateStress', player.getStatus('stress'))
+
+    if newStress ~= stress then
+        TriggerEvent('hud:client:UpdateStress', newStress)
+    end
+end
+
+
+-- Qbox pousse les métadonnées à chaque changement
+RegisterNetEvent('QBCore:Player:SetPlayerData', function(data)
+    PlayerData = data or {}
+    refreshNeeds(PlayerData.metadata)
+end)
+
+
+-- Filet de sécurité : certaines versions de Qbox ne poussent les
+-- métadonnées qu'au chargement. Sans cette boucle, les jauges
+-- resteraient figées sur leur valeur initiale.
+CreateThread(function()
+    while true do
+        Wait(5000)
+
+        if isLoggedIn and QBCore then
+            local ok, data = pcall(function()
+                return QBCore.Functions.GetPlayerData()
+            end)
+
+            if ok and data and data.metadata then
+                refreshNeeds(data.metadata)
+            end
+        end
     end
 end)
 
 -- Initialize HUD visibility
 
-AddEventHandler('ox:playerLoaded', function()
-    if not playerLoaded then
-        isLoggedIn = true
-        SendNUIMessage({ type = 'showhud', show = true })
-        TriggerEvent('hud:client:minimap')
-        playerLoaded = true
-    end
-end)
+-- ═══════════════════════════════════════════════════════════════
+--  AFFICHAGE DE L'INTERFACE
+--
+--  « ox:playerLoaded » et « ox:playerLogout » n'existent plus.
+--  On écoute les équivalents Qbox, sous leurs deux noms possibles
+--  selon la version.
+-- ═══════════════════════════════════════════════════════════════
 
--- Event handler for player unload
-AddEventHandler('ox:playerLogout', function()
+local function onLoaded()
+    if playerLoaded then return end
+
+    isLoggedIn = true
+    playerLoaded = true
+
+    SendNUIMessage({ type = 'showhud', show = true })
+    TriggerEvent('hud:client:minimap')
+
+    -- On lit les valeurs de départ tout de suite : sans ça, les
+    -- jauges affichent zéro jusqu'au premier changement.
+    if QBCore then
+        local ok, data = pcall(function()
+            return QBCore.Functions.GetPlayerData()
+        end)
+
+        if ok and data then
+            PlayerData = data
+            refreshNeeds(data.metadata)
+        end
+    end
+end
+
+
+local function onLogout()
     Citizen.Wait(1000)
+
     PlayerData = {}
     isLoggedIn = false
+    playerLoaded = false
+
     SendNUIMessage({ type = 'hidehud', show = false })
+end
+
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', onLoaded)
+RegisterNetEvent('qbx_core:client:playerLoaded', onLoaded)
+
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', onLogout)
+RegisterNetEvent('qbx_core:client:playerLogout', onLogout)
+
+
+-- Filet : si le joueur est déjà connecté au moment où la ressource
+-- démarre — cas d'un restart en jeu — aucun de ces événements ne
+-- sera émis, et l'interface resterait invisible.
+CreateThread(function()
+    Wait(3000)
+
+    if not playerLoaded and QBCore then
+        local ok, data = pcall(function()
+            return QBCore.Functions.GetPlayerData()
+        end)
+
+        if ok and data and data.citizenid then
+            onLoaded()
+        end
+    end
 end)
 
 
