@@ -44,8 +44,11 @@ body {
     z-index: 0;
 }
 
+/* Tous les blocs d'interface passent devant la vidéo grâce à un
+   z-index positif plus élevé qu'elle. */
 .menu-container {
     position: absolute;
+    z-index: 10;
     bottom: 0;
     text-align: left;
     margin-left: 1%;
@@ -161,15 +164,25 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 
-    /* Derrière tout le reste de l'interface, mais devant le fond */
-    z-index: -1;
+    /* ⚠️  AUCUN z-index NÉGATIF ICI.
+       C'était mon erreur du premier correctif : j'avais remis
+       « z-index: -1 » sur la balise vidéo après avoir corrigé le
+       conteneur. Une valeur négative enfouit l'élément derrière le
+       fond de la page, et l'écran reste noir.
+
+       La vidéo n'a pas besoin de z-index du tout : son conteneur
+       .video-background est déclaré AVANT tous les autres blocs
+       dans le HTML, donc elle se place naturellement derrière eux. */
+    z-index: 1;
 
     /* object-fit garantit qu'aucune déformation n'apparaît si les
        proportions de la vidéo diffèrent de celles de l'écran. */
     object-fit: cover;
 }
 
+/* Devant la vidéo, comme le reste de l'interface */
 .img-center {
+    z-index: 10;
     text-align: center;
     height: 90vh;
     display: flex;
@@ -388,6 +401,7 @@ div#circleG > .circleG:nth-child(even) {
 }
 
 .songname{
+    z-index: 10;
   color: rgb(255, 255, 255);
   font-size: 12px;
   font-family: 'Montserrat', sans-serif;

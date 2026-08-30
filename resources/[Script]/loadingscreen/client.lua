@@ -75,9 +75,11 @@ end)
 -- ═══════════════════════════════════════════════════════════════════
 
 CreateThread(function()
-    -- On laisse au multicharacter le temps de s'afficher : fermer
-    -- trop tôt montrerait un écran noir avant la sélection.
-    local deadline = GetGameTimer() + 60000
+    -- Délai raccourci à 20 secondes. Le précédent était de 60,
+    -- pensé pour laisser à un multicharacter le temps de s'afficher.
+    -- Puisque ZSX ne peut pas le faire — son interface n'est pas
+    -- installée — attendre une minute ne sert qu'à faire patienter.
+    local deadline = GetGameTimer() + 20000
 
     while not closed do
         Wait(500)
@@ -96,6 +98,13 @@ CreateThread(function()
                 shutdown('session active')
                 break
             end
+
+            -- Le ped existe mais reste à l'origine : le monde n'est
+            -- pas encore chargé. On attend, sans bloquer la boucle.
+        elseif GetGameTimer() > (deadline - 5000) then
+            -- Cinq secondes avant l'échéance, on force l'affichage
+            -- d'un message pour que le joueur sache que ça avance.
+            print('[loadingscreen] en attente de la session...')
         end
 
         if GetGameTimer() > deadline then

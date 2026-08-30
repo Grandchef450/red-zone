@@ -18,8 +18,38 @@ version '1.1.0'
 ]]
 
 loadscreen 'index.html'
-loadscreen_manual_shutdown 'yes'
 loadscreen_cursor 'yes'
+
+--[[
+    ⚠️  « loadscreen_manual_shutdown » A ÉTÉ RETIRÉ — 30 août 2026
+
+    Cette directive dit à FiveM de NE JAMAIS fermer l'écran de
+    lui-même : c'est au script de le faire. Elle a du sens quand un
+    multicharacter prend le relais, mais elle devient un piège quand
+    personne n'appelle la fermeture.
+
+    Ce qui se passait ici :
+
+      • le loadingscreen attendait « playerSpawned », émis par
+        spawnmanager — désactivé depuis la migration vers Qbox
+
+      • ZSX devait prendre le relais via HandlePreWarmup(), mais
+        cette fonction n'est APPELÉE NULLE PART dans le code
+        déchiffré, et la variable CreatedUIFrame qu'elle attend
+        n'est jamais mise à true
+
+      • ZSX_UI et ZSX_UIV2 ne sont pas installés : l'interface de
+        sélection ne peut pas se construire
+
+    Résultat : personne ne fermait l'écran, et le joueur restait
+    enfermé indéfiniment avec la musique en fond.
+
+    Sans cette directive, FiveM ferme l'écran automatiquement dès
+    que la session est prête. On perd la transition douce vers le
+    multicharacter, mais on entre en jeu — ce qui vaut mieux.
+
+    À remettre le jour où ZSX_UI sera installé et fonctionnel.
+]]
 
 client_script 'client.lua'
 server_script 'server.lua'
