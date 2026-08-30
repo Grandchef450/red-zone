@@ -16,13 +16,32 @@ body {
     user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera, and Firefox */
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   CORRIGÉ LE 30 AOÛT 2026 — LA VIDÉO NE S'AFFICHAIT PAS
+
+   z-index valait -99. Une valeur NÉGATIVE place l'élément derrière
+   le fond de la page : avec l'iframe YouTube d'origine ça passait,
+   parce qu'une iframe crée son propre contexte d'empilement. Une
+   balise <video> native, elle, se retrouve enfouie et invisible.
+
+   z-index: 0 la remet dans le flux normal, tout en la laissant
+   derrière l'interface — les autres éléments ont des valeurs
+   positives ou sont déclarés après.
+
+   ⚠️  Ne remets JAMAIS une valeur négative ici : c'est le seul
+   réglage qui fait disparaître la vidéo sans aucun message
+   d'erreur, ni dans la console F8, ni ailleurs.
+   ═══════════════════════════════════════════════════════════════ */
 .video-background {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
-    z-index: -99;
+    overflow: hidden;
+    z-index: 0;
 }
 
 .menu-container {
@@ -129,15 +148,25 @@ body {
 }
 
 .video-container video {
-    /* Make video to at least 100% wide and tall */
+    /* La vidéo couvre tout l'écran, quelle que soit sa proportion :
+       elle déborde plutôt que de laisser des bandes noires. */
     min-width: 100%;
     min-height: 100%;
+    width: auto;
+    height: auto;
 
-    /* Center the video */
+    /* Centrage */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    /* Derrière tout le reste de l'interface, mais devant le fond */
+    z-index: -1;
+
+    /* object-fit garantit qu'aucune déformation n'apparaît si les
+       proportions de la vidéo diffèrent de celles de l'écran. */
+    object-fit: cover;
 }
 
 .img-center {
