@@ -4,29 +4,47 @@ game 'gta5'
 name 'custom_weapons_pack'
 description 'RedZone Survival — armes blanches craftables'
 author 'Grandchefstream'
-version '2.0.0'
+version '2.1.0'
 
 --[[
-    CORRIGÉ LE 29 AOÛT 2026
+    CORRIGÉ LE 30 AOÛT 2026 — PLANTAGE AU CHARGEMENT
 
-    Le manifeste d'origine déclarait WEAPONINFO_FILE pour un fichier
-    de structures et WEAPONINFO_FILE_PATCH pour un fichier vide.
-    Les deux étaient inversés, et aucun dossier stream n'existait :
-    le pack ne pouvait rien ajouter au jeu.
+    ─── CE QUI PLANTAIT ───────────────────────────────────────────
 
-    L'ordre des data_file compte : les archétypes doivent être
-    déclarés AVANT les infos d'arme, sinon GTA cherche un modèle
-    qu'il ne connaît pas encore.
+    « An exception occurred during loading of
+      custom_weapons_pack/data/weaponarch… in data file mounter »
+
+    Mon weaponarchetypes.meta utilisait une structure INVENTÉE :
+    des balises <ModelName> en majuscules avec trois champs, alors
+    que GTA attend <modelName> en minuscules et une dizaine de
+    champs obligatoires — txdName, lodDist, flags, et d'autres.
+
+    Le lecteur de fichiers de données lisait donc des octets qu'il
+    n'attendait pas, et le jeu se fermait.
+
+    ─── LA CORRECTION ─────────────────────────────────────────────
+
+    Le fichier est RETIRÉ. Il n'est pas indispensable : GTA résout
+    le modèle d'une arme par le hash de son nom, déclaré dans la
+    balise <Model> de weapons.meta. Le .ydr du dossier stream est
+    trouvé par ce nom.
+
+    weaponarchetypes.meta ne sert qu'à préciser la distance
+    d'affichage et les relations de textures — deux réglages fins
+    dont on peut se passer.
+
+    ⚠️  SI UNE ARME APPARAÎT SANS TEXTURE en jeu, c'est là qu'il
+    faudra revenir, avec une structure vérifiée sur un pack qui
+    fonctionne. Mais ne réintroduis pas ce fichier « au cas où » :
+    un format approximatif fait planter tout le monde au démarrage.
 ]]
 
 files {
-    'data/weaponarchetypes.meta',
     'data/weaponanimations.meta',
     'data/weaponcomponents.meta',
     'data/weapons.meta',
 }
 
-data_file 'WEAPON_METADATA_FILE'      'data/weaponarchetypes.meta'
 data_file 'WEAPON_ANIMATIONS_FILE'    'data/weaponanimations.meta'
 data_file 'WEAPONCOMPONENTSINFO_FILE' 'data/weaponcomponents.meta'
 data_file 'WEAPONINFO_FILE_PATCH'     'data/weapons.meta'
