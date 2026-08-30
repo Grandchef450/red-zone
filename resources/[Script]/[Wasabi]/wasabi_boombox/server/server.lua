@@ -12,8 +12,7 @@ if GetResourceState('es_extended') == 'started' or GetResourceState('es_extended
     ESX = exports['es_extended']:getSharedObject()
 -- REDZONE : Qbox s'appelle « qbx_core ». Il publie bien ses exports
 -- sous le nom qb-core via son pont intégré, mais aucune RESSOURCE
--- ne porte ce nom : le test d'origine échouait donc toujours, et la
--- boombox ne savait pas quelle table créer.
+-- ne porte ce nom : le test d'origine échouait donc toujours.
 elseif GetResourceState('qb-core') == 'started' or GetResourceState('qb-core') == 'starting'
     or GetResourceState('qbx_core') == 'started' or GetResourceState('qbx_core') == 'starting' then
     Framework = 'qb'

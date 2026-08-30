@@ -1753,4 +1753,16 @@ return {
 			image = 'appat_artificiel.png',
 		},
 	},
+
+	-- ─── LOISIRS ───────────────────────────────────────────
+	['boombox'] = {
+		label = 'Boombox',
+		weight = 3500,
+		stack = false,
+		close = true,
+		description = 'Radiocassette de récupération. Se pose au sol et joue ce qu\'on lui donne.',
+		client = {
+			image = 'radio.png',
+		},
+	},
 }
