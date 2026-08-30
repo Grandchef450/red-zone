@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Compteur permanent, indépendant du menu -->
+    <div id="counter" class="counter">
+        <span id="fps">--</span><span class="unit">FPS</span>
+    </div>
+
+    <!-- Menu des profils -->
+    <div id="menu" class="menu">
+        <div class="panel">
+            <header>
+                <h1>Réglages graphiques</h1>
+                <button id="close" class="close" title="Fermer">✕</button>
+            </header>
+
+            <p class="lead">
+                Choisis le profil qui correspond à ta machine.
+                Si tu ne sais pas, lance la détection.
+            </p>
+
+            <button id="auto" class="auto">
+                <span class="auto-title">Détecter automatiquement</span>
+                <span class="auto-note">Mesure tes FPS pendant 13 secondes</span>
+            </button>
+
+            <div id="detect" class="detect">
+                <div class="spinner"></div>
+                <p id="detectText">Mesure en cours...</p>
+                <p id="detectSub" class="detect-sub"></p>
+            </div>
+
+            <div id="profiles" class="profiles"></div>
+
+            <label class="toggle">
+                <input type="checkbox" id="counterToggle">
+                <span>Afficher le compteur de FPS</span>
+            </label>
+
+            <footer>
+                <span id="live">-- FPS</span>
+                <span class="hint">ÉCHAP pour fermer</span>
+            </footer>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

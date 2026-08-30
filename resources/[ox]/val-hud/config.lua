@@ -1,6 +1,11 @@
 Config = {}
 
-Config.FrameWork = 'ox' -- qb | esx
+Config.FrameWork = 'qb' -- qb | esx
+
+-- Cette clé était TESTÉE par server.lua mais jamais définie ici :
+-- le test valait donc toujours nil, et le stress ne pouvait pas
+-- être désactivé, même en essayant.
+Config.DisableStress = false
 Config.MinimumStress = 80         -- Minimum Stress Level For Screen Shaking
 Config.MinimumSpeedUnbuckled = 50 -- Going Over This Speed Unbuckled Will Cause Stress
 Config.MinimumSpeed = 120         -- Going Over This Speed While Buckled Will Cause Stress

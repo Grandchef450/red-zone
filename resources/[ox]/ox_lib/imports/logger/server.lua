@@ -92,6 +92,38 @@ local function formatTags(source, tags)
     return tags
 end
 
+-- ═══════════════════════════════════════════════════════════════
+--  REDZONE — SERVICE « discord »
+--
+--  ox_lib sait envoyer ses logs vers Datadog, Loki et Fivemanage,
+--  mais pas vers Discord. Ce service ajoute le pont manquant.
+--
+--  Il ne construit ni ne poste rien lui-même : il transmet à
+--  rz_logs, qui gère la file d'attente, le regroupement et les
+--  limites de débit de Discord. Un seul émetteur pour tout le
+--  serveur, donc aucun risque de saturer les webhooks.
+--
+--  À ACTIVER dans server.cfg :
+--      setr ox:logger "discord"
+--
+--  ⚠️  Ce fichier appartient à ox_lib. Une mise à jour d'ox_lib
+--  l'écrasera : garde une copie de ce bloc.
+-- ═══════════════════════════════════════════════════════════════
+if service == 'discord' then
+    function lib.logger(source, event, message, ...)
+        if GetResourceState('rz_logs') ~= 'started' then return end
+
+        -- pcall : si rz_logs redémarre pendant un appel, la
+        -- ressource appelante ne doit pas planter pour autant.
+        pcall(function()
+            exports.rz_logs:OxLog(source, event, message)
+        end)
+    end
+
+    return lib.logger
+end
+
+
 if service == 'fivemanage' then
     local key = GetConvar('fivemanage:key', '')
 

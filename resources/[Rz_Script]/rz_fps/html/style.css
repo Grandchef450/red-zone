@@ -1,0 +1,276 @@
+/* ═══════════════════════════════════════════════════════════════
+   RedZone — réglages graphiques
+
+   Aucune dépendance externe : ni jQuery, ni police en ligne, ni
+   image. L'ancien menu chargeait quatre JPG dont un fond de
+   200 Ko pour afficher quatre boutons.
+   ═══════════════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: transparent;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+/* ─── COMPTEUR ────────────────────────────────────────────────── */
+
+.counter {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    display: none;
+    align-items: baseline;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    background: rgba(9, 9, 11, .55);
+    font-variant-numeric: tabular-nums;   /* le chiffre ne saute pas */
+    pointer-events: none;
+}
+
+.counter.on { display: flex; }
+
+.counter.pos-haut-gauche { top: 12px; bottom: auto; left: 16px; right: auto; }
+.counter.pos-haut-droite { top: 12px; bottom: auto; right: 16px; left: auto; }
+.counter.pos-bas-gauche  { bottom: 12px; top: auto; left: 16px; right: auto; }
+.counter.pos-bas-droite  { bottom: 12px; top: auto; right: 16px; left: auto; }
+
+#fps {
+    font-size: 19px;
+    font-weight: 700;
+    color: #4ade80;
+    transition: color .3s;
+}
+
+#fps.warn { color: #fbbf24; }
+#fps.bad  { color: #f87171; }
+
+.unit {
+    font-size: 9px;
+    letter-spacing: 1.4px;
+    color: rgba(255, 255, 255, .45);
+}
+
+/* ─── MENU ────────────────────────────────────────────────────── */
+
+.menu {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .55);
+    backdrop-filter: blur(3px);
+}
+
+.menu.on { display: flex; }
+
+.panel {
+    width: 460px;
+    max-width: 92vw;
+    background: linear-gradient(180deg, #17181c 0%, #0e0f12 100%);
+    border: 1px solid rgba(255, 255, 255, .09);
+    border-radius: 10px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .65);
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+h1 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    color: #f4f4f5;
+}
+
+.close {
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .06);
+    color: rgba(255, 255, 255, .55);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.close:hover { background: rgba(248, 113, 113, .18); color: #f87171; }
+
+.profiles {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.profile {
+    padding: 11px 14px;
+    border: 1px solid rgba(255, 255, 255, .07);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, .02);
+    cursor: pointer;
+    transition: background .18s, border-color .18s;
+}
+
+.profile:hover { background: rgba(255, 255, 255, .055); }
+
+.profile.active {
+    border-color: rgba(74, 222, 128, .45);
+    background: rgba(74, 222, 128, .09);
+}
+
+.profile .name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #f4f4f5;
+}
+
+.profile.active .name { color: #4ade80; }
+
+.profile .desc {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, .42);
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 12px 12px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, .02);
+    font-size: 12px;
+    color: rgba(255, 255, 255, .72);
+    cursor: pointer;
+}
+
+.toggle input { accent-color: #4ade80; cursor: pointer; }
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-top: 1px solid rgba(255, 255, 255, .07);
+    font-size: 10px;
+    color: rgba(255, 255, 255, .32);
+}
+
+#live { font-variant-numeric: tabular-nums; }
+
+
+/* ─── AIDE AU CHOIX ───────────────────────────────────────────── */
+
+.lead {
+    padding: 13px 18px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .5);
+}
+
+.auto {
+    display: block;
+    width: calc(100% - 24px);
+    margin: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(96, 165, 250, .35);
+    border-radius: 7px;
+    background: rgba(96, 165, 250, .09);
+    text-align: left;
+    cursor: pointer;
+    transition: background .18s;
+    font-family: inherit;
+}
+
+.auto:hover { background: rgba(96, 165, 250, .16); }
+.auto:disabled { opacity: .4; cursor: default; }
+
+.auto-title {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #60a5fa;
+}
+
+.auto-note {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, .42);
+}
+
+/* ─── MESURE EN COURS ─────────────────────────────────────────── */
+
+.detect {
+    display: none;
+    margin: 0 12px 12px;
+    padding: 18px 14px;
+    border-radius: 7px;
+    background: rgba(96, 165, 250, .07);
+    text-align: center;
+}
+
+.detect.on { display: block; }
+
+.spinner {
+    width: 22px;
+    height: 22px;
+    margin: 0 auto 10px;
+    border: 2px solid rgba(96, 165, 250, .2);
+    border-top-color: #60a5fa;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#detectText {
+    font-size: 13px;
+    color: #f4f4f5;
+}
+
+.detect-sub {
+    margin-top: 4px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, .45);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Le résultat remplace le compte à rebours */
+.detect.done .spinner { display: none; }
+.detect.done { background: rgba(74, 222, 128, .09); }
+.detect.done #detectText { color: #4ade80; }
+
+/* Profil recommandé, mis en avant après la mesure */
+.profile.recommended {
+    border-color: rgba(96, 165, 250, .55);
+}
+
+.profile.recommended .name::after {
+    content: ' — recommandé';
+    font-size: 10px;
+    font-weight: 400;
+    color: #60a5fa;
+}
+
+.profile .hint {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: rgba(255, 255, 255, .3);
+    font-style: italic;
+}
