@@ -1,79 +1,72 @@
 -- ═══════════════════════════════════════════════════════════════════
---  REDZONE — APPARITION ET SAUVETAGE
+--  REDZONE — APPARITION ET DÉSENCLAVEMENT
 -- ═══════════════════════════════════════════════════════════════════
 
 -- ───────────────────────────────────────────────────────────────────
---  ZONES QUI FONT PLANTER
+--  ZONES INTERDITES
 --
---  Un endroit qui crashe est un piège invisible : le joueur y
---  retourne — souvent parce que son personnage y a été sauvegardé —
---  replante, et finit par croire que le serveur est cassé.
+--  Endroits où un joueur ne doit JAMAIS apparaître : un MLO qui fait
+--  planter, un décor mal collisionné, une zone en travaux.
 --
---  Il ne peut même pas le signaler : il est éjecté avant.
+--  Sans ce mécanisme, un joueur déconnecté au mauvais endroit plante
+--  à chaque tentative de connexion — et ne peut plus jamais revenir
+--  sur son personnage.
 -- ───────────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS `rz_crash_zones` (
-    `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `rz_spawn_blacklist` (
+    `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `label`     VARCHAR(96)  NOT NULL,
 
-    `x`           FLOAT        NOT NULL,
-    `y`           FLOAT        NOT NULL,
-    `z`           FLOAT        NOT NULL,
-    `radius`      FLOAT        NOT NULL DEFAULT 50,
+    `x`         FLOAT        NOT NULL,
+    `y`         FLOAT        NOT NULL,
+    `z`         FLOAT        NOT NULL,
+    `radius`    FLOAT        NOT NULL DEFAULT 25,
 
-    -- Affiché aux joueurs qui s'en approchent
-    `label`       VARCHAR(64)  NOT NULL,
+    `added_by`  VARCHAR(80)  DEFAULT NULL,
+    `added_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    -- Note interne : ce qui plante exactement. Utile dans six mois.
-    `note`        VARCHAR(255) DEFAULT NULL,
-
-    `enabled`     TINYINT(1)   NOT NULL DEFAULT 1,
-    `created_by`  VARCHAR(80)  DEFAULT NULL,
-    `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    PRIMARY KEY (`id`),
-    KEY `idx_enabled` (`enabled`)
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 -- ───────────────────────────────────────────────────────────────────
---  JOURNAL DES SAUVETAGES
+--  JOURNAL
 --
---  Sa vraie valeur est statistique : plusieurs déblocages au même
---  endroit trahissent un décor défectueux. C'est ce qui permet de
---  repérer un piège avant qu'il ne fasse fuir du monde.
+--  Sert surtout à repérer les endroits qui coincent : si trois
+--  joueurs se désenclavent au même endroit dans la semaine, c'est
+--  qu'il y a un vrai problème de décor à corriger.
 -- ───────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `rz_spawn_logs` (
-    `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id`         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `license`    VARCHAR(80)  DEFAULT NULL,
+    `name`       VARCHAR(96)  DEFAULT NULL,
 
-    -- Renseigné uniquement pour une action du staff
-    `admin`       VARCHAR(80)  DEFAULT NULL,
-    `target`      VARCHAR(80)  DEFAULT NULL,
+    -- unstuck | teleport
+    `action`     VARCHAR(24)  NOT NULL,
+    `detail`     JSON         DEFAULT NULL,
 
-    -- unstuck | rescue | bring
-    `action`      VARCHAR(24)  NOT NULL,
-    `detail`      JSON         DEFAULT NULL,
-
-    `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (`id`),
-    KEY `idx_action_date` (`action`, `created_at`)
+    KEY `idx_date` (`created_at`),
+    KEY `idx_action` (`action`, `created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 -- ═══════════════════════════════════════════════════════════════════
 --  LA REQUÊTE QUI VAUT LE DÉTOUR
 --
---  Elle regroupe les déblocages par tranche de 50 mètres. Un endroit
---  qui revient souvent est un décor à corriger — ou une zone à
---  marquer comme instable.
+--  Elle regroupe les désenclavements par zone de 100 mètres. Un
+--  point qui revient souvent n'est pas un joueur maladroit : c'est
+--  un décor à corriger, ou une zone à mettre en liste noire.
 --
 --  SELECT
---      ROUND(JSON_EXTRACT(detail, '$.fromX') / 50) * 50 AS zone_x,
---      ROUND(JSON_EXTRACT(detail, '$.fromY') / 50) * 50 AS zone_y,
---      COUNT(*) AS deblocages
+--      ROUND(JSON_EXTRACT(detail, '$.x') / 100) * 100 AS zone_x,
+--      ROUND(JSON_EXTRACT(detail, '$.y') / 100) * 100 AS zone_y,
+--      COUNT(*) AS incidents
 --  FROM rz_spawn_logs
 --  WHERE action = 'unstuck'
 --    AND created_at > NOW() - INTERVAL 30 DAY
 --  GROUP BY zone_x, zone_y
---  HAVING deblocages >= 3
---  ORDER BY deblocages DESC;
+--  HAVING incidents >= 3
+--  ORDER BY incidents DESC;
 -- ═══════════════════════════════════════════════════════════════════

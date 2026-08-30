@@ -56,7 +56,7 @@ const VIDEO_CONFIG = {
         /* Qualité demandée : 'hd1080', 'hd720', 'large' (480p).
            YouTube reste libre de baisser si la connexion ne suit
            pas — ce paramètre est une préférence, pas une garantie. */
-        qualite: 'hd1080',
+        qualite: 'hd720',
 
         /* Seconde de départ. Utile pour sauter une introduction. */
         debut: 0,
