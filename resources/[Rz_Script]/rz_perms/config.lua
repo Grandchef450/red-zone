@@ -84,6 +84,14 @@ Config.Tools = {
         perms    = { 'rz_radiation.admin', 'rz.radiation' },
     },
     {
+        id       = 'rz-spawn',
+        resource = 'rz_spawn',
+        callback = 'openSpawn',
+        label    = 'Sauvetage',
+        icon     = 'fa-person-falling',
+        perms    = { 'rz_spawn.admin', 'rz.spawn', 'rz.staff' },
+    },
+    {
         id       = 'rz-mort',
         resource = 'rz_mort',
         callback = 'openMort',
