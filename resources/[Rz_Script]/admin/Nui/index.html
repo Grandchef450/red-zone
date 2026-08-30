@@ -1669,14 +1669,24 @@
     <script src="./script/map.js"></script>
     <script src="./script/groups.js"></script>
 <!-- ═══════════════════════════════════════════════════════════════
-     REDZONE — Boutons des outils admin
+     REDZONE — Boutons des outils admin, filtrés par permission
 
-     À COLLER dans : resources/[Rz_Script]/admin/Nui/index.html
+     À COLLER dans : resources\[Rz_Script]\admin\Nui\index.html
      JUSTE AVANT la balise fermante </body>
 
-     Ce bloc remplace les deux blocs précédents (Craft Creator et
-     Zones sûres) : il contient les sept outils d'un coup.
-     Si tu avais déjà collé les anciens, retire-les d'abord.
+     Ce bloc REMPLACE la version précédente : il ne contient plus la
+     liste des outils en dur. Elle vient maintenant du serveur, qui
+     indique pour chacun si le joueur y a droit.
+
+     Les outils non autorisés apparaissent GRISÉS et inertes. Aucun
+     message d'erreur : le joueur voit ce qui existe et comprend de
+     lui-même qu'il lui manque un grade.
+
+     ⚠️  Ce filtrage est du CONFORT, pas de la sécurité. Chaque
+     ressource vérifie sa propre permission côté serveur. Cacher un
+     bouton n'empêche personne de déclencher un callback à la main —
+     mais ça évite l'effet désagréable du bouton qui répond « accès
+     refusé ».
      ═══════════════════════════════════════════════════════════════ -->
 
 <script>
@@ -1684,22 +1694,11 @@
     'use strict';
 
     var MENU_SELECTOR = '.sidebar .menu';
+    var SEP_ID = 'rz-tools-sep';
 
-    // Chaque entrée : ressource visée, callback NUI, libellé, icône.
-    var TOOLS = [
-        { id: 'rz-craft',      res: 'rz_craft',      cb: 'openCreator',   label: 'Craft Creator', icon: 'fa-hammer' },
-        { id: 'rz-safezones',  res: 'rz_safezone',   cb: 'openSafezones', label: 'Zones sûres',   icon: 'fa-shield-halved' },
-        { id: 'rz-props',      res: 'rz_props',      cb: 'openPanel',     label: 'Props',         icon: 'fa-cubes' },
-        { id: 'rz-jobs',       res: 'rz_jobcreator', cb: 'openPanel',     label: 'Jobs',          icon: 'fa-briefcase' },
-        { id: 'rz-jail',       res: 'rz_adminjail',  cb: 'openPanel',     label: 'Prison',        icon: 'fa-handcuffs' },
-        { id: 'rz-reports',    res: 'rz_reports',    cb: 'openPanel',     label: 'Reports',       icon: 'fa-flag' },
-        { id: 'rz-vip',        res: 'rz_vip',        cb: 'openPanel',     label: 'VIP',           icon: 'fa-crown' },
-        { id: 'rz-coffres',    res: 'rz_coffres',    cb: 'openCoffres',   label: 'Coffres',       icon: 'fa-box-archive' },
-        { id: 'rz-epaves',     res: 'rz_epaves',     cb: 'openEpaves',    label: 'Loot épaves',   icon: 'fa-car-burst' },
-        { id: 'rz-signal',     res: 'rz_signal_urgences', cb: 'openSignal', label: 'Annonces pager', icon: 'fa-tower-broadcast' },
-        { id: 'rz-radiation',  res: 'rz_radioactivite',   cb: 'openRadiation', label: 'Zone radioactive', icon: 'fa-radiation' },
-        { id: 'rz-mort',       res: 'rz_mort',            cb: 'openMort',      label: 'Mort et sacs',     icon: 'fa-skull' }
-    ];
+    var tools = null;      // liste reçue du serveur
+    var style = 'grise';   // 'grise' ou 'cache'
+    var loading = false;
 
     function post(resource, callback) {
         return fetch('https://' + resource + '/' + callback, {
@@ -1709,49 +1708,98 @@
         }).catch(function () {});
     }
 
+    /* Demande au serveur les outils autorisés. Une seule fois :
+       les permissions ne changent pas en cours de session. */
+    function loadTools(done) {
+        if (tools !== null) { done(); return; }
+        if (loading) return;
+        loading = true;
+
+        fetch('https://rz_perms/getTools', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({})
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            tools = (data && data.tools) || [];
+            style = (data && data.style) || 'grise';
+            loading = false;
+            done();
+        })
+        .catch(function () {
+            /* rz_perms absent ou en erreur : on n'affiche rien plutôt
+               que des boutons qui échoueraient de toute façon. */
+            tools = [];
+            loading = false;
+            done();
+        });
+    }
+
     function makeItem(tool) {
         var li = document.createElement('li');
         li.id = tool.id;
-        // Pas d'attribut data-page : le routeur du panneau l'ignore
-        // et nous laisse gérer le clic nous-mêmes.
+        /* Pas d'attribut data-page : le routeur du panneau l'ignore
+           et nous laisse gérer le clic nous-mêmes. */
         li.innerHTML =
             '<span class="icon"><i class="fa-solid ' + tool.icon + '"></i></span>' +
             '<span class="label">' + tool.label + '</span>';
+
+        /* Outil non autorisé : grisé et inerte.
+           Aucun message d'erreur — le joueur voit ce qui existe et
+           comprend de lui-même qu'il lui manque un grade. Lui dire
+           « tu n'as pas la permission » n'apporte rien. */
+        if (!tool.allowed) {
+            li.classList.add('rz-locked');
+            li.style.cssText =
+                'opacity:.32;pointer-events:none;cursor:default;' +
+                'filter:grayscale(1);';
+            return li;
+        }
 
         li.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
 
-            // Refermer le panneau via SON propre callback, pour qu'il
-            // remette à zéro son état (focus, spectate, sous-menus).
+            /* Refermer le panneau via SON propre callback, pour qu'il
+               remette à zéro son état interne. */
             post(GetParentResourceName(), 'close');
 
-            // Puis ouvrir l'outil visé.
-            post(tool.res, tool.cb);
+            post(tool.resource, tool.callback);
         });
 
         return li;
     }
 
     function inject() {
-        var menu = document.querySelector(MENU_SELECTOR);
-        if (!menu) return;
+        if (!document.querySelector(MENU_SELECTOR)) return;
 
-        // Séparateur, une seule fois
-        if (!document.getElementById('rz-tools-sep')) {
-            var sep = document.createElement('li');
-            sep.id = 'rz-tools-sep';
-            sep.style.cssText =
-                'pointer-events:none;opacity:.45;font-size:10px;' +
-                'letter-spacing:1px;padding:12px 16px 4px;text-transform:uppercase;';
-            sep.textContent = 'RedZone';
-            menu.appendChild(sep);
-        }
+        loadTools(function () {
+            if (!tools || tools.length === 0) return;
 
-        TOOLS.forEach(function (tool) {
-            if (!document.getElementById(tool.id)) {
-                menu.appendChild(makeItem(tool));
+            var menu = document.querySelector(MENU_SELECTOR);
+            if (!menu) return;
+
+            if (!document.getElementById(SEP_ID)) {
+                var sep = document.createElement('li');
+                sep.id = SEP_ID;
+                sep.style.cssText =
+                    'pointer-events:none;opacity:.45;font-size:10px;' +
+                    'letter-spacing:1px;padding:12px 16px 4px;' +
+                    'text-transform:uppercase;';
+                sep.textContent = 'RedZone';
+                menu.appendChild(sep);
             }
+
+            tools.forEach(function (tool) {
+                /* Mode « cache » : on saute les non autorisés.
+                   Mode « grise » (défaut) : on les affiche inertes. */
+                if (style === 'cache' && !tool.allowed) return;
+
+                if (!document.getElementById(tool.id)) {
+                    menu.appendChild(makeItem(tool));
+                }
+            });
         });
     }
 
@@ -1761,7 +1809,8 @@
         inject();
     }
 
-    // La barre latérale peut être reconstruite : on réinjecte au besoin.
+    /* La barre latérale peut être reconstruite après une connexion
+       ou un changement de page : on réinjecte au besoin. */
     new MutationObserver(inject).observe(document.body, {
         childList: true, subtree: true
     });

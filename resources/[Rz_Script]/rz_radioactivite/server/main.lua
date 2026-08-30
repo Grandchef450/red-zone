@@ -70,25 +70,38 @@ CreateThread(function()
         Wait(Config.Movement.tickMs)
 
         if Zone.active and Config.Movement.enabled then
-            local dx, dy = Zone.targetX - Zone.x, Zone.targetY - Zone.y
-            local dist = math.sqrt(dx * dx + dy * dy)
-
-            if dist < 25.0 then
-                pickTarget()
+            -- Avec le cycle actif, le nuage suit un ITINÉRAIRE.
+            -- Le déplacement aléatoire d'origine ne sert plus que
+            -- si le cycle est désactivé, ou si un admin a placé la
+            -- zone à la main hors scénario.
+            if Config.Cycle.enabled and Current and Current.scenario then
+                AdvanceOnPath(step)
             else
-                local move = Zone.speed * step
-                Zone.x = Zone.x + (dx / dist) * move
-                Zone.y = Zone.y + (dy / dist) * move
+                local dx, dy = Zone.targetX - Zone.x, Zone.targetY - Zone.y
+                local dist = math.sqrt(dx * dx + dy * dy)
+
+                if dist < 25.0 then
+                    pickTarget()
+                else
+                    local move = Zone.speed * step
+                    Zone.x = Zone.x + (dx / dist) * move
+                    Zone.y = Zone.y + (dy / dist) * move
+                end
             end
         end
 
+        -- On envoie aussi l'état du cycle : pendant l'annonce, le
+        -- blip doit apparaître alors que la zone n'est pas encore
+        -- dangereuse. C'est ce qui permet de fuir dans la bonne
+        -- direction plutôt qu'au hasard.
         TriggerClientEvent('rz_radiation:sync', -1, {
-            active = Zone.active,
-            x      = Zone.x,
-            y      = Zone.y,
-            radius = Zone.radius,
-            minZ   = Config.Zone.minZ,
-            maxZ   = Config.Zone.maxZ,
+            active   = Zone.active,
+            incoming = CycleState == 'annonce',
+            x        = Zone.x,
+            y        = Zone.y,
+            radius   = Zone.radius,
+            minZ     = Config.Zone.minZ,
+            maxZ     = Config.Zone.maxZ,
         })
     end
 end)

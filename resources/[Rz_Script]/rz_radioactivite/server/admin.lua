@@ -132,3 +132,216 @@ RegisterNetEvent('rz_radiation:requestBlipRebuild', function()
     if not Config.HasAce(source) then return end
     TriggerClientEvent('rz_radiation:rebuildBlip', -1)
 end)
+
+-- ═══════════════════════════════════════════════════════════════════
+--  PILOTAGE DU CYCLE
+-- ═══════════════════════════════════════════════════════════════════
+
+lib.callback.register('rz_radiation:getCycle', function(source)
+    if not Config.HasAce(source) then return end
+
+    local info = GetCycleInfo()
+
+    local scenarios = {}
+    for _, sc in ipairs(Config.Scenarios) do
+        scenarios[#scenarios + 1] = {
+            value  = sc.key,
+            label  = sc.label,
+            note   = sc.note,
+            weight = sc.weight or 1,
+            steps  = #sc.path,
+            radius = sc.radius or Config.Zone.radius,
+            speed  = sc.speed or Config.Zone.speed,
+            loop   = sc.loop == true,
+        }
+    end
+
+    info.scenarios = scenarios
+    info.cycleEnabled = Config.Cycle.enabled
+
+    return info
+end)
+
+
+---Lance un scénario tout de suite, sans attendre la fin de l'accalmie.
+lib.callback.register('rz_radiation:launchScenario', function(source, key)
+    if not Config.HasAce(source) then return deny(source) end
+
+    local sc = Config.GetScenario(key)
+    if not sc then return false, 'Itinéraire inconnu.' end
+
+    StartWarning(key)
+    logChange(source, 'launchScenario', { scenario = key })
+
+    return true, ('« %s » annoncé. Le nuage arrive dans %d secondes.')
+        :format(sc.label, Config.Cycle.warningSeconds)
+end)
+
+
+---Dissipe le nuage immédiatement et repart en accalmie.
+lib.callback.register('rz_radiation:forceDormant', function(source)
+    if not Config.HasAce(source) then return deny(source) end
+
+    GoDormant()
+    logChange(source, 'forceDormant', {})
+
+    return true, 'Nuage dissipé. Retour en accalmie.'
+end)
+
+
+---Saute l'attente : passe directement à l'étape suivante du cycle.
+lib.callback.register('rz_radiation:skipPhase', function(source)
+    if not Config.HasAce(source) then return deny(source) end
+
+    if CycleState == 'dormante' then
+        StartWarning()
+        return true, 'Annonce lancée.'
+    elseif CycleState == 'annonce' then
+        GoActive()
+        return true, 'Nuage apparu.'
+    else
+        GoDormant()
+        return true, 'Nuage dissipé.'
+    end
+end)
+
+
+lib.callback.register('rz_radiation:toggleCycle', function(source)
+    if not Config.HasAce(source) then return deny(source) end
+
+    Config.Cycle.enabled = not Config.Cycle.enabled
+
+    if not Config.Cycle.enabled then
+        -- Sans cycle, la zone reprend son déplacement aléatoire.
+        Current.scenario = nil
+    end
+
+    logChange(source, 'toggleCycle', { enabled = Config.Cycle.enabled })
+
+    return true, Config.Cycle.enabled
+        and 'Cycle réactivé : accalmies et itinéraires.'
+        or  'Cycle désactivé : la zone se déplace au hasard.'
+end)
+
+---Création d'une zone sur la position de l'admin.
+lib.callback.register('rz_radiation:createManual', function(source, data)
+    if not Config.HasAce(source) then return deny(source) end
+
+    return CreateManualZone(
+        source,
+        data.radius,
+        data.speed,
+        data.minutes,
+        data.announce
+    )
+end)
+
+
+---Données nécessaires au formulaire de création.
+lib.callback.register('rz_radiation:getManualOptions', function(source)
+    if not Config.HasAce(source) then return end
+
+    local durations = {}
+    for _, m in ipairs(Config.Manual.durations) do
+        durations[#durations + 1] = {
+            value = m,
+            label = m >= 60 and ('%d h %s'):format(m // 60,
+                        m % 60 > 0 and ('%d min'):format(m % 60) or '')
+                    or ('%d minutes'):format(m),
+        }
+    end
+
+    return {
+        maxRadius       = Config.MaxScenarioRadius(),
+        minRadius       = Config.Manual.minRadius,
+        durations       = durations,
+        defaultDuration = Config.Manual.defaultDuration,
+        defaultSpeed    = Config.Manual.defaultSpeed,
+        announceDefault = Config.Manual.announceByDefault,
+    }
+end)
+
+-- ═══════════════════════════════════════════════════════════════════
+--  RÉGLAGES
+-- ═══════════════════════════════════════════════════════════════════
+
+lib.callback.register('rz_radiation:getGroups', function(source)
+    if not Config.HasAce(source) then return {} end
+
+    local out = {}
+
+    for _, g in ipairs(GROUPS) do
+        local n = 0
+        for _, def in ipairs(SETTINGS) do
+            if def.group == g.key then n = n + 1 end
+        end
+
+        out[#out + 1] = {
+            key = g.key, label = g.label, icon = g.icon, count = n,
+        }
+    end
+
+    return out
+end)
+
+
+lib.callback.register('rz_radiation:getSettings', function(source, group)
+    if not Config.HasAce(source) then return {} end
+
+    local out = {}
+
+    for _, def in ipairs(SETTINGS) do
+        if not group or def.group == group then
+            out[#out + 1] = {
+                key   = def.key,
+                label = def.label,
+                note  = def.note,
+                type  = def.type,
+                min   = def.min,
+                max   = def.max,
+                step  = def.step,
+                value = ReadSetting(def.key),
+            }
+        end
+    end
+
+    return out
+end)
+
+
+lib.callback.register('rz_radiation:setSetting', function(source, key, value)
+    if not Config.HasAce(source) then return deny(source) end
+    return SaveSetting(source, key, value)
+end)
+
+
+lib.callback.register('rz_radiation:resetGroup', function(source, group)
+    if not Config.HasAce(source) then return deny(source) end
+
+    local n = ResetGroup(source, group)
+
+    return true, ('%d réglage(s) effacé(s). Relance la ressource pour retrouver les valeurs d\'origine.')
+        :format(n)
+end)
+
+
+---Qui se trouve actuellement dans la zone, et avec quelle protection.
+lib.callback.register('rz_radiation:getExposed', function(source)
+    if not Config.HasAce(source) then return {} end
+
+    local out = {}
+
+    for _, playerId in ipairs(GetPlayers()) do
+        local src = tonumber(playerId)
+
+        if exports[GetCurrentResourceName()]:IsInZone(src) then
+            out[#out + 1] = {
+                id        = src,
+                name      = GetPlayerName(src),
+                protected = exports[GetCurrentResourceName()]:IsProtected(src),
+            }
+        end
+    end
+
+    return out
+end)

@@ -21,7 +21,12 @@ local effectOn = false
 RegisterNetEvent('rz_radiation:sync', function(data)
     zone = data
 
-    if not zone.active then
+    -- Pendant l'ANNONCE, le nuage n'est pas encore dangereux mais
+    -- son blip doit apparaître : c'est ce qui permet de fuir dans
+    -- la bonne direction plutôt qu'au hasard.
+    local showBlip = zone.active or zone.incoming
+
+    if not showBlip then
         if blipArea then RemoveBlip(blipArea) blipArea = nil end
         if blipCentre then RemoveBlip(blipCentre) blipCentre = nil end
         return
@@ -40,13 +45,18 @@ RegisterNetEvent('rz_radiation:sync', function(data)
             SetBlipScale(blipCentre, 0.9)
             SetBlipAsShortRange(blipCentre, false)
             BeginTextCommandSetBlipName('STRING')
-            AddTextComponentSubstringPlayerName('Zone contaminée')
+            AddTextComponentSubstringPlayerName(
+                zone.incoming and 'Contamination imminente' or 'Zone contaminée')
             EndTextCommandSetBlipName(blipCentre)
         else
             -- Un blip de rayon ne se redimensionne pas : on le
             -- recrée si le rayon a changé, sinon on le déplace.
             SetBlipCoords(blipArea, zone.x, zone.y, 0.0)
             SetBlipCoords(blipCentre, zone.x, zone.y, 0.0)
+
+            -- Clignote tant que le nuage n'est pas là : impossible
+            -- de confondre une alerte avec une contamination réelle.
+            SetBlipFlashes(blipCentre, zone.incoming == true)
         end
     end
 end)
@@ -71,6 +81,8 @@ CreateThread(function()
     while true do
         Wait(250)
 
+        -- zone.incoming ne compte pas : le nuage est annoncé mais
+        -- n'a pas encore d'effet.
         if not zone.active then
             if inside then
                 inside = false

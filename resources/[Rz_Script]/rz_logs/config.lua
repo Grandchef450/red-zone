@@ -20,15 +20,16 @@ Config.Debug = false
 --  préfères moins de salons.
 -- ═══════════════════════════════════════════════════════════════════
 Config.Webhooks = {
-    mort        = '',   -- morts, agonies, réanimations
-    inventaire  = '',   -- ajouts, retraits, transferts d'items
-    craft       = '',   -- fabrications, boîte aux lettres
-    coffres     = '',   -- coffres de sécurité remis et ouverts
-    admin       = '',   -- actions du staff, /giveitem, sanctions
-    connexions  = '',   -- arrivées et départs
-    suspect     = '',   -- tirs bloqués en safe zone, comportements douteux
-    monde       = '',   -- blackout, réseau, zone radioactive
-    erreurs     = '',   -- pannes du serveur, échecs de webhook
+    mort        = 'https://discord.com/api/webhooks/1543406211872063488/xU8sj_sl0A2mBodwErTEpxbQS0-UcqQhKcXAmpjlXmZ_xdcAwQo-CJ3JLpoPiS0sjgWg',   -- morts, agonies, réanimations
+    inventaire  = 'https://discord.com/api/webhooks/1543406494954029107/va9r9uxDpIkmbs1toYZVHAYRRw2TLlKqgnOJ3W9rPwSrf0CLNoI9nTCVNCni6eGoPcuQ',   -- ajouts, retraits, transferts d'items
+    craft       = 'https://discord.com/api/webhooks/1543407516606800024/AL9ihyzZiBLgPzDJRRZTRa7zoIbPJhfhoLXj8fYzihpir15ppxRiTNSp_4rHoCcSsFXW',   -- fabrications, boîte aux lettres
+    coffres     = 'https://discord.com/api/webhooks/1543406350032179310/4JkZdn-J43r_ZR33WUn587ccr5RQs3nv42p4mG52XRCmQa3Vz2vjwezHbd4qDzitYva4',   -- coffres de sécurité remis et ouverts
+    giveweeapon = 'https://discord.com/api/webhooks/1543407205515010119/QWmqUhnAvzz8kWtgjrfsza4U5kG7mVfqFoRQ5M5_f9uccTBc3a0RSGzGfFQyw9TKj_xU',   -- actions du staff, /giveitem, sanctions
+    giveitems   = 'https://discord.com/api/webhooks/1543406867730931792/WLSkuYLBjXLeT1-qao9m2JEC23MivS-6cSIDMA1bw0Vp0-Wr6dFPpf-lvvoNF9Ohz8dt',   -- arrivées et départs
+    weapon     = 'https://discord.com/api/webhooks/1543407913295552562/L62kmWjxDkvmVWZRWse8LAsPk6KifujwnpMIUI-dw1gQlPFXCdSMG6DaiZUMXCE1ZoR8',   -- tirs bloqués en safe zone, comportements douteux
+    loot       = 'https://discord.com/api/webhooks/1543407457144147998/AzWm5wnjof6GdUtXP5b54o-Eux6QglQMBqF4ITZeQcJXsOvi1dj1dOtA5UvHxvn5a-i7',   -- blackout, réseau, zone radioactive
+    Crash     = 'https://discord.com/api/webhooks/1543407298599460884/yJDlPmj3La2iIHJUWWwyXbAK7O1ru95b8C9IA7W_5v6KjH5i5KakxiryEPi0XlueQpGY',   -- pannes du serveur, échecs de webhook
+    Airdrop     = 'https://discord.com/api/webhooks/1543676799664525413/XZ3XEqmkaOk3tc1udvdwLjVtxx6NSd4uioZhZ4zwkkidiog7BwFnDQlKrTIuhUL0tFGD',   -- ouverture de caisse et loots, échecs de webhook
 }
 
 

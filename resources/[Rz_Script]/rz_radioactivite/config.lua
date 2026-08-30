@@ -70,6 +70,282 @@ Config.Movement = {
 }
 
 
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  LE CYCLE
+--
+--  La zone n'est plus permanente. Elle alterne entre deux états :
+--
+--    DORMANT   aucune contamination sur la carte. Les joueurs
+--              respirent, farment, s'installent.
+--    ACTIF     un nuage parcourt un itinéraire, puis se dissipe.
+--
+--  Ce rythme vaut mieux qu'une menace continue : une zone toujours
+--  présente devient un décor qu'on contourne machinalement. Une
+--  zone qui revient après une accalmie se remarque.
+--
+--  Entre les deux, une ANNONCE sur les pagers laisse le temps de
+--  se préparer. C'est ce qui donne sa valeur au pager : sans lui,
+--  on découvre le nuage en le traversant.
+-- ═══════════════════════════════════════════════════════════════════
+Config.Cycle = {
+    enabled = true,
+
+    -- Durée de l'accalmie, en minutes. Tirée au hasard dans cette
+    -- fourchette à chaque fois.
+    dormantMin = 45,
+    dormantMax = 120,
+
+    -- Délai entre l'annonce et l'apparition réelle du nuage.
+    -- Assez pour évacuer, trop court pour organiser une expédition.
+    warningSeconds = 180,
+
+    -- Durée de vie maximale d'un nuage, en minutes. Il se dissipe
+    -- même si son itinéraire n'est pas terminé — sinon un trajet
+    -- long immobiliserait le cycle pendant des heures.
+    maxActiveMinutes = 90,
+
+    -- La zone démarre-t-elle en accalmie au lancement du serveur ?
+    -- true évite qu'un redémarrage fasse apparaître un nuage sur
+    -- des joueurs qui viennent de se reconnecter.
+    startDormant = true,
+}
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  LES ITINÉRAIRES
+--
+--  Chaque scénario décrit un trajet à travers la carte. À la fin
+--  d'une accalmie, un scénario est tiré au sort selon son poids.
+--
+--  Un nuage qui suit un chemin connu est bien plus intéressant
+--  qu'un déplacement aléatoire : les joueurs finissent par
+--  reconnaître les couloirs de passage, et éviter d'y bâtir.
+--
+--  ─── COMMENT AJOUTER UN ITINÉRAIRE ─────────────────────────────
+--  Place-toi aux endroits voulus, note tes coordonnées avec
+--  dolu_tool, et ajoute une entrée ici. Le nuage relie les points
+--  dans l'ordre, en ligne droite.
+--
+--  `weight` est la probabilité relative : un scénario à 3 sort
+--  trois fois plus souvent qu'un scénario à 1.
+-- ═══════════════════════════════════════════════════════════════════
+Config.Scenarios = {
+    {
+        key    = 'vent_du_nord',
+        label  = 'Vent du nord',
+        note   = 'Descend de Paleto vers Los Santos par l\'intérieur',
+        weight = 3,
+        radius = 500.0,
+        speed  = 3.5,
+        path = {
+            vec2(-300.0,  6300.0),   -- Paleto Bay
+            vec2(100.0,   5000.0),   -- forêts du nord
+            vec2(800.0,   3800.0),   -- Grand Senora
+            vec2(1200.0,  2200.0),   -- Sandy est
+            vec2(600.0,   200.0),    -- Vinewood
+            vec2(200.0,  -1200.0),   -- Los Santos centre
+        },
+    },
+    {
+        key    = 'derive_cotiere',
+        label  = 'Dérive côtière',
+        note   = 'Longe la côte ouest, du sud vers le nord',
+        weight = 2,
+        radius = 450.0,
+        speed  = 4.0,
+        path = {
+            vec2(-1600.0, -1200.0),  -- Vespucci
+            vec2(-2000.0,  100.0),   -- Del Perro
+            vec2(-2600.0,  1800.0),  -- Pacific Bluffs
+            vec2(-2200.0,  3200.0),  -- côte de Zancudo
+            vec2(-800.0,   4800.0),  -- Chumash nord
+            vec2(-400.0,   6200.0),  -- Paleto
+        },
+    },
+    {
+        key    = 'boucle_du_desert',
+        label  = 'Boucle du désert',
+        note   = 'Tourne autour de Sandy Shores et Grapeseed',
+        weight = 3,
+        radius = 600.0,
+        speed  = 3.0,
+        loop   = true,           -- revient au premier point
+        path = {
+            vec2(1400.0,  3200.0),
+            vec2(2400.0,  3600.0),
+            vec2(2200.0,  4600.0),
+            vec2(1400.0,  4900.0),
+            vec2(800.0,   4200.0),
+        },
+    },
+    {
+        key    = 'couloir_militaire',
+        label  = 'Couloir militaire',
+        note   = 'Part de Fort Zancudo vers la ville. Nuage dense.',
+        weight = 1,
+        radius = 800.0,          -- le plus large des quatre
+        speed  = 2.5,            -- et le plus lent : difficile à fuir
+        path = {
+            vec2(-2100.0, 3200.0),   -- Fort Zancudo
+            vec2(-1400.0, 2000.0),
+            vec2(-800.0,  600.0),
+            vec2(-200.0, -800.0),    -- Los Santos
+        },
+    },
+    {
+        key    = 'traversee_est',
+        label  = 'Traversée de l\'est',
+        note   = 'Du mont Chiliad aux docks, en diagonale',
+        weight = 2,
+        radius = 550.0,
+        speed  = 4.5,            -- le plus rapide : il faut un véhicule
+        path = {
+            vec2(500.0,   5600.0),   -- mont Chiliad
+            vec2(1800.0,  3900.0),
+            vec2(2600.0,  1800.0),
+            vec2(1600.0,  100.0),
+            vec2(1000.0, -1800.0),   -- docks est
+        },
+    },
+}
+
+
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  ZONE MANUELLE
+--
+--  Créée par un admin depuis le menu, centrée sur SA position.
+--  Utile pour un événement scénarisé, un test, ou une contamination
+--  ponctuelle qui ne suit aucun itinéraire.
+--
+--  Le rayon est PLAFONNÉ au plus large des scénarios automatiques.
+--  Sans cette limite, un curseur poussé au maximum couvrirait la
+--  carte entière et rendrait le serveur injouable — avec un nuage
+--  que personne ne pourrait fuir.
+-- ═══════════════════════════════════════════════════════════════════
+Config.Manual = {
+    -- Durées proposées, en minutes
+    durations = { 5, 10, 15, 30, 45, 60, 90, 120 },
+    defaultDuration = 30,
+
+    -- Vitesse par défaut. 0 = nuage immobile, ce qui convient à un
+    -- événement localisé.
+    defaultSpeed = 0.0,
+
+    -- Annoncer sur les pagers, comme un nuage automatique ?
+    -- Décochable : un admin peut vouloir une contamination discrète.
+    announceByDefault = true,
+
+    -- Plancher : en dessous, la zone est trop petite pour se voir
+    minRadius = 50.0,
+}
+
+
+---Rayon le plus large parmi les scénarios automatiques.
+---C'est le plafond de la création manuelle.
+---@return number
+function Config.MaxScenarioRadius()
+    local max = Config.Zone.radius
+
+    for _, sc in ipairs(Config.Scenarios) do
+        local r = sc.radius or Config.Zone.radius
+        if r > max then max = r end
+    end
+
+    return max
+end
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  MESSAGES DU CYCLE
+--
+--  %s est remplacé par le nom de l'itinéraire. Une variante est
+--  tirée au hasard : au bout de vingt cycles, un texte unique
+--  devient du bruit que plus personne ne lit.
+-- ═══════════════════════════════════════════════════════════════════
+Config.CycleMessages = {
+
+    -- Fin d'accalmie, avant l'apparition du nuage
+    incoming = {
+        'ALERTE : NUAGE CONTAMINE EN FORMATION. TRAJECTOIRE %s.',
+        'RELEVES ANORMAUX. UNE ZONE CONTAMINEE SE LEVE : %s.',
+        'LE COMPTEUR S EMBALLE. CONTAMINATION ATTENDUE SUR %s.',
+        'AVIS DE CONTAMINATION. AXE DE PASSAGE : %s.',
+    },
+
+    -- Le nuage vient d'apparaître
+    started = {
+        'LE NUAGE EST LA. NE RESTE PAS DEHORS.',
+        'CONTAMINATION ACTIVE. LE COMPTEUR HURLE.',
+        'ZONE CONTAMINEE CONFIRMEE. DEGAGE DE SA ROUTE.',
+    },
+
+    -- Contamination créée par le staff, sans itinéraire
+    manual = {
+        'CONTAMINATION LOCALISEE DETECTEE. EVITE LE SECTEUR.',
+        'RELEVES CRITIQUES SUR UNE ZONE FIXE. NE T APPROCHE PAS.',
+        'FOYER DE CONTAMINATION IDENTIFIE. PERIMETRE A EVITER.',
+    },
+
+    -- Le nuage s'est dissipé
+    ended = {
+        'LE NUAGE S EST DISSIPE. L AIR REDEVIENT RESPIRABLE.',
+        'PLUS AUCUN RELEVE. LA CONTAMINATION EST PASSEE.',
+        'RETOUR A LA NORMALE. PROFITE, CA NE DURERA PAS.',
+    },
+}
+
+
+---Tire un message au hasard dans une catégorie du cycle.
+function Config.PickCycleMessage(category, ...)
+    local list = Config.CycleMessages[category]
+    if not list or #list == 0 then return '' end
+
+    local template = list[math.random(1, #list)]
+    local args = { ... }
+
+    if #args > 0 then
+        return template:format(table.unpack(args))
+    end
+
+    return template
+end
+
+
+---Tire un scénario au hasard, pondéré par son poids.
+---@return table|nil
+function Config.PickScenario()
+    local total = 0
+    for _, sc in ipairs(Config.Scenarios) do
+        total = total + (sc.weight or 1)
+    end
+
+    if total <= 0 then return Config.Scenarios[1] end
+
+    local roll = math.random() * total
+    local acc = 0
+
+    for _, sc in ipairs(Config.Scenarios) do
+        acc = acc + (sc.weight or 1)
+        if roll <= acc then return sc end
+    end
+
+    return Config.Scenarios[#Config.Scenarios]
+end
+
+
+---Scénario par sa clé.
+function Config.GetScenario(key)
+    for _, sc in ipairs(Config.Scenarios) do
+        if sc.key == key then return sc end
+    end
+    return nil
+end
+
+
 -- ═══════════════════════════════════════════════════════════════════
 --  DÉGÂTS
 --

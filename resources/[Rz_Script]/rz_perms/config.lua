@@ -68,6 +68,14 @@ Config.Tools = {
         perms    = { 'rz_signal.admin', 'rz.signal.announce', 'rz.signal.network' },
     },
     {
+        id       = 'rz-airdrop',
+        resource = 'rz_airdrop',
+        callback = 'openAirdrop',
+        label    = 'Largages',
+        icon     = 'fa-parachute-box',
+        perms    = { 'rz_airdrop.admin', 'rz.airdrop' },
+    },
+    {
         id       = 'rz-radiation',
         resource = 'rz_radioactivite',
         callback = 'openRadiation',
