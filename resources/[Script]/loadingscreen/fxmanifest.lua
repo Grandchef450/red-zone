@@ -32,7 +32,7 @@ files {
     -- ─── VIDÉO DE FOND ─────────────────────────────────────────
     -- Le son de ce fichier n'est jamais joué : la balise video est
     -- en `muted`. C'est song/Apocalypse2.mp3 qu'on entend.
-    'video/fond.mp4',
+    'video/intro_zombie.mp4',
 
     -- ─── MUSIQUE ───────────────────────────────────────────────
     'song/Apocalypse2.mp3',
