@@ -15,7 +15,7 @@ const VIDEO_CONFIG = {
          'youtube'  vidéo YouTube en fond
          'aucune'   fond noir, sans vidéo
        ───────────────────────────────────────────────────────────── */
-    mode: 'youtube',
+    mode: 'local',
 
 
     /* ─── MODE LOCAL ──────────────────────────────────────────────
