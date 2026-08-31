@@ -80,7 +80,16 @@ Config.UseSafezones = true
 --  l'apparition.
 -- ═══════════════════════════════════════════════════════════════════
 Config.Appearance = {
-    -- Ouvrir la personnalisation pour un nouveau personnage
+    -- Ouvrir la personnalisation pour un nouveau personnage.
+    --
+    -- ⚠️  À passer temporairement à false si tu plantes en boucle à
+    -- la création. La personnalisation appelle
+    -- SetPedComponentVariation, le natif qui provoque le crash
+    -- « pennsylvania-oranges-vermont » quand un vêtement référencé
+    -- n'existe plus — typiquement après le retrait d'un pack.
+    --
+    -- Le joueur pourra toujours se créer avec /apparence une fois
+    -- en jeu, quand tout sera stabilisé.
     onFirstSpawn = true,
 
     -- Secondes d'attente avant l'ouverture. Le temps que le décor

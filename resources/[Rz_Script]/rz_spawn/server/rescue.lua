@@ -317,3 +317,36 @@ AddEventHandler('onResourceStart', function(resource)
         print(('^2[rz_spawn]^7 %d zone(s) interdite(s)'):format(#Config.Blacklist))
     end
 end)
+
+---Réinitialise l'apparence d'un joueur à distance.
+---Utile quand quelqu'un plante à chaque connexion : son apparence
+---référence un vêtement d'un pack retiré depuis.
+lib.callback.register('rz_spawn:resetAppearance', function(source, targetId)
+    if not Config.HasAce(source) then return false, 'Permission requise.' end
+
+    targetId = tonumber(targetId)
+    if not targetId or not GetPlayerName(targetId) then
+        return false, 'Joueur introuvable.'
+    end
+
+    TriggerClientEvent('rz_spawn:forceResetAppearance', targetId)
+
+    return true, ('Apparence de %s réinitialisée.'):format(GetPlayerName(targetId))
+end)
+
+
+lib.addCommand('fixskin', {
+    help = 'Réinitialiser l\'apparence d\'un joueur qui plante',
+    params = {
+        { name = 'target', type = 'playerId', help = 'ID du joueur' },
+    },
+    restricted = Config.Ace,
+}, function(source, args)
+    TriggerClientEvent('rz_spawn:forceResetAppearance', args.target)
+
+    TriggerClientEvent('ox_lib:notify', source, {
+        type = 'success',
+        description = ('Apparence de %s réinitialisée.')
+            :format(GetPlayerName(args.target) or args.target),
+    })
+end)

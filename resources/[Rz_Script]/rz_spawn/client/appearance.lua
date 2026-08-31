@@ -36,6 +36,65 @@ local function currentGender()
 end
 
 
+-- ═══════════════════════════════════════════════════════════════
+--  REMISE À ZÉRO DE L'APPARENCE
+--
+--  ⚠️  LA CAUSE DU PLANTAGE « pennsylvania-oranges-vermont »
+--
+--  Le rapport de crash désigne le natif 0x00a1cadd00108836, soit
+--  SetPedComponentVariation : la fonction qui habille un ped.
+--
+--  Elle plante quand on lui demande un vêtement qui n'existe pas —
+--  typiquement après le retrait d'un pack de vêtements dont des
+--  joueurs portaient encore les pièces. Leur apparence enregistrée
+--  pointe alors dans le vide.
+--
+--  On repart donc systématiquement d'une tenue vanilla connue avant
+--  d'ouvrir le menu. Le joueur choisira la sienne ensuite ; on ne
+--  risque plus de charger une référence morte.
+-- ═══════════════════════════════════════════════════════════════
+
+---Remet le ped dans une tenue de base garantie valide.
+function resetToSafeAppearance()
+    local ped = cache.ped
+    local female = GetEntityModel(ped) == `mp_f_freemode_01`
+
+    -- Composants sûrs : ces valeurs existent dans le jeu de base,
+    -- quels que soient les packs installés ou retirés.
+    -- { slot, drawable, texture }
+    local safe = female and {
+        { 1, 0, 0 },    -- masque
+        { 3, 15, 0 },   -- torse nu
+        { 4, 15, 0 },   -- jambes
+        { 6, 35, 0 },   -- chaussures
+        { 8, 15, 0 },   -- sous-vêtement
+        { 11, 15, 0 },  -- veste
+    } or {
+        { 1, 0, 0 },
+        { 3, 15, 0 },
+        { 4, 21, 0 },
+        { 6, 34, 0 },
+        { 8, 15, 0 },
+        { 11, 15, 0 },
+    }
+
+    for _, c in ipairs(safe) do
+        -- pcall : même une valeur vanilla peut échouer si un pack
+        -- a écrasé le composant. Mieux vaut ignorer que planter.
+        pcall(function()
+            SetPedComponentVariation(ped, c[1], c[2], c[3], 0)
+        end)
+    end
+
+    -- Les accessoires posent le même problème : on les retire tous.
+    for prop = 0, 7 do
+        pcall(function() ClearPedProp(ped, prop) end)
+    end
+
+    dbg('apparence remise à une base sûre')
+end
+
+
 ---Ouvre la personnalisation complète.
 ---@param isNew boolean  création, ou simple retouche
 function OpenAppearance(isNew)
@@ -56,6 +115,12 @@ function OpenAppearance(isNew)
         FreezeEntityPosition(ped, true)
         SetEntityInvincible(ped, true)
     end
+
+    -- Toujours repartir d'une base saine, création ou retouche :
+    -- c'est ce qui évite de charger une référence vers un vêtement
+    -- supprimé, et donc de planter le joueur.
+    resetToSafeAppearance()
+    Wait(300)
 
     if isNew then
         lib.notify({
@@ -152,4 +217,39 @@ CreateThread(function()
     RegisterCommand(Config.Appearance.command, function()
         OpenAppearance(false)
     end, false)
+end)
+
+-- ═══════════════════════════════════════════════════════════════════
+--  RÉPARER UNE APPARENCE CASSÉE
+--
+--  Quand un joueur plante à chaque connexion sans qu'on sache
+--  pourquoi, c'est presque toujours son apparence : elle référence
+--  un vêtement d'un pack retiré depuis.
+--
+--  Cette commande le remet en tenue vanilla, ce qui le débloque
+--  immédiatement. Il refait ensuite son personnage.
+-- ═══════════════════════════════════════════════════════════════════
+
+RegisterCommand('resetapparence', function()
+    resetToSafeAppearance()
+
+    lib.notify({
+        type        = 'success',
+        title       = 'Apparence réinitialisée',
+        description = 'Tenue de base restaurée. Fais /apparence pour te rhabiller.',
+        duration    = 10000,
+    })
+end, false)
+
+
+---Réinitialisation forcée par le staff, à distance.
+RegisterNetEvent('rz_spawn:forceResetAppearance', function()
+    resetToSafeAppearance()
+
+    lib.notify({
+        type        = 'inform',
+        title       = 'Le staff est intervenu',
+        description = 'Ton apparence a été réinitialisée.',
+        duration    = 8000,
+    })
 end)
