@@ -68,7 +68,6 @@ Config.Profiles = {
         reduceBudget = true,
         decals       = false,
         tracks       = false,
-        coronas      = false,
         lightCutoff  = 0.3,
     },
     {
@@ -85,7 +84,6 @@ Config.Profiles = {
         reduceBudget = true,
         decals       = true,
         tracks       = false,
-        coronas      = true,
         lightCutoff  = 0.7,
     },
     {
@@ -102,7 +100,6 @@ Config.Profiles = {
         reduceBudget = false,
         decals       = true,
         tracks       = true,
-        coronas      = true,
         lightCutoff  = 1.0,
     },
 }

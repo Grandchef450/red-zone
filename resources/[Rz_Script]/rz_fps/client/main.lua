@@ -51,6 +51,50 @@ local function load()
 end
 
 
+
+-- ═══════════════════════════════════════════════════════════════════
+--  APPEL PROTÉGÉ
+--
+--  ⚠️  POURQUOI CE GARDE-FOU EXISTE
+--
+--  La première version appelait « DistantCoronasDisabled », un natif
+--  que j'avais cru exister et qui n'existe pas. Résultat : erreur de
+--  script à chaque application de profil, puis plantage du client.
+--
+--  Les natifs graphiques changent d'un build de GTA à l'autre :
+--  certains disparaissent, d'autres sont renommés. Appeler l'un
+--  d'eux à l'aveugle est un pari.
+--
+--  safeCall vérifie qu'il existe AVANT de l'appeler. Un natif absent
+--  est simplement ignoré : le joueur perd un réglage fin, il ne perd
+--  pas sa session.
+-- ═══════════════════════════════════════════════════════════════════
+
+local missing = {}
+
+---Appelle un natif s'il existe.
+---@param name string  nom du natif
+---@param ... any      ses arguments
+---@return boolean  true si l'appel a eu lieu
+local function safeCall(name, ...)
+    local fn = _G[name]
+
+    if type(fn) ~= 'function' then
+        -- On ne le signale qu'une fois : sinon la console se
+        -- remplirait du même message à chaque changement de profil.
+        if not missing[name] then
+            missing[name] = true
+            print(('^3[rz_fps]^7 natif « %s » indisponible sur ce build, ignoré')
+                :format(name))
+        end
+        return false
+    end
+
+    local ok = pcall(fn, ...)
+    return ok
+end
+
+
 -- ═══════════════════════════════════════════════════════════════════
 --  APPLICATION D'UN PROFIL
 --
@@ -64,39 +108,38 @@ local function applyPersistent(p)
     -- ─── OMBRES ────────────────────────────────────────────────
     -- Second poste de dépense après la géométrie. Recalculées à
     -- chaque frame, pour chaque source de lumière.
-    CascadeShadowsEnableEntityTracker(p.shadows)
-    CascadeShadowsSetAircraftMode(not p.shadows)
-    CascadeShadowsSetDynamicDepthMode(p.shadows)
-    CascadeShadowsSetShadowSampleType(p.shadows and 'CSM_ST_BOX3x3' or 'CSM_ST_POINT')
+    safeCall('CascadeShadowsEnableEntityTracker', p.shadows)
+    safeCall('CascadeShadowsSetAircraftMode', not p.shadows)
+    safeCall('CascadeShadowsSetDynamicDepthMode', p.shadows)
+    safeCall('CascadeShadowsSetShadowSampleType',
+        p.shadows and 'CSM_ST_BOX3x3' or 'CSM_ST_POINT')
 
     if p.shadowBounds then
-        CascadeShadowsSetCascadeBoundsScale(p.shadowBounds)
+        safeCall('CascadeShadowsSetCascadeBoundsScale', p.shadowBounds)
     end
 
     -- Ombres des objets lointains : coûteuses et peu visibles.
-    SetFarShadowsSuppressed(not p.farShadows)
+    safeCall('SetFarShadowsSuppressed', not p.farShadows)
 
     -- ─── MÉMOIRE VIDÉO ─────────────────────────────────────────
     -- Le réglage décisif sur une machine à faible mémoire : c'est
     -- lui qui évite les textures qui mettent dix secondes à
     -- apparaître, et les chutes brutales en zone dense.
-    SetReducePedModelBudget(p.reduceBudget)
-    SetReduceVehicleModelBudget(p.reduceBudget)
+    safeCall('SetReducePedModelBudget', p.reduceBudget)
+    safeCall('SetReduceVehicleModelBudget', p.reduceBudget)
 
     -- ─── LUMIÈRES ──────────────────────────────────────────────
-    DistantCoronasDisabled(not p.coronas)
-
     if p.lightCutoff then
-        SetLightsCutoffDistanceTweak(p.lightCutoff)
+        safeCall('SetLightsCutoffDistanceTweak', p.lightCutoff)
     end
 
     -- ─── TRACES AU SOL ─────────────────────────────────────────
     -- Chaque empreinte est une décalque persistante à dessiner.
-    SetForcePedFootstepsTracks(p.tracks)
-    SetForceVehicleTrails(p.tracks)
+    safeCall('SetForcePedFootstepsTracks', p.tracks)
+    safeCall('SetForceVehicleTrails', p.tracks)
 
     -- ─── DISTANCE D'AFFICHAGE ──────────────────────────────────
-    SetPedLodMultiplier(p.pedLod)
+    safeCall('SetPedLodMultiplier', p.pedLod)
 
     dbg(('profil appliqué : %s'):format(p.label))
 end
@@ -107,6 +150,11 @@ local function applyPerFrame(p)
     -- LE levier principal. Réduit la distance à laquelle les objets
     -- passent en haute définition. Aucun autre réglage n'a autant
     -- d'effet sur les FPS.
+    --
+    -- Ces deux-là tournent à CHAQUE frame : on les appelle
+    -- directement plutôt que par safeCall, qui ferait une recherche
+    -- dans _G soixante fois par seconde. Ce sont aussi les deux
+    -- natifs dont je suis certain qu'ils existent.
     OverrideLodscaleThisFrame(p.lodScale)
 
     if not p.decals then
@@ -392,10 +440,19 @@ AddEventHandler('onClientResourceStop', function(resource)
 
     -- On rend la main proprement : sans ça, un restart laisserait
     -- le joueur avec des ombres coupées et le curseur bloqué.
+    --
+    -- Ces appels passent aussi par safeCall : un natif absent au
+    -- moment de l'arrêt planterait le client au pire moment, celui
+    -- où plus rien ne peut le rattraper.
     SetNuiFocus(false, false)
-    CascadeShadowsEnableEntityTracker(true)
-    CascadeShadowsSetAircraftMode(false)
-    SetPedLodMultiplier(1.0)
-    SetForcePedFootstepsTracks(true)
-    SetForceVehicleTrails(true)
+
+    safeCall('CascadeShadowsEnableEntityTracker', true)
+    safeCall('CascadeShadowsSetAircraftMode', false)
+    safeCall('CascadeShadowsSetDynamicDepthMode', true)
+    safeCall('SetFarShadowsSuppressed', false)
+    safeCall('SetReducePedModelBudget', false)
+    safeCall('SetReduceVehicleModelBudget', false)
+    safeCall('SetPedLodMultiplier', 1.0)
+    safeCall('SetForcePedFootstepsTracks', true)
+    safeCall('SetForceVehicleTrails', true)
 end)
