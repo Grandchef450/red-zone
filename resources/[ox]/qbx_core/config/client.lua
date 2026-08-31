@@ -19,35 +19,29 @@ return {
             ['bad word'] = true
         },
 
-        locations = { -- Spawn locations for multichar, these are chosen randomly
+        -- ═══════════════════════════════════════════════════════
+        --  DÉCOR DE CRÉATION DE PERSONNAGE — REDZONE
+        --
+        --  Un seul emplacement : le mont Chiliad. Qbox en tire un au
+        --  hasard dans cette liste — avec une seule entrée, c'est
+        --  toujours celui-là.
+        --
+        --  pedCoords  où se tient le personnage, et son orientation
+        --  camCoords  où se place la caméra, et vers où elle regarde
+        --
+        --  ⚠️  LES DEUX DOIVENT SE FAIRE FACE.
+        --  Les orientations sont opposées à 180° près : le
+        --  personnage regarde à 164°, la caméra à 344°. Si tu
+        --  déplaces l'un, ajuste l'autre — sinon tu filmes son dos.
+        --
+        --  La caméra est décalée de 3 m et surélevée de 0,5 m :
+        --  assez pour cadrer le personnage en pied sans le coller.
+        -- ═══════════════════════════════════════════════════════
+        locations = {
             {
-                pedCoords = vec4(969.25, 72.61, 116.18, 276.55),
-                camCoords = vec4(972.2, 72.9, 116.68, 97.27),
+                pedCoords = vec4(-431.6877, 1101.5211, 340.4783, 164.5576),
+                camCoords = vec4(-430.9000, 1098.6000, 340.9800, 344.5576),
             },
-            {
-                pedCoords = vec4(1104.49, 195.9, -49.44, 44.22),
-                camCoords = vec4(1102.29, 198.14, -48.86, 225.07),
-            },
-            {
-                pedCoords = vec4(-2163.87, 1134.51, -24.37, 310.05),
-                camCoords = vec4(-2161.7, 1136.4, -23.77, 131.52),
-            },
-            {
-                pedCoords = vec4(-996.71, -68.07, -99.0, 57.61),
-                camCoords = vec4(-999.90, -66.30, -98.45, 241.68),
-            },
-            {
-                pedCoords = vec4(-1023.45, -418.42, 67.66, 205.69),
-                camCoords = vec4(-1021.8, -421.7, 68.14, 27.11),
-            },
-            {
-                pedCoords = vec4(2265.27, 2925.02, -84.8, 267.77),
-                camCoords = vec4(2268.24, 2925.02, -84.36, 90.88),
-            },
-            {
-                pedCoords = vec4(-1004.5, -478.51, 50.03, 28.19),
-                camCoords = vec4(-1006.36, -476.19, 50.50, 210.38),
-            }
         },
     },
 
