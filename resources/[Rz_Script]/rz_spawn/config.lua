@@ -32,13 +32,11 @@ Config.Debug = false
 --  connexion, sans qu'il puisse rien y faire.
 -- ═══════════════════════════════════════════════════════════════════
 Config.Spawn = {
-    -- Point de départ d'un nouveau personnage.
+    -- Point de départ d'un nouveau personnage : le mont Chiliad.
     --
-    -- ⚠️  À REMPLACER par ta vraie safe zone principale. Ces
-    -- coordonnées sont celles du motel de Sandy Shores : un endroit
-    -- plat, dégagé, au sol solide — de quoi ne pas tomber sous la
-    -- carte le temps que tu traces tes zones.
-    default = vec4(1972.0, 3815.0, 33.4, 30.0),
+    -- Isolé, dégagé, à 340 m d'altitude. Un vestiaire de départ
+    -- loin de tout, où le joueur s'équipe avant de descendre.
+    default = vec4(-431.4511, 1102.2653, 340.4395, 346.9962),
 
     -- Restaurer la dernière position connue au retour en jeu
     restoreLastPosition = true,
@@ -64,6 +62,43 @@ Config.Spawn = {
 Config.UseSafezones = true
 
 
+
+
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  PERSONNALISATION À LA CRÉATION
+--
+--  illenium-appearance contient bien une fonction InitializeCharacter,
+--  mais RIEN NE L'APPELLE : c'est au pont du framework de le faire,
+--  et celui de Qbox ne s'en charge pas.
+--
+--  Résultat : un nouveau personnage arrive avec l'apparence par
+--  défaut, sans jamais avoir pu se créer un visage ni s'habiller.
+--
+--  On déclenche donc l'ouverture nous-mêmes, juste après
+--  l'apparition.
+-- ═══════════════════════════════════════════════════════════════════
+Config.Appearance = {
+    -- Ouvrir la personnalisation pour un nouveau personnage
+    onFirstSpawn = true,
+
+    -- Secondes d'attente avant l'ouverture. Le temps que le décor
+    -- se charge : ouvrir le menu sur un monde vide donne un aperçu
+    -- du personnage sur fond noir.
+    delaySeconds = 3,
+
+    -- Le joueur peut-il rouvrir la personnalisation lui-même ?
+    -- Utile pendant les tests, à passer à false pour l'ouverture :
+    -- sinon chacun change de visage quand il veut, et plus personne
+    -- ne se reconnaît.
+    allowCommand = true,
+    command = 'apparence',
+
+    -- Immobiliser le joueur pendant la personnalisation. Sans ça,
+    -- il peut s'éloigner et se retrouver hors du décor prévu.
+    freezeDuring = true,
+}
 
 
 -- ═══════════════════════════════════════════════════════════════════

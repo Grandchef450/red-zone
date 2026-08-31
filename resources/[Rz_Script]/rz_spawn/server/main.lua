@@ -127,6 +127,13 @@ function SpawnPlayer(source)
         isNew  = isNew,
     })
 
+    -- Un nouveau personnage passe par la personnalisation : sans
+    -- ça, il arrive avec l'apparence par défaut sans jamais avoir
+    -- pu choisir son visage ni ses habits.
+    if isNew then
+        TriggerClientEvent('rz_spawn:openAppearance', source)
+    end
+
     dbg(('%s → %.0f, %.0f, %.0f (%s)'):format(
         GetPlayerName(source) or source,
         target.x, target.y, target.z,
