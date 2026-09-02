@@ -3,8 +3,8 @@ game 'gta5'
 lua54 'yes'
 
 author 'Grandchef / VoightQC'
-description 'RedZone Survival — grades du staff et filtrage du menu admin'
-version '1.0.0'
+description 'RedZone Survival — vérification des inventaires joueurs'
+version '0.1.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -13,20 +13,18 @@ shared_scripts {
 
 client_scripts {
     'client/main.lua',
-    'client/staff.lua',
-    'client/gradeTools.lua',
 }
+
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/main.lua',
-    'server/staff.lua',
-    'server/discord.lua',
-    'server/gradeTools.lua',
 }
 
 ox_libs { 'locale' }
 
 dependencies {
     'ox_lib',
+    'qbx_core',
+    'ox_inventory',
     'oxmysql',
 }

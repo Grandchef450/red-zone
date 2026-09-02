@@ -235,12 +235,31 @@ function LaunchDrop(forced)
             -- d'approche, il est déjà en route.
             if i == 1 then wait = math.floor(wait / 2) end
 
+            -- Le cercle de zone n'annonce QUE la caisse en cours, pas
+            -- les quatre d'un coup : sinon le trajet entier se lit
+            -- d'avance sur la carte et il n'y a plus de course.
+            if Config.ZoneAlert.enabled and point.zone then
+                TriggerClientEvent('rz_airdrop:announceZone', -1, {
+                    x     = point.zone.x,
+                    y     = point.zone.y,
+                    r     = point.zone.r,
+                    label = point.zone.label,
+                })
+            end
+
             Wait(wait * 1000)
 
             local data = crates[i]
             if data then
                 spawnCrate(point, data.tier, data.contents)
                 Flight.dropped = Flight.dropped + 1
+            end
+
+            -- Le pin exact de la caisse prend le relais : le cercle
+            -- de zone n'a plus lieu d'être, qu'elle ait atterri ou
+            -- que le tirage ait échoué.
+            if Config.ZoneAlert.enabled and point.zone then
+                TriggerClientEvent('rz_airdrop:clearZoneAlert', -1, point.zone.label)
             end
         end
 

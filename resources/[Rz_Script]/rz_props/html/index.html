@@ -23,8 +23,14 @@
                 <label>Nom du prop</label>
                 <input type="text" id="name" placeholder="Ex: Établi armurerie" maxlength="40">
             </div>
-            <button id="place" class="btn-place">Placer en jeu</button>
+            <div class="btn-row">
+                <button id="place" class="btn-place">Placer en jeu</button>
+                <button id="savePreset" class="btn-secondary" title="Ajoute ce modèle à la liste des raccourcis, sans le placer">+ Raccourci</button>
+            </div>
         </div>
+
+        <div class="list-title"><span id="presetCount">Raccourcis ajoutés</span></div>
+        <div class="list list-presets" id="presetList"></div>
 
         <div class="list-title"><span id="count">Props posés</span></div>
         <div class="list" id="list"></div>

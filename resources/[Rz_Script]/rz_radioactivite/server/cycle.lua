@@ -122,6 +122,18 @@ function GoActive()
         })
     })
 
+    if GetResourceState('rz_logs') == 'started' then
+        pcall(function()
+            exports.rz_logs:Log('loot', {
+                title  = ('Zone radioactive — %s'):format(Current.scenario.label),
+                fields = {
+                    { name = 'Rayon',   value = ('%.0f m'):format(Zone.radius) },
+                    { name = 'Vitesse', value = tostring(Zone.speed) },
+                },
+            })
+        end)
+    end
+
     dbg(('nuage actif : %s'):format(Current.scenario.label))
 end
 
@@ -192,6 +204,20 @@ function CreateManualZone(source, radius, speed, minutes, doAnnounce)
             announced = doAnnounce,
         })
     })
+
+    if GetResourceState('rz_logs') == 'started' then
+        pcall(function()
+            exports.rz_logs:Log('loot', {
+                title  = 'Zone radioactive manuelle',
+                source = source,
+                fields = {
+                    { name = 'Rayon',   value = ('%.0f m'):format(radius) },
+                    { name = 'Durée',   value = ('%d min'):format(minutes) },
+                    { name = 'Vitesse', value = tostring(speed) },
+                },
+            })
+        end)
+    end
 
     dbg(('zone manuelle : %.0f m sur %.0f,%.0f pendant %d min')
         :format(radius, coords.x, coords.y, minutes))

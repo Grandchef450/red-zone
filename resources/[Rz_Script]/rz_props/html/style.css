@@ -34,11 +34,34 @@ input[type=text]{font-family:var(--mono);}
 #name{width:100%;font-family:var(--sans);}
 select:focus,input:focus{outline:none;border-color:var(--blue);}
 
+.btn-row{display:flex;gap:8px;}
 .btn-place{
-    padding:10px;border:none;border-radius:var(--r);background:var(--blue);color:#fff;
+    flex:1;padding:10px;border:none;border-radius:var(--r);background:var(--blue);color:#fff;
     font-weight:700;cursor:pointer;font-size:13px;
 }
 .btn-place:hover{filter:brightness(1.1);}
+.btn-secondary{
+    padding:10px 12px;border:1px solid var(--border2);border-radius:var(--r);
+    background:var(--bg3);color:var(--t2);font-weight:600;cursor:pointer;font-size:12px;
+    white-space:nowrap;
+}
+.btn-secondary:hover{color:var(--t1);border-color:var(--blue);}
+
+.list-presets{flex:0 0 auto;max-height:140px;}
+.list-presets:empty::after{content:"Aucun raccourci ajouté.";color:var(--t3);font-size:12px;font-style:italic;padding:4px 4px;}
+.preset-item{
+    display:flex;align-items:center;gap:8px;background:var(--bg2);
+    border:1px solid var(--border);border-radius:6px;padding:7px 9px;
+}
+.preset-item .info{flex:1;min-width:0;}
+.preset-item .info .label{font-size:12px;font-weight:600;}
+.preset-item .info .model{font-family:var(--mono);font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.preset-item button{
+    flex:none;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:11px;
+    border:1px solid rgba(255,91,91,.3);background:var(--bg3);color:var(--red);
+}
+.preset-item button:hover{background:rgba(255,91,91,.15);}
+.preset-item.builtin{opacity:.6;}
 
 .list-title{padding:10px 16px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);}
 .list{flex:1;overflow-y:auto;padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;}

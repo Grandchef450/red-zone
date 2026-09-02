@@ -21,6 +21,8 @@ const presetEl= document.getElementById('preset');
 const modelEl = document.getElementById('model');
 const nameEl  = document.getElementById('name');
 const toastEl = document.getElementById('toast');
+const presetListEl  = document.getElementById('presetList');
+const presetCountEl = document.getElementById('presetCount');
 
 let toastTimer;
 function toast(msg, type = '') {
@@ -41,6 +43,41 @@ function fillPresets(presets) {
 }
 presetEl.addEventListener('change', () => {
     if (presetEl.value) modelEl.value = presetEl.value;
+});
+
+// ---- Raccourcis ajoutés à la main ----
+function renderPresets(presets) {
+    presets = presets || [];
+    fillPresets(presets);
+
+    const custom = presets.filter(p => !p.builtin);
+    presetCountEl.textContent = `Raccourcis ajoutés (${custom.length})`;
+
+    presetListEl.innerHTML = '';
+    custom.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'preset-item';
+        div.innerHTML = `
+            <div class="info">
+                <div class="label">${p.label}</div>
+                <div class="model">${p.model}</div>
+            </div>
+            <button class="del">Suppr.</button>
+        `;
+        div.querySelector('.del').addEventListener('click', () => {
+            nui('deletePreset', { model: p.model });
+            toast('Raccourci supprimé');
+        });
+        presetListEl.appendChild(div);
+    });
+}
+
+document.getElementById('savePreset').addEventListener('click', () => {
+    const model = (modelEl.value || '').trim();
+    if (!model) { toast('Entre un modèle de prop', 'err'); return; }
+    const label = nameEl.value.trim() || model;
+    nui('addPreset', { model, label });
+    toast('Raccourci enregistré', 'ok');
 });
 
 // ---- Liste des props ----
@@ -104,12 +141,15 @@ window.addEventListener('message', e => {
     const d = e.data;
     switch (d.action) {
         case 'open':
-            fillPresets(d.presets);
+            renderPresets(d.presets);
             renderList(d.props);
             appEl.classList.remove('hidden', 'dim');
             break;
         case 'list':
             renderList(d.props);
+            break;
+        case 'presets':
+            renderPresets(d.presets);
             break;
         case 'hide':       // pendant le placement en jeu
             appEl.classList.add('dim');

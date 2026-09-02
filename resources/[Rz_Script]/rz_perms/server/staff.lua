@@ -123,9 +123,13 @@ end
 --  qui pourrait promouvoir contournerait toute la hiérarchie.
 -- ═══════════════════════════════════════════════════════════════════
 
+-- ⚠️  Uniquement rz_perms.manage. Le repli sur rz_craft.admin
+-- contredisait le commentaire ci-dessus : server.cfg accorde
+-- rz_craft.admin à group.admin, donc n'importe quel admin pouvait
+-- accorder n'importe quel grade — y compris développeur — à
+-- n'importe qui. C'est exactement ce que ce droit doit empêcher.
 local function canManage(source)
     return IsPlayerAceAllowed(source, 'rz_perms.manage')
-        or IsPlayerAceAllowed(source, 'rz_craft.admin')
 end
 
 

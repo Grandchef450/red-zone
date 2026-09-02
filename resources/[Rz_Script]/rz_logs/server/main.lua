@@ -32,9 +32,14 @@ end
 -- ═══════════════════════════════════════════════════════════════════
 
 ---Échappe ce qui casserait le rendu Markdown de Discord.
-local function clean(text)
+---@param text any
+---@param maxLen number?  1000 par défaut. Les champs (`fields[].value`)
+---   doivent rester sous la limite Discord de 1024 — n'agrandis ce
+---   paramètre QUE pour une description, qui accepte jusqu'à 4096.
+local function clean(text, maxLen)
     if not text then return '—' end
 
+    maxLen = maxLen or 1000
     text = tostring(text)
 
     -- Les codes couleur de FiveM (^1, ^#FF0000) n'ont aucun sens ici
@@ -44,8 +49,8 @@ local function clean(text)
     text = text:gsub('@everyone', '@\226\128\139everyone')
     text = text:gsub('@here', '@\226\128\139here')
 
-    if #text > 1000 then
-        text = text:sub(1, 997) .. '...'
+    if #text > maxLen then
+        text = text:sub(1, maxLen - 3) .. '...'
     end
 
     return text
@@ -119,7 +124,10 @@ function Log(category, data)
 
     local embed = {
         title       = clean(data.title),
-        description = data.description and clean(data.description) or nil,
+        -- 3900 et non 1000 : la description Discord accepte jusqu'à
+        -- 4096 caractères, contrairement à un field (1024 max). Utile
+        -- pour un transcript de conversation complet (rz_reports).
+        description = data.description and clean(data.description, 3900) or nil,
         color       = data.color or Config.ColorOf(category),
         fields      = #fields > 0 and fields or nil,
         footer      = { text = Config.Appearance.footer },

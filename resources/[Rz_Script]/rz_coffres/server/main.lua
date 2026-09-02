@@ -162,6 +162,20 @@ function GiveChest(target, itemName, hours, grantedBy)
 
     dbg(('coffre %s remis à %s pour %d h'):format(itemName, ownerName, hours))
 
+    if GetResourceState('rz_logs') == 'started' then
+        pcall(function()
+            exports.rz_logs:Log('coffres', {
+                title  = 'Coffre remis',
+                source = target,
+                fields = {
+                    { name = 'Item',       value = itemName },
+                    { name = 'Durée',      value = formatRemaining(hours * 3600) },
+                    { name = 'Remis par',  value = grantedBy and ('`%s`'):format(grantedBy) or 'Système' },
+                },
+            })
+        end)
+    end
+
     TriggerClientEvent('ox_lib:notify', target, {
         type        = 'success',
         title       = 'Coffre de sécurité reçu',
@@ -226,7 +240,37 @@ exports.ox_inventory:registerHook('openInventory', function(payload)
     if not locked then return true end
 
     local citizenid = getCitizenId(payload.source)
-    if citizenid == item.metadata.rzOwner then return true end
+
+    if citizenid == item.metadata.rzOwner then
+        -- Coffre ENCORE sous protection : au-delà de l'expiration,
+        -- n'importe qui peut l'ouvrir, ce n'est plus un évènement.
+        if GetResourceState('rz_logs') == 'started' then
+            pcall(function()
+                exports.rz_logs:Log('coffres', {
+                    title  = 'Coffre ouvert par son propriétaire',
+                    source = payload.source,
+                    fields = { { name = 'Item', value = item.name } },
+                })
+            end)
+        end
+
+        return true
+    end
+
+    -- Quelqu'un d'autre que le propriétaire tente d'ouvrir un coffre
+    -- encore verrouillé : ça mérite d'être su.
+    if GetResourceState('rz_logs') == 'started' then
+        pcall(function()
+            exports.rz_logs:Log('coffres', {
+                title  = 'Tentative bloquée',
+                source = payload.source,
+                fields = {
+                    { name = 'Item',        value = item.name },
+                    { name = 'Propriétaire', value = item.metadata.rzOwnerName or 'inconnu' },
+                },
+            })
+        end)
+    end
 
     return false
 end, { print = false })

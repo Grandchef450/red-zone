@@ -19,17 +19,37 @@ Config.Debug = false
 --  Plusieurs catégories peuvent partager le même webhook si tu
 --  préfères moins de salons.
 -- ═══════════════════════════════════════════════════════════════════
+-- ⚠️  CORRECTIF — quatre clés ne correspondaient à AUCUNE catégorie
+-- réellement utilisée dans le code (Lua est sensible à la casse, et
+-- les noms ne matchaient pas non plus) : les messages étaient donc
+-- ignorés en silence, sans la moindre erreur, exactement comme le
+-- prévoit Config.IsEnabled pour une catégorie « désactivée ». Les
+-- commentaires d'origine décrivaient pourtant la bonne catégorie —
+-- seule la clé était fausse. Renommées pour matcher ce que le code
+-- appelle vraiment :
+--   giveweeapon → admin        (le code appelle Log('admin', ...)
+--                                pour les promotions de grade, le
+--                                sync Discord, les sauvetages ET les
+--                                /giveitem — c'est justement ce que
+--                                décrivait déjà ce commentaire)
+--   giveitems   → connexions   (son propre commentaire disait déjà
+--                                « arrivées et départs »)
+--   Crash       → erreurs      (son propre commentaire disait déjà
+--                                « pannes du serveur »)
+--   Airdrop     → airdrop      (simple différence de casse avec
+--                                Log('airdrop', ...) dans rz_airdrop)
 Config.Webhooks = {
-    mort        = 'https://discord.com/api/webhooks/1543406211872063488/xU8sj_sl0A2mBodwErTEpxbQS0-UcqQhKcXAmpjlXmZ_xdcAwQo-CJ3JLpoPiS0sjgWg',   -- morts, agonies, réanimations
-    inventaire  = 'https://discord.com/api/webhooks/1543406494954029107/va9r9uxDpIkmbs1toYZVHAYRRw2TLlKqgnOJ3W9rPwSrf0CLNoI9nTCVNCni6eGoPcuQ',   -- ajouts, retraits, transferts d'items
-    craft       = 'https://discord.com/api/webhooks/1543407516606800024/AL9ihyzZiBLgPzDJRRZTRa7zoIbPJhfhoLXj8fYzihpir15ppxRiTNSp_4rHoCcSsFXW',   -- fabrications, boîte aux lettres
-    coffres     = 'https://discord.com/api/webhooks/1543406350032179310/4JkZdn-J43r_ZR33WUn587ccr5RQs3nv42p4mG52XRCmQa3Vz2vjwezHbd4qDzitYva4',   -- coffres de sécurité remis et ouverts
-    giveweeapon = 'https://discord.com/api/webhooks/1543407205515010119/QWmqUhnAvzz8kWtgjrfsza4U5kG7mVfqFoRQ5M5_f9uccTBc3a0RSGzGfFQyw9TKj_xU',   -- actions du staff, /giveitem, sanctions
-    giveitems   = 'https://discord.com/api/webhooks/1543406867730931792/WLSkuYLBjXLeT1-qao9m2JEC23MivS-6cSIDMA1bw0Vp0-Wr6dFPpf-lvvoNF9Ohz8dt',   -- arrivées et départs
-    weapon     = 'https://discord.com/api/webhooks/1543407913295552562/L62kmWjxDkvmVWZRWse8LAsPk6KifujwnpMIUI-dw1gQlPFXCdSMG6DaiZUMXCE1ZoR8',   -- tirs bloqués en safe zone, comportements douteux
-    loot       = 'https://discord.com/api/webhooks/1543407457144147998/AzWm5wnjof6GdUtXP5b54o-Eux6QglQMBqF4ITZeQcJXsOvi1dj1dOtA5UvHxvn5a-i7',   -- blackout, réseau, zone radioactive
-    Crash     = 'https://discord.com/api/webhooks/1543407298599460884/yJDlPmj3La2iIHJUWWwyXbAK7O1ru95b8C9IA7W_5v6KjH5i5KakxiryEPi0XlueQpGY',   -- pannes du serveur, échecs de webhook
-    Airdrop     = 'https://discord.com/api/webhooks/1543676799664525413/XZ3XEqmkaOk3tc1udvdwLjVtxx6NSd4uioZhZ4zwkkidiog7BwFnDQlKrTIuhUL0tFGD',   -- ouverture de caisse et loots, échecs de webhook
+    mort       = 'https://discord.com/api/webhooks/1543406211872063488/xU8sj_sl0A2mBodwErTEpxbQS0-UcqQhKcXAmpjlXmZ_xdcAwQo-CJ3JLpoPiS0sjgWg',   -- morts, agonies, réanimations — configuré, pas encore appelé par rz_mort
+    inventaire = 'https://discord.com/api/webhooks/1543406494954029107/va9r9uxDpIkmbs1toYZVHAYRRw2TLlKqgnOJ3W9rPwSrf0CLNoI9nTCVNCni6eGoPcuQ',   -- ajouts, retraits, transferts d'items
+    craft      = 'https://discord.com/api/webhooks/1543407516606800024/AL9ihyzZiBLgPzDJRRZTRa7zoIbPJhfhoLXj8fYzihpir15ppxRiTNSp_4rHoCcSsFXW',   -- fabrications (ox_inventory), boîte aux lettres
+    coffres    = 'https://discord.com/api/webhooks/1543406350032179310/4JkZdn-J43r_ZR33WUn587ccr5RQs3nv42p4mG52XRCmQa3Vz2vjwezHbd4qDzitYva4',   -- coffres de sécurité — configuré, pas encore appelé par rz_coffres
+    admin      = 'https://discord.com/api/webhooks/1543407205515010119/QWmqUhnAvzz8kWtgjrfsza4U5kG7mVfqFoRQ5M5_f9uccTBc3a0RSGzGfFQyw9TKj_xU',   -- actions du staff, /giveitem, grades, sauvetages
+    connexions = 'https://discord.com/api/webhooks/1543406867730931792/WLSkuYLBjXLeT1-qao9m2JEC23MivS-6cSIDMA1bw0Vp0-Wr6dFPpf-lvvoNF9Ohz8dt',   -- arrivées et départs
+    weapon     = 'https://discord.com/api/webhooks/1543407913295552562/L62kmWjxDkvmVWZRWse8LAsPk6KifujwnpMIUI-dw1gQlPFXCdSMG6DaiZUMXCE1ZoR8',   -- tirs bloqués en safe zone — configuré, pas encore appelé par rz_safezone
+    loot       = 'https://discord.com/api/webhooks/1543407457144147998/AzWm5wnjof6GdUtXP5b54o-Eux6QglQMBqF4ITZeQcJXsOvi1dj1dOtA5UvHxvn5a-i7',   -- blackout, réseau, radioactivité — configuré, pas encore appelé
+    erreurs    = 'https://discord.com/api/webhooks/1543407298599460884/yJDlPmj3La2iIHJUWWwyXbAK7O1ru95b8C9IA7W_5v6KjH5i5KakxiryEPi0XlueQpGY',   -- pannes du serveur, échecs de webhook
+    airdrop    = 'https://discord.com/api/webhooks/1543676799664525413/XZ3XEqmkaOk3tc1udvdwLjVtxx6NSd4uioZhZ4zwkkidiog7BwFnDQlKrTIuhUL0tFGD',   -- ouverture de caisse et loots
+    reports    = 'https://discord.com/api/webhooks/1544515779943333900/GbGRvBqSHWLy-FKZOFQPk0ZUxwG1YMvoWc-Gz4oDzLu0olBBT9rmZGq_fIAjBiSPCTom',   -- report fermé : joueur, staff, transcript complet
 }
 
 
@@ -51,6 +71,7 @@ Config.Appearance = {
         coffres     = 15844367,   -- or
         admin       = 10181046,   -- violet
         connexions  = 9807270,    -- gris
+        reports     = 3900151,    -- bleu profond
         suspect     = 15105570,   -- orange
         monde       = 1752220,    -- cyan
         erreurs     = 10038562,   -- bordeaux

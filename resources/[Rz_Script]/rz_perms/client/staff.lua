@@ -33,6 +33,14 @@ function OpenStaffMenu()
             iconColor   = '#4ade80',
             onSelect    = function() GrantDialog() end,
         },
+        {
+            title       = 'Permissions du menu',
+            description = 'Activer ou désactiver les boutons du F5, grade par grade',
+            icon        = 'fas fa-sliders',
+            iconColor   = '#60a5fa',
+            arrow       = true,
+            onSelect    = function() OpenPermissionsMenu() end,
+        },
     }
 
     for _, s in ipairs(staff) do

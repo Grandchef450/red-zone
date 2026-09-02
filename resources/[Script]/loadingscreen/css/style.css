@@ -150,10 +150,7 @@ body {
     margin-right: 5px;
 }
 
-/* La règle s'applique désormais aux DEUX modes : une balise <video>
-   pour un fichier local, une <iframe> pour YouTube. */
-.video-container video,
-.video-container iframe {
+.video-container video {
     /* La vidéo couvre tout l'écran, quelle que soit sa proportion :
        elle déborde plutôt que de laisser des bandes noires. */
     min-width: 100%;

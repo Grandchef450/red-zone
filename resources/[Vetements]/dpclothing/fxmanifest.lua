@@ -12,3 +12,10 @@ client_scripts {
 	'Client/Clothing.lua',
 	'Client/GUI.lua',				-- The GUI.
 }
+
+-- Logo RedZone au centre de la roue (GUI.lua). Un fichier non
+-- déclaré ici n'est pas servi au client : le sprite resterait
+-- invisible sans qu'aucune erreur ne s'affiche.
+files {
+	'img/redzone_logo.png',
+}

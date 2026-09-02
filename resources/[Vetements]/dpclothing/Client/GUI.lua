@@ -45,10 +45,11 @@ end
 
 local function DrawButton(b)
 	local B = Config.GUI.ButtonColor
+	local Dict = b.Dict or "dp_clothing" -- surchargeable pour un sprite hors dp_clothing.ytd (ex: le logo RedZone)
 	if b.Shadow then
 		DrawSprite("dp_clothing", "circle", b.x, b.y, b.Size.Circle.x/0.80, b.Size.Circle.y/0.80, 0.0, b.Colour.r, b.Colour.g, b.Colour.b, b.Alpha)
 	end
-	DrawSprite("dp_clothing", b.Sprite, b.x, b.y, b.Size.Sprite.x/0.68, b.Size.Sprite.y/0.68, b.Rotation, 255, 255, 255, b.Alpha)
+	DrawSprite(Dict, b.Sprite, b.x, b.y, b.Size.Sprite.x/0.68, b.Size.Sprite.y/0.68, b.Rotation, 255, 255, 255, b.Alpha)
 	if IsDisabledControlJustPressed(1, 24) then
 		local x,y = GetCursor()
 		local Distance = Distance(b.x+0.005, b.y+0.025, x, y)
@@ -216,7 +217,11 @@ local function DrawGUI()
 		Colour = {r=0,g=0,b=0},
 		Shadow = true,
 		Size = {Circle = {x = 0.0345, y = 0.06}, Sprite = {x = 0.0234, y = 0.0425}},
-		Sprite = "info",
+		-- Logo RedZone à la place de l'icône "info" d'origine : c'est
+		-- le seul emplacement libre au centre de la roue, et le
+		-- bouton garde exactement le même comportement au clic.
+		Dict = "RedzoneLogo",
+		Sprite = "logo",
 		Text = Lang("Info"),
 		x = x, y = y,
 	})
@@ -225,6 +230,13 @@ local function DrawGUI()
 		for k,v in pairs(LastEquipped) do log(k.." : "..json.encode(v)) end		-- If the info button is pressed we log all "LastEquipped" items, for debugging purposes.
 	end
 end
+
+-- Logo RedZone au centre de la roue : une texture "runtime" créée une
+-- fois à partir d'un PNG ordinaire (img/redzone_logo.png), pas besoin
+-- de recompiler dp_clothing.ytd pour ça. Même technique déjà utilisée
+-- (et vérifiée fonctionnelle) dans rpemotes/client/EmoteMenu.lua.
+local RedzoneLogoTxd = CreateRuntimeTxd("RedzoneLogo")
+CreateRuntimeTextureFromImage(RedzoneLogoTxd, "logo", "img/redzone_logo.png")
 
 local TextureDicts = {"dp_clothing", "dp_wheel"}
 Citizen.CreateThread(function()

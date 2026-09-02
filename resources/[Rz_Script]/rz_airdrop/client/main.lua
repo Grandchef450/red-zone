@@ -15,6 +15,9 @@ local crates = {}
 local planeBlip = nil
 local flying = false
 
+-- [zoneLabel] = blip
+local zoneAlerts = {}
+
 
 local function dbg(...)
     if Config.Debug then print('^3[rz_airdrop]^7', ...) end
@@ -42,10 +45,18 @@ RegisterNetEvent('rz_airdrop:startFlight', function(data)
     AddTextComponentSubstringPlayerName('Appareil non identifié')
     EndTextCommandSetBlipName(planeBlip)
 
+    -- Le son passe par PlaySoundFrontend : il joue pour CE client
+    -- précis peu importe où il se trouve sur la carte, contrairement
+    -- à un son 3D positionné sur l'avion (qui n'existe pas — cf.
+    -- l'en-tête du fichier).
+    if Config.Plane.alertSound then
+        PlaySoundFrontend(-1, Config.Plane.alertSound, Config.Plane.alertSoundSet, true)
+    end
+
     lib.notify({
         type        = 'inform',
         title       = 'Contact radar',
-        description = 'Un appareil traverse le secteur.',
+        description = 'Un largage est en cours. Vérifie ta carte.',
         duration    = 8000,
     })
 
@@ -62,8 +73,12 @@ RegisterNetEvent('rz_airdrop:startFlight', function(data)
 
         -- Le cap oriente l'icône : un avion qui vole de côté sur la
         -- carte trahit immédiatement le trucage.
+        --
+        -- Le sprite 423 est dessiné nez vers le bas : sans le +180,
+        -- la formule standard (90 - angle) pointe la queue dans le
+        -- sens du trajet au lieu du nez.
         local heading = math.deg(math.atan(dy, dx))
-        SetBlipRotation(planeBlip, math.floor((90 - heading) % 360))
+        SetBlipRotation(planeBlip, math.floor((270 - heading) % 360))
 
         while flying do
             local elapsed = GetGameTimer() - started
@@ -87,6 +102,60 @@ RegisterNetEvent('rz_airdrop:endFlight', function()
         RemoveBlip(planeBlip)
         planeBlip = nil
     end
+
+    -- Filet de sécurité : si un cercle de zone n'a pas été effacé
+    -- (largage interrompu, caisse jamais posée), il ne doit pas
+    -- rester affiché après la fin du vol.
+    for label, blip in pairs(zoneAlerts) do
+        if DoesBlipExist(blip) then RemoveBlip(blip) end
+        zoneAlerts[label] = nil
+    end
+end)
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  ZONE À RISQUE
+--
+--  Un cercle qui annonce « une caisse va tomber quelque part par
+--  ici » avant que le pin exact n'existe. Contrairement au pin de la
+--  caisse (sprite 478, posé au mètre près), on ne donne que la zone
+--  terrestre entière : ça laisse une chance de deviner, pas de
+--  spawn-camper la position exacte.
+-- ═══════════════════════════════════════════════════════════════════
+
+RegisterNetEvent('rz_airdrop:announceZone', function(zone)
+    if not Config.ZoneAlert.enabled then return end
+
+    -- Un largage forcé en jeu peut retomber sur une zone déjà
+    -- annoncée si un vol précédent n'a pas fini de se nettoyer.
+    if zoneAlerts[zone.label] and DoesBlipExist(zoneAlerts[zone.label]) then
+        RemoveBlip(zoneAlerts[zone.label])
+    end
+
+    local blip = AddBlipForRadius(zone.x, zone.y, 0.0, zone.r)
+    SetBlipColour(blip, Config.ZoneAlert.blipColour)
+    SetBlipAlpha(blip, Config.ZoneAlert.blipAlpha)
+    SetBlipAsShortRange(blip, false)
+
+    zoneAlerts[zone.label] = blip
+
+    lib.notify({
+        type        = 'inform',
+        title       = 'Zone à risque',
+        description = ('Un largage pourrait tomber près de %s.'):format(zone.label),
+        duration    = 8000,
+    })
+
+    dbg(('zone annoncée : %s'):format(zone.label))
+end)
+
+
+RegisterNetEvent('rz_airdrop:clearZoneAlert', function(label)
+    local blip = zoneAlerts[label]
+    if not blip then return end
+
+    if DoesBlipExist(blip) then RemoveBlip(blip) end
+    zoneAlerts[label] = nil
 end)
 
 

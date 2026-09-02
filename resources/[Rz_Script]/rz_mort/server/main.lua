@@ -40,6 +40,22 @@ local function nameOf(source)
 end
 
 
+---Envoie vers le salon Discord « mort ». N'importe pas si rz_logs
+---est absent ou en redémarrage : la mort est déjà en base, Discord
+---n'est qu'une alerte en plus.
+local function logDiscord(title, description, fields)
+    if GetResourceState('rz_logs') ~= 'started' then return end
+
+    pcall(function()
+        exports.rz_logs:Log('mort', {
+            title       = title,
+            description = description,
+            fields      = fields,
+        })
+    end)
+end
+
+
 -- ═══════════════════════════════════════════════════════════════════
 --  SAFE ZONES
 -- ═══════════════════════════════════════════════════════════════════
@@ -255,6 +271,8 @@ lib.callback.register('rz_mort:confirmRevive', function(source, targetId, itemNa
         VALUES (?, 'revive', ?)
     ]], { citizenIdOf(targetId), json.encode({ by = citizenIdOf(source), item = Config.Revive.item }) })
 
+    logDiscord('Réanimation', ('**%s** relevé par **%s**.'):format(nameOf(targetId), nameOf(source)))
+
     return true, ('Injection faite. %s se relèvera dans %d secondes.')
         :format(nameOf(targetId), Config.Revive.standUpSeconds)
 end)
@@ -315,6 +333,11 @@ function FinalDeath(source)
         x = coords.x, y = coords.y, z = coords.z,
         bag = bagId, safezone = not shouldDrop,
     }) })
+
+    logDiscord('Mort', ('**%s** est mort.'):format(nameOf(source)), {
+        { name = 'Position', value = ('%.0f, %.0f, %.0f'):format(coords.x, coords.y, coords.z) },
+        { name = 'Sac',      value = bagId and ('`%s`'):format(bagId) or 'Aucun (zone sûre)' },
+    })
 
     dbg(('%s est mort%s'):format(nameOf(source), bagId and ' — sac déposé' or ''))
 end

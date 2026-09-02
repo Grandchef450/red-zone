@@ -8,6 +8,7 @@ local isOpen     = false
 local placing    = false
 local spawned    = {}     -- [id] = handle de l'objet
 local lastList   = {}     -- derniere liste recue (pour l'UI)
+local lastPresets = Config.PropPresets   -- presets serveur (config.lua + presets.json), en attendant la premiere synchro
 
 local function dbg(msg)
     if Config.Debug then print(('^3[rz_props]^7 %s'):format(msg)) end
@@ -72,6 +73,11 @@ end
 
 RegisterNetEvent('rz_props:client:sync', function(list)
     syncProps(list)
+end)
+
+RegisterNetEvent('rz_props:client:presets', function(list)
+    lastPresets = list or Config.PropPresets
+    if isOpen then sendUI('presets', { presets = lastPresets }) end
 end)
 
 RegisterNetEvent('rz_props:client:added', function(p)
@@ -192,7 +198,7 @@ local function openUI()
     SetNuiFocus(true, true)
     sendUI('open', {
         resource = resourceName,
-        presets  = Config.PropPresets,
+        presets  = lastPresets,
         props    = lastList,
     })
     TriggerServerEvent('rz_props:server:request')
@@ -237,6 +243,27 @@ RegisterNUICallback('startPlace', function(data, cb)
             sendUI('show', { props = lastList })
         end
     end)
+end)
+
+-- Enregistre un nouveau raccourci (modele + nom), persistant sur
+-- disque cote serveur (presets.json). N'importe pas de placer un
+-- prop pour l'ajouter : juste taper le modele et un nom.
+RegisterNUICallback('addPreset', function(data, cb)
+    if type(data.model) ~= 'string' or data.model == '' then
+        cb({ ok = false }); return
+    end
+    TriggerServerEvent('rz_props:server:addPreset', {
+        model = data.model,
+        label = type(data.label) == 'string' and data.label or nil,
+    })
+    cb({ ok = true })
+end)
+
+RegisterNUICallback('deletePreset', function(data, cb)
+    if type(data.model) == 'string' and data.model ~= '' then
+        TriggerServerEvent('rz_props:server:deletePreset', data.model)
+    end
+    cb('ok')
 end)
 
 RegisterNUICallback('rename', function(data, cb)

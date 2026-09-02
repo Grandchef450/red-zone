@@ -78,6 +78,17 @@ RegisterNetEvent('rz_reports:client:notify', function(msg, kind)
     -- notif chat
     TriggerEvent('chat:addMessage', { color = {120,170,255}, args = { '[Reports]', msg } })
     if isOpen then sendUI('toast', { msg = msg, kind = kind }) end
+
+    -- Signal sonore : uniquement pour un NOUVEAU report, pas pour
+    -- chaque prise en charge / réponse / fermeture — sinon le staff
+    -- l'ignore au bout de trois notifications.
+    --
+    -- rz_reports n'utilise pas ox_lib (resource volontairement
+    -- standalone) : le message de chat ci-dessus reste la
+    -- notification visuelle, ce bloc n'ajoute que le son.
+    if kind == 'newreport' then
+        PlaySoundFrontend(-1, 'CHECKPOINT_PERFECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+    end
 end)
 RegisterNetEvent('rz_reports:client:teleport', function(x, y, z)
     local ped = PlayerPedId()

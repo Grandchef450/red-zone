@@ -2,8 +2,13 @@
   DÉPOSE TA VIDÉO ICI
 ═══════════════════════════════════════════════════════════════
 
-Nom attendu :   fond.mp4
+Nom attendu :   intro_zombie.mp4 (celui déclaré dans
+                script/video-config.js et fxmanifest.lua — change
+                les deux si tu changes le nom)
 Format :        MP4, codec H.264
+
+Uniquement en local : il n'y a plus d'option YouTube dans ce
+script (retirée le 1er septembre 2026, cf. fxmanifest.lua).
 
 C'est le seul format lu de façon fiable par le navigateur intégré
 de FiveM. Un MKV, un AVI ou un WebM ne s'affichera pas.

@@ -323,6 +323,23 @@ local function logBlock(zoneKey, attacker, victim, kind, weapon, fromInside)
             (zone_key, attacker, victim, kind, weapon, from_inside)
         VALUES (?, ?, ?, ?, ?, ?)
     ]], { zoneKey, attacker, victim, kind, weapon, fromInside and 1 or 0 })
+
+    -- Même garde-fou de cooldown que la base : pas un message Discord
+    -- par balle d'une arme automatique.
+    if GetResourceState('rz_logs') == 'started' then
+        pcall(function()
+            exports.rz_logs:Log('weapon', {
+                title  = 'Tir bloqué en zone sûre',
+                fields = {
+                    { name = 'Zone',      value = zoneKey or 'inconnue' },
+                    { name = 'Arme',      value = weapon or 'inconnue' },
+                    { name = 'Attaquant', value = attacker and ('`%s`'):format(attacker) or 'inconnu' },
+                    { name = 'Victime',   value = victim and ('`%s`'):format(victim) or 'aucune' },
+                    { name = 'Depuis',    value = fromInside and 'l\'intérieur de la zone' or 'l\'extérieur' },
+                },
+            })
+        end)
+    end
 end
 
 

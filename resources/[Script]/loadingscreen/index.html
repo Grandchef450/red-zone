@@ -146,14 +146,12 @@
     <!-- ═══════════════════════════════════════════════════════════
          VIDÉO DE FOND — CONTENEUR VIDE
 
-         Le contenu est construit par script/video-loader.js selon
-         le mode choisi dans script/video-config.js :
+         Le contenu (une balise <video>) est construit par
+         script/video-loader.js d'après script/video-config.js.
 
-           'local'    → une balise <video> sur un fichier du serveur
-           'youtube'  → une iframe YouTube
-           'aucune'   → fond noir
-
-         Un seul réglage à changer pour basculer de l'un à l'autre.
+         Volontairement local uniquement — pas d'option YouTube :
+         un écran de chargement ne doit dépendre d'aucune connexion
+         externe au moment précis où le joueur charge.
          ═══════════════════════════════════════════════════════════ -->
     <div class="video-background video-container noselect"></div>
     
@@ -181,4 +179,4 @@
     <script src="script/main.js"></script>
     
 </body>
-</html>https://youtu.be/_nzMxd_rOuw
+</html>

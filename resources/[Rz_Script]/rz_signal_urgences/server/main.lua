@@ -230,6 +230,17 @@ function SetNetwork(zoneKey, up, adminId)
         VALUES (?, ?, ?)
     ]], { zoneKey, up and 1 or 0, adminId })
 
+    if GetResourceState('rz_logs') == 'started' then
+        pcall(function()
+            exports.rz_logs:Log('loot', {
+                title  = ('Réseau %s — %s'):format(up and 'rétabli' or 'coupé', zone.label),
+                fields = {
+                    { name = 'Par', value = adminId and ('`%s`'):format(adminId) or 'automatique' },
+                },
+            })
+        end)
+    end
+
     return true, ('%s : réseau %s.'):format(zone.label, up and 'rétabli' or 'coupé')
 end
 

@@ -3,16 +3,22 @@
     Réglage du butin depuis le menu admin, sans redémarrage.
 ]]
 
+-- ⚠️  Config.Ace ('rz.staff') sert /epavemodel et /epaveinfo : de
+-- simples commandes de repérage, ouvertes à tout le staff. Le
+-- réglage du butin est une tout autre affaire — server.cfg le
+-- réserve explicitement au développeur (rz_epaves.admin n'est pas
+-- accordé à l'admin) — donc PAS de repli sur Config.Ace ici, sans
+-- quoi n'importe quel membre du staff pourrait modifier
+-- l'équilibrage des épaves depuis le panneau F5.
 local function canEdit(source)
-    return IsPlayerAceAllowed(source, Config.Ace)
-        or IsPlayerAceAllowed(source, 'rz_epaves.admin')
+    return IsPlayerAceAllowed(source, 'rz_epaves.admin')
 end
 
 local function deny(source)
     TriggerClientEvent('ox_lib:notify', source, {
         type = 'error',
         title = 'Accès refusé',
-        description = ('Permission %s requise.'):format(Config.Ace),
+        description = 'Permission rz_epaves.admin requise.',
     })
     return false
 end

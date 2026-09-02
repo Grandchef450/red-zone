@@ -6,10 +6,20 @@ description 'RedZone Survival — écran de chargement'
 version '1.1.0'
 
 --[[
-    MODIFIÉ LE 30 AOÛT 2026
+    VIDÉO DE FOND — LOCAL UNIQUEMENT
 
-    La vidéo de fond n'est plus une iframe YouTube mais un fichier
-    local : video/fond.mp4
+    L'option YouTube a été retirée du code le 1er septembre 2026
+    (script/video-loader.js ne sait plus construire d'iframe) : un
+    écran de chargement ne doit dépendre d'aucune connexion externe
+    au moment précis où le joueur charge. Tout se règle désormais
+    dans script/video-config.js — un seul fichier vidéo, en local.
+
+    Le fichier livré (video/intro_zombie.mp4) a aussi été corrigé ce
+    jour-là : son index (« moov ») était en fin de fichier au lieu du
+    début, ce qui obligeait le navigateur à tout télécharger avant de
+    pouvoir démarrer la lecture — invisible sur un écran de quelques
+    secondes. Voir video-config.js pour ne pas reproduire l'erreur en
+    déposant une nouvelle vidéo.
 
     ⚠️  UN FICHIER NON DÉCLARÉ DANS `files` N'EST PAS SERVI AU
     CLIENT. C'est la cause n°1 d'un écran de chargement noir : le
@@ -58,8 +68,8 @@ files {
     'index.html',
     'css/style.css',
     -- ─── VIDÉO ─────────────────────────────────────────────────
-    -- video-config.js contient le mode ('local' ou 'youtube').
-    -- video-loader.js construit l'élément correspondant.
+    -- video-config.js contient le fichier et le réglage activee.
+    -- video-loader.js construit la balise <video> correspondante.
     'script/video-config.js',
     'script/video-loader.js',
 

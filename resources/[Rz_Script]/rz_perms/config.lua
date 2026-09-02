@@ -22,8 +22,11 @@ Config.Tools = {
         label    = 'Équipe',
         icon     = 'fa-user-shield',
         -- Accorder un grade, c'est pouvoir s'accorder tous les
-        -- autres. Réservé au droit le plus élevé.
-        perms    = { 'rz_perms.manage', 'rz_craft.admin' },
+        -- autres. Réservé au droit le plus élevé — rz_craft.admin
+        -- retiré : server.cfg l'accorde à group.admin, ce qui
+        -- ouvrait la gestion des grades à tout admin (voir
+        -- server/staff.lua, canManage).
+        perms    = { 'rz_perms.manage' },
     },
     {
         id       = 'rz-craft',
@@ -57,7 +60,10 @@ Config.Tools = {
         callback = 'openEpaves',
         label    = 'Loot épaves',
         icon     = 'fa-car-burst',
-        perms    = { 'rz_epaves.admin', 'rz.staff' },
+        -- rz.staff retiré : rz_epaves ne l'accepte plus pour éditer
+        -- l'équilibrage (voir server/admin.lua), le bouton ne doit
+        -- donc pas apparaître actif pour tout le staff non plus.
+        perms    = { 'rz_epaves.admin' },
     },
     {
         id       = 'rz-signal',
@@ -82,14 +88,6 @@ Config.Tools = {
         label    = 'Zone radioactive',
         icon     = 'fa-radiation',
         perms    = { 'rz_radiation.admin', 'rz.radiation' },
-    },
-    {
-        id       = 'rz-spawn',
-        resource = 'rz_spawn',
-        callback = 'openSpawn',
-        label    = 'Sauvetage',
-        icon     = 'fa-person-falling',
-        perms    = { 'rz_spawn.admin', 'rz.spawn', 'rz.staff' },
     },
     {
         id       = 'rz-mort',
@@ -129,7 +127,12 @@ Config.Tools = {
         callback = 'openPanel',
         label    = 'Reports',
         icon     = 'fa-flag',
-        perms    = { 'rz.staff' },
+        -- Droit dédié, pas rz.staff : rz.staff est utilisé par une
+        -- dizaine d'autres vérifications sans rapport (voir
+        -- Config.EditableGrades ci-dessous) — le panneau du
+        -- fondateur ne doit désactiver QUE ce bouton, jamais les
+        -- autres choses gardées par rz.staff.
+        perms    = { 'rz.reports.view' },
     },
     {
         id       = 'rz-vip',
@@ -138,6 +141,18 @@ Config.Tools = {
         label    = 'VIP',
         icon     = 'fa-crown',
         perms    = { 'rz.vip' },
+    },
+    {
+        id       = 'rz-invcheck',
+        resource = 'rz_invcheck',
+        callback = 'openPanel',
+        label    = 'Inventaires',
+        icon     = 'fa-magnifying-glass',
+        -- Ouvre une vue interactive sur l'inventaire d'un joueur EN
+        -- LIGNE (dépose/retire des objets, comme looter un corps) :
+        -- pas un simple droit de lecture. Non accordé à modérateur ni
+        -- support par défaut — ajustable depuis Permissions du menu.
+        perms    = { 'rz.invcheck' },
     },
 }
 
@@ -317,4 +332,54 @@ function Config.GetGrade(key)
         if g.key == key then return g end
     end
     return nil
+end
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  PERMISSIONS PAR GRADE — PANNEAU DU FONDATEUR
+--
+--  Le fondateur (celui qui tient rz_perms.manage) peut activer ou
+--  désactiver, grade par grade, chacun des boutons du F5, depuis
+--  l'onglet Équipe → Permissions du menu. Le résultat est écrit en
+--  base (rz_grade_tools) et réappliqué à chaque démarrage : plus
+--  besoin d'éditer server.cfg ni de redémarrer pour un changement.
+--
+--  DÉVELOPPEUR N'APPARAÎT PAS ICI, VOLONTAIREMENT. Il garde tout,
+--  toujours — c'est le filet de sécurité qui empêche de se retrouver
+--  bloqué dehors par une mauvaise manipulation.
+-- ═══════════════════════════════════════════════════════════════════
+Config.EditableGrades = { 'admin', 'moderateur', 'support' }
+
+-- Permissions que le panneau ajoute/retire réellement pour un outil.
+-- Par défaut : identique à `perms` dans Config.Tools (l'outil bascule
+-- en bloc).
+--
+-- rz-signal est la seule exception, et rz_signal.admin y est
+-- volontairement ABSENT — pas seulement rz.signal.network. Dans
+-- rz_signal_urgences, rz_signal.admin court-circuite TOUTES les
+-- vérifications, network compris (voir Config.HasAce : il renvoie
+-- vrai dès que AceSuper est présent, sans regarder quelle action est
+-- demandée). Le mettre dans ce bundle donnerait donc, en un clic, le
+-- contrôle du réseau électrique à n'importe quel grade activé ici —
+-- exactement ce que server.cfg refuse explicitement au modérateur.
+--
+-- ⚠️  CONSÉQUENCE POUR ADMIN : rz_signal.admin lui reste accordé de
+-- façon statique par server.cfg, en dehors de ce panneau. Basculer
+-- « Annonces pager » à OFF pour Admin ici grise le bouton mais ne
+-- lui retire RIEN en pratique — son accès complet vient d'ailleurs.
+-- Le panneau ne contrôle donc réellement ce bouton que pour
+-- Modérateur et Support, dont c'est la seule source d'accès.
+Config.ManagedPerms = {
+    ['rz-signal'] = { 'rz.signal.announce' },
+}
+
+---Permissions ACE qu'un toggle de ce panneau ajoute ou retire pour cet outil.
+function Config.PermsFor(toolId)
+    if Config.ManagedPerms[toolId] then return Config.ManagedPerms[toolId] end
+
+    for _, tool in ipairs(Config.Tools) do
+        if tool.id == toolId then return tool.perms end
+    end
+
+    return {}
 end

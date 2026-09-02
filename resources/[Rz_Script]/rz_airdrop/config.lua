@@ -77,6 +77,36 @@ Config.Plane = {
     blipSprite = 423,   -- avion
     blipColour = 5,     -- jaune
     blipScale  = 0.9,
+
+    -- Joué une fois au décollage, pour tout le monde, où que le
+    -- joueur se trouve sur la carte. Mettre alertSound à nil ou ''
+    -- pour couper le son sans toucher au reste.
+    --
+    -- Autres sons déjà utilisés ailleurs sur ce serveur (mêmes
+    -- soundset) : 'Beep_Red' (urgent), 'NAV_UP_DOWN' (discret).
+    alertSound    = 'Beep_Green',
+    alertSoundSet = 'HUD_FRONTEND_DEFAULT_SOUNDSET',
+}
+
+
+-- ═══════════════════════════════════════════════════════════════════
+--  ZONE À RISQUE
+--
+--  Un cercle affiché sur la zone terrestre visée, dès le début du
+--  compte à rebours de CETTE caisse précise — pas les quatre d'un
+--  coup, sinon le largage entier se lit d'avance sur la carte.
+--
+--  Il s'efface dès que la caisse tombe réellement : le pin exact
+--  (sprite 478, posé par addCrate) prend alors le relais.
+-- ═══════════════════════════════════════════════════════════════════
+Config.ZoneAlert = {
+    enabled = true,
+
+    blipSprite = 0,      -- cercle plein, pas d'icône
+    blipColour = 5,      -- jaune, comme l'avion
+    blipAlpha  = 110,     -- semi-transparent : on devine la zone, pas plus
+
+    labelPrefix = 'Zone à risque — ',
 }
 
 
