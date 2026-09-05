@@ -22,8 +22,6 @@ server_scripts {
     'server/rescue.lua',
 }
 
-ox_libs { 'locale' }
-
 dependencies {
     'ox_lib',
     'qbx_core',

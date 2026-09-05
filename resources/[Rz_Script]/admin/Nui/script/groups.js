@@ -50,6 +50,8 @@
         { key: "notes", labelKey: "groups_perm_label_notes", label: "Notas", descKey: "groups_perm_desc_notes", desc: "Notas administrativas", icon: "fa-note-sticky" },
         { key: "gang", label: "Assign gang", descKey: "groups_perm_desc_gang", desc: "Asignar banda", icon: "fa-people-group" },
         { key: "revive", label: "Revive", descKey: "groups_perm_desc_revive", desc: "Revivir", icon: "fa-heart-pulse" },
+        { key: "rz_effects", labelKey: "player_rz_effects", label: "Annuler les effets", descKey: "groups_perm_desc_rz_effects", desc: "Annuler virus, bonus et gueule de bois (rz_soins)", icon: "fa-broom" },
+        { key: "rz_heal", labelKey: "player_rz_heal", label: "Soigner", descKey: "groups_perm_desc_rz_heal", desc: "Remettre un joueur en pleine santé (rz_soins)", icon: "fa-kit-medical" },
         { key: "money", label: "Manage money", descKey: "groups_perm_desc_money", desc: "Gestionar dinero", icon: "fa-wallet" },
         { key: "admin", label: "Assign admin", descKey: "groups_perm_desc_admin", desc: "Dar rango admin", icon: "fa-crown" },
         { key: "kill", label: "Kill", descKey: "groups_perm_desc_kill", desc: "Matar", icon: "fa-skull" },

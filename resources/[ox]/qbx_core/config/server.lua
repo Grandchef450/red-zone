@@ -59,24 +59,18 @@ return {
     ---@alias TableName string
     ---@alias ColumnName string
     ---@type [TableName, ColumnName][]
+    -- Lignes supprimées quand un personnage est effacé. Seules les
+    -- tables qui existent réellement sur ce serveur : les entrées
+    -- bank_accounts_new, player_mails et npwd_* (téléphone NPWD, non
+    -- installé) déclenchaient un avertissement à chaque démarrage.
+    -- properties = ps-housing, dont la colonne est owner_citizenid.
     characterDataTables = {
-        {'properties', 'owner'},
-        {'bank_accounts_new', 'id'},
+        {'properties', 'owner_citizenid'},
         {'playerskins', 'citizenid'},
-        {'player_mails', 'citizenid'},
         {'player_outfits', 'citizenid'},
         {'player_vehicles', 'citizenid'},
         {'player_groups', 'citizenid'},
         {'players', 'citizenid'},
-        {'npwd_calls', 'identifier'},
-        {'npwd_darkchat_channel_members', 'user_identifier'},
-        {'npwd_marketplace_listings', 'identifier'},
-        {'npwd_messages_participants', 'participant'},
-        {'npwd_notes', 'identifier'},
-        {'npwd_phone_contacts', 'identifier'},
-        {'npwd_phone_gallery', 'identifier'},
-        {'npwd_twitter_profiles', 'identifier'},
-        {'npwd_match_profiles', 'identifier'},
     }, -- Rows to be deleted when the character is deleted
 
     server = {

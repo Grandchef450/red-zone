@@ -1,31 +1,11 @@
+Server = {}
+
 local function getFileData(path, file)
     return json.decode(LoadResourceFile(cache.resource, path .. '/' .. file))
 end
 
 local function updateFileData(path, file, data)
-    return SaveResourceFile(cache.resource, path .. '/' .. file, json.encode(data, { indent = true }))
-end
-
-local function formatTimecycles(timecycles)
-    local formatedTimecycles = {}
-
-    for i = 1, #timecycles do
-        local v = timecycles[i]
-        local found
-        for j = 1, #formatedTimecycles do
-            if formatedTimecycles[j].label == v.Name then
-                found = true
-                break
-            end
-        end
-        if not found then
-            table.insert(formatedTimecycles, { label = v.Name, value = tostring(joaat(v.Name)) })
-        end
-    end
-
-    table.sort(formatedTimecycles, function(a, b) return a.label < b.label end)
-
-    return formatedTimecycles
+    return SaveResourceFile(cache.resource, path .. '/' .. file, json.encode(data, { indent = true }), -1)
 end
 
 local function formatVanillaInteriors(vanillaInteriors)
@@ -136,7 +116,6 @@ lib.callback.register('dolu_tool:getData', function()
         peds = getFileData('shared/data', 'pedList.json'),
         vehicles = getFileData('shared/data', 'vehicleList.json'),
         weapons = getFileData('shared/data', 'weaponList.json'),
-        timecycles = formatTimecycles(getFileData('shared/data', 'timecycleModifiers.json')),
         staticEmitters = formatStaticEmitters(getFileData('shared/data', 'staticEmitters.json')),
         radioStations = formatRadioStations(getFileData('shared/data', 'radioStations.json'))
     }

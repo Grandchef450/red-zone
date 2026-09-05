@@ -22,19 +22,19 @@ if (audio) {
         var x = document.getElementById("text").innerText;
         var y = document.getElementById("text");
 
-        if (key === 32 && x == "MUTE") { // spacebar
+        if (key === 32 && x == "COUPER") { // spacebar
 
             event.preventDefault();
 
             audio.paused ? audio.play() : audio.pause();
-            y.innerHTML = "UNMUTE";
+            y.innerHTML = "ACTIVER";
 
-        } else if (key === 32 && x == "UNMUTE") {
+        } else if (key === 32 && x == "ACTIVER") {
 
             event.preventDefault();
 
             audio.paused ? audio.play() : audio.pause();
-            y.innerHTML = "MUTE";
+            y.innerHTML = "COUPER";
         }
     });
 }

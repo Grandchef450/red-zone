@@ -105,6 +105,11 @@ local function HasPerm(src, perm)
     return false
 end
 
+-- Exposé aux handlers de Editable/Server (rz_soins : annuler les effets, soigner)
+function AdminHasPermKey(src, key)
+    return HasPerm(src, key) or HasPerm(src, "*")
+end
+
 local UiPermissionKeys = {
     "dashboard", "players", "map", "logs", "groups", "bans", "terminal", "comandos", "kick_action_menu", "reportes", "estadisticas",
     "info_admin", "announcements", "noclip", "server_time", "godmode", "invisibility", "staff_clothing", "tag_player", "admin_tag", "delete_vehicle", "fix_vehicle",
@@ -113,6 +118,8 @@ local UiPermissionKeys = {
     "terminal_restart", "terminal_stop", "terminal_console", "log_server_join", "log_server_leave", "log_chat", "log_deaths", "log_kills", "log_explosions",
     "log_permissions", "log_admin_actions", "log_bans", "log_unbans", "log_tx_admin", "reportes_control_panel", "reportes_all_reports", "reportes_staff_chat",
     "tpm", "copy_coords", "tune_vehicle", "infiniteammo",
+    -- rz_soins : annuler virus/bonus/gueule de bois, soigner
+    "rz_effects", "rz_heal",
     -- Legacy aliases still used in some client checks.
     "invisible", "deletecar"
 }

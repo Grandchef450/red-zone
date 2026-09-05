@@ -18,76 +18,40 @@ if GetResourceState('ox_inventory'):find('start') then
     Shared.ox_inventory = true
 end
 
-lib.locale()
+-- Localization
+-- Load the configured language once (with a per-key fallback on English) and
+-- share it between the Lua scripts and the NUI.
+local localeData do
+    local data = json.decode(LoadResourceFile(cache.resource, 'locales/en.json') or '{}')
+    local lang = Config.language or 'en'
 
-if lib.context == 'server' then
-    Server = {}
-elseif lib.context == 'client' then
-    if not Shared.isUiLoaded then
-        lib.notify({
-            type = 'error',
-            icon = 'fa-solid fa-ban',
-            title = 'Dolu Tool',
-            description = 'Unable to load UI. Build dolu_tool or download the latest release',
-            duration = 20000
-        })
+    if lang ~= 'en' then
+        local file = LoadResourceFile(cache.resource, ('locales/%s.json'):format(lang))
+
+        if file then
+            for key, value in pairs(json.decode(file) or {}) do
+                data[key] = value
+            end
+        else
+            print(("^3[dolu_tool] Locale '%s' not found, falling back to 'en'^0"):format(lang))
+        end
     end
 
-    Client = {
-        noClip = false,
-        isMenuOpen = false,
-        currentTab = 'home',
-        lastLocation = json.decode(GetResourceKvpString('dolu_tool:lastLocation')),
-        portalPoly = false,
-        portalLines = false,
-        portalCorners = false,
-        portalInfos = false,
-        interiorId = GetInteriorFromEntity(cache.ped),
-        defaultTimecycles = {},
-        spawnedEntities = {},
-        freezeTime = false,
-        freezeWeather = false,
-        data = {}
-    }
+    localeData = data
+end
 
-    -- Load locale
-    RegisterNUICallback('loadLocale', function(_, cb)
-        cb(1)
-        local locale = Config.language or 'en'
-        local JSON = LoadResourceFile(cache.resource, ('locales/%s.json'):format(locale))
-        if not JSON then
-            JSON = LoadResourceFile(cache.resource, 'locales/en.json')
-            lib.notify({
-                type = 'error',
-                title = "Dolu Tool",
-                description = "'" .. locale .. "' locale not found, please contribute by adding your language",
-                duration = 10000
-            })
-        end
-        SendNUIMessage({
-            action = 'setLocale',
-            data = json.decode(JSON)
-        })
-    end)
+Shared.locale = localeData
 
-    -- Get data from shared/data json files
-    lib.callback('dolu_tool:getData', false, function(data)
-        Client.data = data
-    end)
+--- Returns the translated string for `key`, formatted with the extra arguments.
+--- Falls back to the key itself when the translation is missing.
+---@param key string
+---@param ... string | number
+---@return string
+function locale(key, ...)
+    local str = localeData[key]
 
-    CreateThread(function()
-        -- If ox_target is running, create targets
-        if GetResourceState('ox_target'):find('start') then
-            Utils.initTarget()
-        end
+    if not str then return key end
+    if select('#', ...) > 0 then return str:format(...) end
 
-        Utils.setMenuPlayerCoords()
-
-        Client.version = lib.callback.await('dolu_tool:getVersion', false)
-
-        while true do
-            Wait(150)
-            Client.interiorId = GetInteriorFromEntity(cache.ped)
-        end
-    end)
+    return str
 end

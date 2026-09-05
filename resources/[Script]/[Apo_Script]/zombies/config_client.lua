@@ -48,14 +48,14 @@ Config = {
     NotifyHordeZone = function (entered, zoneData) -- Function that will be called when the player enters a horde zone
         if entered then
             lib.notify({
-                description = 'You have entered a horde zone, be careful!',
+                description = 'Vous entrez dans une zone infestée, soyez prudent !',
                 duration = 5000,
                 type = 'error',
                 position = 'center-right'
             })
         else
             lib.notify({
-                description = 'You have left the horde zone, you are safe now!',
+                description = 'Vous avez quitté la zone infestée, vous êtes en sécurité.',
                 duration = 5000,
                 type = 'success',
                 position = 'center-right'

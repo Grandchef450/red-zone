@@ -20,8 +20,6 @@ server_scripts {
     'server/main.lua',
 }
 
-ox_libs { 'locale' }
-
 dependencies {
     'ox_lib',
     'qbx_core',

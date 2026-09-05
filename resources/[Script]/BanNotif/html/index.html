@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;background:transparent">
+<audio id="cannon" src="nui://BanNotif/zz-hunger-games-cannon.mp3" preload="auto"></audio>
+<script>
+  window.addEventListener('message', function (ev) {
+    var d = ev.data || {};
+    if (d.action !== 'play') return;
+    var a = document.getElementById('cannon');
+    a.volume = Math.max(0, Math.min(1, d.volume == null ? 0.6 : d.volume));
+    a.currentTime = 0;
+    a.play().catch(function () {});
+  });
+</script>
+</body>
+</html>

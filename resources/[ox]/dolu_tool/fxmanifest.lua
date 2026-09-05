@@ -4,7 +4,7 @@ lua54 'yes'
 game 'gta5'
 
 name 'dolu_tool'
-version '4.6.1'
+version '4.8.0'
 description 'A tool for FiveM developpers'
 author 'Dolu'
 repository 'https://github.com/dolutattoo/dolu_tool'
@@ -19,16 +19,22 @@ server_script 'server/version.lua'
 shared_script 'shared/init.lua'
 
 client_scripts {
-    'client/freecam/utils.lua',
-    'client/freecam/config.lua',
-    'client/freecam/camera.lua',
-    'client/freecam/main.lua',
+    'client/main.lua',
     'client/utils.lua',
-    'client/nui.lua',
+    'client/menu.lua',
     'client/controls.lua',
-    'client/commands.lua',
-    'client/interior.lua',
-    'client/threads.lua',
+    'client/keybinds.lua',
+    'client/noclip.lua',
+    'client/instructionalButtons.lua',
+    'client/target.lua',
+    'client/modules/audio.lua',
+    'client/modules/interior.lua',
+    'client/modules/locations.lua',
+    'client/modules/object.lua',
+    'client/modules/peds.lua',
+    'client/modules/vehicles.lua',
+    'client/modules/weapons.lua',
+    'client/modules/world.lua',
 }
 
 server_scripts {

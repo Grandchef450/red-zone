@@ -79,8 +79,18 @@ end
 RegisterNetEvent('ox_inventory:notify', Utils.Notify)
 exports('notify', Utils.Notify)
 
+local notifySuppressed = false
+
+---@param value boolean
+local function setNotifySuppressed(value)
+    notifySuppressed = value
+end
+
+RegisterNetEvent('ox_inventory:suppressItemNotifications', setNotifySuppressed)
+exports('suppressItemNotifications', setNotifySuppressed)
+
 function Utils.ItemNotify(data)
-    if not client.itemnotify then
+    if notifySuppressed or not client.itemnotify then
         return
     end
 
@@ -104,11 +114,22 @@ end
 
 local rewardTypes = 1 << 0 | 1 << 1 | 1 << 2 | 1 << 3 | 1 << 7 | 1 << 10
 
--- Enables the weapon wheel, but disables the use of inventory weapons.
--- Mostly used for weaponised vehicles, though could be called for "minigames"
-function Utils.WeaponWheel(state)
+local weaponWheelOverride = false
+
+---Enables the weapon wheel, but disables the use of inventory weapons.
+---Mostly used for weaponised vehicles, though could be called for "minigames"
+---@param state? boolean
+---@param override? boolean
+function Utils.WeaponWheel(state, override)
+    if not override and weaponWheelOverride and state == false then
+        return
+    end
     if client.disableweapons then state = true end
     if state == nil then state = EnableWeaponWheel end
+
+    if override then
+        weaponWheelOverride = state or false
+    end
 
     EnableWeaponWheel = state
     SetWeaponsNoAutoswap(not state)
@@ -120,7 +141,9 @@ function Utils.WeaponWheel(state)
     end
 end
 
-exports('weaponWheel', Utils.WeaponWheel)
+exports('weaponWheel', function (state)
+    Utils.WeaponWheel(state, true)
+end)
 
 function Utils.CreateBlip(settings, coords)
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
@@ -173,9 +196,9 @@ local hasTextUi
 
 ---@param point CPoint
 function Utils.nearbyMarker(point)
-    DrawMarker(2, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15,
+    DrawMarker(point.marker.type, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, point.marker.scale[1], point.marker.scale[2], point.marker.scale[3],
         ---@diagnostic disable-next-line: param-type-mismatch
-        point.marker[1], point.marker[2], point.marker[3], 222, false, false, 0, true, false, false, false)
+        point.marker.colour[1], point.marker.colour[2], point.marker.colour[3], 222, false, false, 0, true, false, false, false)
 
     if point.isClosest and point.currentDistance < 1.2 then
         if not hasTextUi then
@@ -198,6 +221,44 @@ function Utils.nearbyMarker(point)
         hasTextUi = nil
         lib.hideTextUI()
     end
+end
+
+function Utils.blurIn()
+    if IsScreenblurFadeRunning() then
+        DisableScreenblurFade()
+    end
+
+    TriggerScreenblurFadeIn(100)
+end
+
+function Utils.blurOut()
+    if IsScreenblurFadeRunning() then
+        DisableScreenblurFade()
+    end
+
+    TriggerScreenblurFadeOut(250)
+end
+
+---@param serverID number
+---@return string
+local function defaultGetPlayerName(serverId)
+    local playerId = GetPlayerFromServerId(serverId)
+    local playerName = GetPlayerName(playerId)
+    return ('[%d] %s'):format(serverId, playerName)
+end
+
+local getPlayerName = defaultGetPlayerName
+
+exports('setGetPlayerNameMethod', function (fn)
+    if type(fn) == "function" then
+        getPlayerName = fn
+    else
+        getPlayerName = defaultGetPlayerName
+    end
+end)
+
+function Utils.getPlayerName(serverId)
+    return getPlayerName(serverId)
 end
 
 return Utils

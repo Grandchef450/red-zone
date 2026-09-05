@@ -142,8 +142,8 @@ RegisterCommand('coords', function(args)
 end, false)
 
 SetTimeout(1000, function()
-    TriggerEvent('chat:addSuggestion', '/coords', 'Saves current coordinates to the clipboard.', {
-        { name = 'heading', help = 'Save your current heading.' },
+    TriggerEvent('chat:addSuggestion', '/coords', 'Copie les coordonnées actuelles dans le presse-papier.', {
+        { name = 'heading', help = 'Enregistre aussi votre cap actuel.' },
     })
 end)
 

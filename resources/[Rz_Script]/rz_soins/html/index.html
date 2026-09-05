@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+  #rz-bonus {
+    position: fixed; top: 2.2vh; left: 1.2vw;
+    display: flex; flex-direction: column; gap: 0.55vh;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    pointer-events: none;
+  }
+  .b {
+    display: flex; align-items: center; gap: 0.7vw;
+    min-width: 13vw; padding: 0.55vh 0.8vw;
+    background: rgba(18, 19, 15, 0.82);
+    border-left: 0.25vw solid #E8893F;
+    border-radius: 0.3vw;
+    color: #ECEADF; font-size: 1.35vh; line-height: 1.2;
+    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,.35);
+  }
+  .b.virus   { border-left-color: #79C48C; }
+  .b.danger  { border-left-color: #E27272; }
+  .b.hang    { border-left-color: #A2A496; }
+  .b .lbl { flex: 1; font-weight: 600; letter-spacing: .02em; }
+  .b .sub { display: block; font-weight: 400; font-size: 1.15vh; color: #A2A496; margin-top: 0.15vh; }
+  .b .t   { font-variant-numeric: tabular-nums; font-size: 1.5vh; font-weight: 700; color: #E8893F; }
+  .b.virus  .t { color: #79C48C; }
+  .b.danger .t { color: #E27272; }
+  .b.hang   .t { color: #A2A496; }
+  .bar { position: absolute; left: 0; bottom: 0; height: 0.25vh; background: rgba(232,137,63,.65); }
+  .b { position: relative; overflow: hidden; }
+</style>
+</head>
+<body>
+<div id="rz-bonus"></div>
+<script>
+  const root = document.getElementById('rz-bonus');
+  let entries = [];          // { id, label, sub, remaining, total, kind }
+  let hangover = 0;
+
+  function fmt(s) {
+    s = Math.max(0, Math.round(s));
+    const m = Math.floor(s / 60), r = s % 60;
+    return m + ':' + (r < 10 ? '0' : '') + r;
+  }
+
+  function render() {
+    let html = '';
+    for (const e of entries) {
+      const pct = e.total > 0 ? Math.max(0, Math.min(100, (e.remaining / e.total) * 100)) : 0;
+      html += `<div class="b ${e.kind}"><span class="lbl">${e.label}${e.sub ? `<span class="sub">${e.sub}</span>` : ''}</span>` +
+              `<span class="t">${e.remaining != null ? fmt(e.remaining) : ''}</span>` +
+              (e.total > 0 ? `<div class="bar" style="width:${pct}%"></div>` : '') + `</div>`;
+    }
+    if (hangover > 0) {
+      html += `<div class="b hang"><span class="lbl">Gueule de bois<span class="sub">${hangover} saline${hangover > 1 ? 's' : ''} pour s'en remettre</span></span><span class="t">☠</span></div>`;
+    }
+    root.innerHTML = html;
+  }
+
+  window.addEventListener('message', (ev) => {
+    const d = ev.data || {};
+    if (d.action === 'state') {
+      entries = d.entries || [];
+      hangover = d.hangover || 0;
+      render();
+    }
+  });
+
+  setInterval(() => {
+    let dirty = false;
+    for (const e of entries) {
+      if (e.remaining != null && e.remaining > 0) { e.remaining -= 1; dirty = true; }
+    }
+    if (dirty) render();
+  }, 1000);
+</script>
+</body>
+</html>

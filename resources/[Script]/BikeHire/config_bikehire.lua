@@ -28,15 +28,15 @@ model = {
 }
 
 translations = {
-    press = "Click",
+    press = "Cliquer",
     machineKey = "INPUT_FRONTEND_RDOWN",
-    toHire = "To borrow a bike",
-    toReturn = "To retun the bike",
-    noFree = "~y~Alarm~w~: there are no free stations to drop this bike on!",
-    noneLeft = "~y~Alarm~w~: There are no bikes left",
-    bikeHired = "~g~Success~w~: You borrowed a bike, it's now unlocked and you can cycle on",
+    toHire = "pour emprunter un vélo",
+    toReturn = "pour rendre le vélo",
+    noFree = "~y~Alerte~w~ : aucune station libre pour déposer ce vélo !",
+    noneLeft = "~y~Alerte~w~ : il ne reste plus de vélo",
+    bikeHired = "~g~Succès~w~ : vous avez emprunté un vélo, il est déverrouillé, vous pouvez pédaler",
     returnKey = "INPUT_FRONTEND_RDOWN",
-    cooldown = "~y~Alarm~w~: You have to wait for you to borrow a bike again!",
+    cooldown = "~y~Alerte~w~ : vous devez attendre avant de pouvoir emprunter un vélo à nouveau !",
 }
 
 locations = {

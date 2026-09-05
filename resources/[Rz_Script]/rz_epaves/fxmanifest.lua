@@ -21,7 +21,7 @@ server_scripts {
     'server/admin.lua',
 }
 
-ox_libs { 'locale', 'table' }
+ox_libs { 'table' }
 
 dependencies {
     'ox_lib',

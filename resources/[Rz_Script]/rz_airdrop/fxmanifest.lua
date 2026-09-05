@@ -23,7 +23,7 @@ server_scripts {
     'server/admin.lua',
 }
 
-ox_libs { 'locale', 'table', 'math' }
+ox_libs { 'table', 'math' }
 
 dependencies {
     'ox_lib',

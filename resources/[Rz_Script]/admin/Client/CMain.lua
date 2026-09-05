@@ -545,6 +545,21 @@ end)
 -- NUI CALLBACK: quickAction
 -- Handles all quick-action buttons inside the kick-actions panel
 -- ============================================================
+-- Ferme le panel (ou le menu d'actions rapides) avant d'ouvrir une interface externe
+-- (ox_doorlock, Dynasty 8), sinon les deux NUI se disputent le focus.
+local function closePanelForExternalUi()
+    isMenuOpen = false
+    if isKickActionsOpen then
+        SendNUIMessage({ action = "closeKickActions" })
+        isKickActionsOpen = false
+        SetNuiFocusKeepInput(false)
+        TriggerServerEvent("adminpanel:kickActionsClosed")
+    end
+    SendNUIMessage({ action = "close" })
+    SetNuiFocus(false, false)
+    blockInput(300)
+end
+
 RegisterNUICallback("quickAction", function(data, cb)
     local action = (type(data) == "table") and data.action or nil
 
@@ -628,6 +643,16 @@ RegisterNUICallback("quickAction", function(data, cb)
 
     elseif action == "givecarkeys" then
         TriggerEvent("admin:giveCarKeys")
+
+    -- ox_doorlock : équivaut à /doorlock (l'ace command.doorlock est vérifiée côté serveur)
+    elseif action == "doorlock" then
+        closePanelForExternalUi()
+        ExecuteCommand("doorlock")
+
+    -- Dynasty 8 : menu agent immobilier ps-realtor (ace dynasty8.admin vérifiée côté serveur)
+    elseif action == "dynasty8" then
+        closePanelForExternalUi()
+        TriggerEvent("bl-realtor:client:toggleUI")
     end
 
     cb("ok")
@@ -1963,6 +1988,12 @@ RegisterNUICallback("playerDetailAction", function(data, cb)
 
     elseif action == "revive" then
         TriggerServerEvent("adminpanel:revivePlayer", playerId)
+
+    elseif action == "rz_effects" then
+        TriggerServerEvent("adminpanel:rzEffects", playerId)
+
+    elseif action == "rz_heal" then
+        TriggerServerEvent("adminpanel:rzHeal", playerId)
 
     elseif action == "ck" then
         -- Character kill (CK) — online or offline

@@ -306,7 +306,9 @@ window.addEventListener("message", (event) => {
             admintag: "admin_tag",
             deletevehicle: "delete_vehicle",
             fixvehicle: "fix_vehicle",
-            infiniteammo: "infiniteammo"
+            infiniteammo: "infiniteammo",
+            doorlock: "dashboard",
+            dynasty8: "dashboard"
         }
         var kickActionToPerm = {
             noclip: "noclip",
@@ -322,7 +324,9 @@ window.addEventListener("message", (event) => {
             fixvehicle: "fix_vehicle",
             tunevehicle: "tune_vehicle",
             infiniteammo: "infiniteammo",
-            givecarkeys: "fix_vehicle"
+            givecarkeys: "fix_vehicle",
+            doorlock: "kick_action_menu",
+            dynasty8: "kick_action_menu"
         }
         var dashboardAllowed = sectionPerms.dashboard === true || sectionPerms.dashboard === "1" || sectionPerms.dashboard === 1
         document.querySelectorAll(".dashboard-action-btn").forEach(function(btn) {
@@ -1129,7 +1133,7 @@ window.addEventListener("message", (event) => {
             servertime: "server_time", staffclothing: "staff_clothing", tags: "tag_player",
             tpm: "tpm", copycoords: "copy_coords", deletevehicle: "delete_vehicle",
             fixvehicle: "fix_vehicle", tunevehicle: "tune_vehicle", infiniteammo: "infiniteammo",
-            givecarkeys: "fix_vehicle"
+            givecarkeys: "fix_vehicle", doorlock: "kick_action_menu", dynasty8: "kick_action_menu"
         }
         var kickActionMenuAllowed = sectionPerms.kick_action_menu === true || sectionPerms.kick_action_menu === "1" || sectionPerms.kick_action_menu === 1
         document.querySelectorAll(".kick-actions-btn").forEach(function(btn) {

@@ -14,7 +14,7 @@ shared_scripts {
 client_scripts { 'client/main.lua' }
 server_scripts { 'server/main.lua' }
 
-ox_libs { 'locale', 'table' }
+ox_libs { 'table' }
 
 dependencies {
     'ox_lib',

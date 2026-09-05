@@ -14,10 +14,10 @@ config.distanceBeforeUpdatingPos = 40
 
 -- Message list
 config.Messages = {
-    ["streamer_on"]  = "Streamer mode is on. From now you will not hear any music/sound.",
-    ["streamer_off"] = "Streamer mode is off. From now you will be able to listen to music that players might play.",
+    ["streamer_on"]  = "Mode streamer activé. Vous n'entendrez plus aucune musique/son.",
+    ["streamer_off"] = "Mode streamer désactivé. Vous entendrez à nouveau la musique jouée par les autres joueurs.",
 
-    ["no_permission"] = "You cant use this command, you dont have permissions for it!",
+    ["no_permission"] = "Vous n'avez pas la permission d'utiliser cette commande !",
 }
 
 -- Addon list

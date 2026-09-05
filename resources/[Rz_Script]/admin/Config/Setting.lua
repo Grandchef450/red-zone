@@ -22,7 +22,7 @@ Config.ServerName = ''
 Config.AdminCommand = 'adminpanel' -- Command to open the admin panel
 
 Config.AmbulanceSystem = 'auto'  -- 'auto', 'esx_ambulancejob', 'qb-ambulancejob', 'wasabi_ambulance', 'wasabi_ambulance_v2' , 'osp_ambulance' , 'ars_ambulancejob' , 'p_ambulancejob' , 'qs-medical-creator', 'sky_ambulancejob' or 'standalone'
-Config.HousingSystem = 'auto'  -- 'auto', 'vms_housing', 'qs-housing', 'bcs_housing', qb-houses, esx_property, 'origen_housing', 'brutal_housing', rtx_housing'
+Config.HousingSystem = 'auto'  -- 'auto', 'ps-housing' (Dynasty 8, ajouté le 2026-09-03), 'vms_housing', 'qs-housing', 'bcs_housing', qb-houses, esx_property, 'origen_housing', 'brutal_housing', rtx_housing'
 Config.ClothingSystem = 'auto'  -- 'auto', 'tgiann-clothing', qb-clothing, esx_skin, 'illenium-appearance', 'qs-appearance', 'origen_clothing', 'rcore_clothing', 'fivem-appearance'
 Config.InventorySystem = 'auto'  -- 'auto', 'core_inventory', 'qs-inventory', 'ox_inventory', 'ak47_inventory', 'inventory (chezza inventory)', 'tgiann-inventory', 'origen_inventory', 'jaksam_inventory', 'codem-inventory', 'qb-inventory'
 Config.GarageSystem = 'auto'  -- 'auto', 'vms_garagesv2', 'qb-garage', 'esx_garage', 'origen_garage', 'qs-advancedgarage', 'jg-advancedgarages', 'okokGarage', 'op-garages', 'cd_garage', 'lunar_garage'

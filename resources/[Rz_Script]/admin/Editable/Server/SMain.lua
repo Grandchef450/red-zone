@@ -1,5 +1,31 @@
 local garageResources = { "vms_garagesv2", "jg-advancedgarages", "qs-advancedgarages", "okokGarage", "op-garages", "origen_garages", "qb-garages", "esx_garage" }
-local housingResources = { "vms_housing", "qs-housing", "bcs_housing", "qb-houses", "esx_property", "origen_housing", "brutal_housing", "rtx_housing" }
+local housingResources = { "ps-housing", "vms_housing", "qs-housing", "bcs_housing", "qb-houses", "esx_property", "origen_housing", "brutal_housing", "rtx_housing" }
+
+-- ps-housing : propriétés d'un citizenid, lues dans la table `properties`
+local function getPsHousingProperties(citizenid)
+    local list = {}
+    if not citizenid or citizenid == "" or not (MySQL and MySQL.query and MySQL.query.await) then return list end
+    local ok, rows = pcall(function()
+        return MySQL.query.await(
+            "SELECT property_id, street, region, apartment, shell, for_sale, price FROM properties WHERE owner_citizenid = ? ORDER BY property_id",
+            { citizenid })
+    end)
+    if not ok or type(rows) ~= "table" then return list end
+    for _, row in ipairs(rows) do
+        local name
+        if row.apartment and row.apartment ~= "" then
+            name = ("Appartement %s"):format(row.apartment)
+        else
+            name = row.street or row.region or "Propriété"
+            if row.region and row.street and row.region ~= row.street then
+                name = ("%s (%s)"):format(row.street, row.region)
+            end
+        end
+        if row.shell and row.shell ~= "" then name = ("%s · %s"):format(name, row.shell) end
+        list[#list + 1] = { name = name, houseNumber = tostring(row.property_id) }
+    end
+    return list
+end
 local gangResources = { "jc_organizaciones", "op-crime", "av_gangs" }
 
 local function getResolvedGarageSystem()
@@ -414,6 +440,11 @@ function GetPlayerProperties(targetId)
                 end
             end
         end
+    elseif housing == "ps-housing" then
+        local xPlayerPs = GetPlayer(targetId)
+        if xPlayerPs then
+            list = getPsHousingProperties(GetIdentifier(xPlayerPs))
+        end
     elseif housing == "qs-housing" then
         local idByHouse = {}
         local xPlayerQs = GetPlayer(targetId)
@@ -546,7 +577,9 @@ function GetPlayerPropertiesByIdentifier(identifier)
     local id = identifier:gsub("^%s+", ""):gsub("%s+$", "")
     if id == "" then return list end
     local housing = getResolvedHousingSystem()
-    if housing == "origen_housing" then
+    if housing == "ps-housing" then
+        list = getPsHousingProperties(id)
+    elseif housing == "origen_housing" then
         pcall(function()
             local ownedHouses = exports["origen_housing"]:getOwnedHouses(id)
             if ownedHouses and #ownedHouses > 0 then
@@ -890,4 +923,50 @@ RegisterNetEvent("adminpanel:revivePlayer", function(targetId)
         TriggerClientEvent("admin:revive", targetId, targetId)
     end
     if LogAdminAction then LogAdminAction(src, "revive", targetId, GetPlayerName(targetId)) end
+end)
+
+-- ──────────────────────────────────────────────────────────────
+-- rz_soins : annuler tous les effets (virus, bonus, gueule de
+-- bois) et soigner. Permissions "rz_effects" / "rz_heal", à
+-- cocher dans les groupes (modérateur et plus).
+-- ──────────────────────────────────────────────────────────────
+local function rzNotify(src, msg, type)
+    TriggerClientEvent('ox_lib:notify', src, { title = 'Admin', description = msg, type = type or 'inform' })
+end
+
+local function rzTarget(src, targetId, perm)
+    if not src or src == 0 then return end
+    if not hasAllowedGroup(src) then return end
+    if AdminHasPermKey and not AdminHasPermKey(src, perm) then
+        rzNotify(src, 'Permission manquante : ' .. perm, 'error')
+        return
+    end
+    targetId = tonumber(targetId)
+    if not targetId or not GetPlayerName(targetId) then
+        rzNotify(src, 'Joueur introuvable.', 'error')
+        return
+    end
+    if GetResourceState('rz_soins') ~= 'started' then
+        rzNotify(src, 'rz_soins n\'est pas démarré.', 'error')
+        return
+    end
+    return targetId
+end
+
+RegisterNetEvent("adminpanel:rzEffects", function(targetId)
+    local src = source
+    targetId = rzTarget(src, targetId, "rz_effects")
+    if not targetId then return end
+    exports.rz_soins:AdminClearEffects(targetId)
+    rzNotify(src, ('Effets annulés pour %s (%d).'):format(GetPlayerName(targetId), targetId), 'success')
+    if LogAdminAction then LogAdminAction(src, "rz_effects", targetId, GetPlayerName(targetId)) end
+end)
+
+RegisterNetEvent("adminpanel:rzHeal", function(targetId)
+    local src = source
+    targetId = rzTarget(src, targetId, "rz_heal")
+    if not targetId then return end
+    exports.rz_soins:AdminHeal(targetId)
+    rzNotify(src, ('%s (%d) soigné.'):format(GetPlayerName(targetId), targetId), 'success')
+    if LogAdminAction then LogAdminAction(src, "rz_heal", targetId, GetPlayerName(targetId)) end
 end)

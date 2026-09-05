@@ -875,6 +875,7 @@ return {
 		close = true,
 		client = {
 			image = 'bandage_survie.png',
+			export = 'rz_soins.useSoin',
 		},
 	},
 	['attelle_survie'] = {
@@ -883,6 +884,7 @@ return {
 		close = true,
 		client = {
 			image = 'attelle_survie.png',
+			export = 'rz_soins.useSoin',
 		},
 	},
 	['cartouche_9mm_cuivre'] = {
@@ -1352,7 +1354,8 @@ return {
 		weight = 600,
 		close = true,
 		client = {
-			image = 'trousse_premiers_soins.png',
+			image = 'medbag.png',
+			export = 'rz_soins.useSoin',
 		},
 	},
 	['imprimerie_pieces_or'] = {
@@ -1736,6 +1739,1233 @@ return {
 		},
 	},
 
+	-- ─── SOINS ─────────────────────────────────────────────
+	-- Effets (points de vie, durées) : définis dans rz_soins, pas ici.
+	['pansement_bob'] = {
+		label = 'Pansement Bob',
+		weight = 10,
+		close = true,
+		description = 'Petit pansement décoré. Pour les égratignures.',
+		client = {
+			image = 'pansement_bob.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['pansement_dora'] = {
+		label = 'Pansement Dora',
+		weight = 10,
+		close = true,
+		description = 'Petit pansement décoré. Pour les égratignures.',
+		client = {
+			image = 'pansement_dora.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['pansement_hello'] = {
+		label = 'Pansement Hello Kitty',
+		weight = 10,
+		close = true,
+		description = 'Petit pansement décoré. Pour les égratignures.',
+		client = {
+			image = 'pansement_hello.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['pansement_flash'] = {
+		label = 'Pansement Flash',
+		weight = 10,
+		close = true,
+		description = 'Petit pansement décoré. Pour les égratignures.',
+		client = {
+			image = 'pansement_flash.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['bandage'] = {
+		label = 'Bandage',
+		weight = 50,
+		close = true,
+		description = 'Bande de gaze. Arrête un saignement léger.',
+		client = {
+			image = 'bandage.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['boite_bandages'] = {
+		label = 'Boîte de 10 bandages',
+		weight = 500,
+		close = true,
+		description = 'Se déballe en 10 bandages.',
+		client = {
+			image = 'boite_bandages.png',
+			export = 'rz_soins.useDeballage',
+		},
+	},
+	['kit_medical'] = {
+		label = 'Kit médical',
+		weight = 600,
+		close = true,
+		description = 'Trousse complète. Soigne des blessures sérieuses.',
+		client = {
+			image = 'medikit.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['kit_medical_avance'] = {
+		label = 'Kit médical avancé',
+		weight = 600,
+		close = true,
+		description = 'Matériel de terrain. Remet quelqu\'un sur pied.',
+		client = {
+			image = 'advancedkit.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['boite_medical_20'] = {
+		label = 'Boîte médicale (20)',
+		weight = 1500,
+		stack = false,
+		durability = true,
+		description = 'Rangement pour 20 objets médicaux.',
+		client = {
+			image = 'boite_medical_20.png',
+		},
+	},
+	['kit_perfusion'] = {
+		label = 'Kit de perfusion',
+		weight = 600,
+		close = true,
+		description = 'Tuyau, aiguille, poche : la base d\'une perfusion.',
+		client = {
+			image = 'kit_perfusion.png',
+		},
+	},
+	['kit_perfusion_saline'] = {
+		label = 'Perfusion saline',
+		weight = 600,
+		close = true,
+		description = 'Réhydrate et stabilise.',
+		client = {
+			image = 'kit_perfusion_saline.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['kit_perfusion_sanguine'] = {
+		label = 'Perfusion sanguine',
+		weight = 600,
+		close = true,
+		description = 'Transfusion. Pour les grosses pertes de sang.',
+		client = {
+			image = 'kit_perfusion_sanguine.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['tuyau_perfusion'] = {
+		label = 'Tuyau de perfusion',
+		weight = 100,
+		description = 'Composant de kit de perfusion.',
+		client = {
+			image = 'tuyau_perfusion.png',
+		},
+	},
+	['serum_salin'] = {
+		label = 'Sérum salin',
+		weight = 400,
+		close = true,
+		description = 'Solution saline stérile.',
+		client = {
+			image = 'serum_salin.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['serum_salin_survie'] = {
+		label = 'Sérum salin de survie',
+		weight = 300,
+		close = true,
+		description = 'Version de fortune, moins efficace.',
+		client = {
+			image = 'serum_salin_survie.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['poche_sang'] = {
+		label = 'Poche de sang',
+		weight = 500,
+		description = 'Sang conservé. Indispensable à la transfusion.',
+		client = {
+			image = 'poche_sang.png',
+		},
+	},
+	['fiole_morphine'] = {
+		label = 'Fiole de morphine',
+		weight = 100,
+		description = 'Concentré. À charger dans une seringue.',
+		client = {
+			image = 'fiole_morphine.png',
+		},
+	},
+	['seringue_morphine'] = {
+		label = 'Seringue de morphine',
+		weight = 120,
+		close = true,
+		description = 'Coupe la douleur, redonne des forces.',
+		client = {
+			image = 'seringue_morphine.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['antidouleur'] = {
+		label = 'Antidouleur',
+		weight = 50,
+		close = true,
+		description = 'Comprimés. Soulage, ne soigne pas vraiment.',
+		client = {
+			image = 'antidouleur.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['sirop_medicinal'] = {
+		label = 'Sirop médicinal',
+		weight = 300,
+		close = true,
+		description = 'Contre la toux et la fièvre.',
+		client = {
+			image = 'sirop_medicinal.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['xanax'] = {
+		label = 'Xanax',
+		weight = 50,
+		close = true,
+		description = 'Calme les nerfs. À ne pas mélanger.',
+		client = {
+			image = 'xanax.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['adrenaline'] = {
+		label = 'Adrénaline',
+		weight = 100,
+		description = 'Ampoule brute. Sert à fabriquer un épipen.',
+		client = {
+			image = 'adrenaline.png',
+		},
+	},
+	['heparine'] = {
+		label = 'Héparine',
+		weight = 100,
+		close = true,
+		description = 'Anticoagulant. Utile en cas d\'hémorragie interne.',
+		client = {
+			image = 'heparine.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['pistolet_injecteur'] = {
+		label = 'Pistolet injecteur',
+		weight = 600,
+		stack = false,
+		durability = true,
+		description = 'Injecte une ampoule sans seringue.',
+		client = {
+			image = 'pistolet_injecteur.png',
+		},
+	},
+	['defibrillateur'] = {
+		label = 'Défibrillateur',
+		weight = 3000,
+		stack = false,
+		durability = true,
+		description = 'Relance un cœur arrêté. Lourd et précieux.',
+		client = {
+			image = 'defibrillateur.png',
+		},
+	},
+	['aiguille'] = {
+		label = 'Aiguille',
+		weight = 20,
+		description = 'Aiguille simple. Couture ou bricolage.',
+		client = {
+			image = 'aiguille.png',
+		},
+	},
+	['aiguille_medicale'] = {
+		label = 'Aiguille médicale',
+		weight = 30,
+		description = 'Stérile. Pour seringues et perfusions.',
+		client = {
+			image = 'aiguille_medicale.png',
+		},
+	},
+	['aiguille_suture'] = {
+		label = 'Aiguille à suture',
+		weight = 30,
+		close = true,
+		description = 'Referme une plaie ouverte.',
+		client = {
+			image = 'aiguille_suture.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['attelle_bras'] = {
+		label = 'Attelle de bras',
+		weight = 400,
+		close = true,
+		description = 'Immobilise un bras cassé.',
+		client = {
+			image = 'attelle_bras.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['attelle_jambe'] = {
+		label = 'Attelle de jambe',
+		weight = 600,
+		close = true,
+		description = 'Immobilise une jambe cassée.',
+		client = {
+			image = 'attelle_jambe.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['attelle_doigts'] = {
+		label = 'Attelle de doigts',
+		weight = 100,
+		close = true,
+		description = 'Pour les doigts cassés ou foulés.',
+		client = {
+			image = 'attelle_doigts.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['attelle_poignet'] = {
+		label = 'Attelle de poignet',
+		weight = 200,
+		close = true,
+		description = 'Maintient un poignet abîmé.',
+		client = {
+			image = 'attelle_poignet.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['attelle_pression'] = {
+		label = 'Attelle à pression',
+		weight = 500,
+		close = true,
+		description = 'Attelle gonflable, s\'adapte à n\'importe quel membre.',
+		client = {
+			image = 'attelle_pression.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['collier_cervical'] = {
+		label = 'Collier cervical',
+		weight = 400,
+		close = true,
+		description = 'Maintient la nuque après un choc.',
+		client = {
+			image = 'collier_cervical.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['genouillere'] = {
+		label = 'Genouillère',
+		weight = 300,
+		close = true,
+		description = 'Soutient un genou abîmé.',
+		client = {
+			image = 'genouillere.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['cheviliere'] = {
+		label = 'Chevillère',
+		weight = 200,
+		close = true,
+		description = 'Soutient une cheville tordue.',
+		client = {
+			image = 'cheviliere.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['couverture_survie'] = {
+		label = 'Couverture de survie',
+		weight = 150,
+		close = true,
+		description = 'Contre le froid et l\'état de choc.',
+		client = {
+			image = 'couverture_survie.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+
+	-- ─── VIRUS ─────────────────────────────────────────────
+	-- Effets (infection, contagion, antidotes) : définis dans rz_soins.
+	['virus'] = {
+		label = 'Échantillon de virus',
+		weight = 100,
+		description = 'Fiole scellée. Ne pas ouvrir.',
+		client = {
+			image = 'virus.png',
+		},
+	},
+	['virus_t'] = {
+		label = 'Virus T',
+		weight = 100,
+		description = 'Souche T. Extrêmement contagieuse.',
+		client = {
+			image = 'virus_t.png',
+		},
+	},
+	['virus_t_injection'] = {
+		label = 'Injection de virus T',
+		weight = 120,
+		close = true,
+		description = 'Seringue chargée de souche T.',
+		client = {
+			image = 'virus_t_injection.png',
+			export = 'rz_soins.useVirus',
+		},
+	},
+	['virus_t_nemesis'] = {
+		label = 'Virus T — Némésis',
+		weight = 100,
+		description = 'Variante Némésis de la souche T.',
+		client = {
+			image = 'virus_t_nemesis.png',
+		},
+	},
+	['virus_t_veronica'] = {
+		label = 'Virus T — Veronica',
+		weight = 100,
+		description = 'Variante Veronica de la souche T.',
+		client = {
+			image = 'virus_t_veronica.png',
+		},
+	},
+	['virus_n_injection'] = {
+		label = 'Injection de virus N',
+		weight = 120,
+		close = true,
+		description = 'Seringue chargée de souche N.',
+		client = {
+			image = 'virus_n_injection.png',
+			export = 'rz_soins.useVirus',
+		},
+	},
+	['virus_v_injection'] = {
+		label = 'Injection de virus V',
+		weight = 120,
+		close = true,
+		description = 'Seringue chargée de souche V.',
+		client = {
+			image = 'virus_v_injection.png',
+			export = 'rz_soins.useVirus',
+		},
+	},
+	['antivirus_t'] = {
+		label = 'Antivirus T',
+		weight = 100,
+		close = true,
+		description = 'Antidote à la souche T. Une dose.',
+		client = {
+			image = 'antivirus_t.png',
+		},
+	},
+	['antivirus_t_injection'] = {
+		label = 'Injection d\'antivirus T',
+		weight = 120,
+		close = true,
+		description = 'Antidote injectable, effet immédiat.',
+		client = {
+			image = 'antivirus_t_injection.png',
+			export = 'rz_soins.useVirus',
+		},
+	},
+
+	-- ─── SOINS (SUITE) ─────────────────────────────────────
+	['creme_brulure'] = {
+		label = 'Crème contre les brûlures',
+		weight = 150,
+		close = true,
+		description = 'Apaise et referme les brûlures.',
+		client = {
+			image = 'burncream.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['poche_glace'] = {
+		label = 'Poche de glace',
+		weight = 300,
+		close = true,
+		description = 'Fait dégonfler les coups et les entorses.',
+		client = {
+			image = 'icepack.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['kit_suture'] = {
+		label = 'Kit de suture',
+		weight = 400,
+		close = true,
+		description = 'Aiguille, fil et pince : referme les grandes plaies.',
+		client = {
+			image = 'suturekit.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['pince_epiler'] = {
+		label = 'Pince à épiler',
+		weight = 40,
+		close = true,
+		description = 'Pour retirer une balle ou un éclat.',
+		client = {
+			image = 'tweezers.png',
+			export = 'rz_soins.useSoin',
+		},
+	},
+	['defibrillateur_portable'] = {
+		label = 'Défibrillateur portable',
+		weight = 1500,
+		stack = false,
+		durability = true,
+		description = 'Version compacte. Moins de charges, mais tient dans un sac.',
+		client = {
+			image = 'defib.png',
+		},
+	},
+	['brancard'] = {
+		label = 'Brancard',
+		weight = 6000,
+		stack = false,
+		description = 'Pour transporter un blessé. Encombrant.',
+		client = {
+			image = 'stretcher.png',
+		},
+	},
+
+	-- ─── MÉDICAMENTS ───────────────────────────────────────
+	-- Bonus temporaires, pas de soin. À la fin de l'effet : retour à
+	-- la normale, moins 35 % de faim et de soif. Effets dans rz_soins.
+	['percocet_5'] = {
+		label = 'Percocet 5 mg',
+		weight = 5,
+		close = true,
+		description = 'Petit comprimé. Le souffle ne manque plus, un moment.',
+		client = {
+			image = 'perc5.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['percocet_10'] = {
+		label = 'Percocet 10 mg',
+		weight = 5,
+		close = true,
+		description = 'Souffle et jambes, un moment.',
+		client = {
+			image = 'perc10.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['percocet_30'] = {
+		label = 'Percocet 30 mg',
+		weight = 5,
+		close = true,
+		description = 'Dose forte. Le corps oublie la fatigue, puis la facture arrive.',
+		client = {
+			image = 'perc30.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['vicodin_5'] = {
+		label = 'Vicodin 5 mg',
+		weight = 5,
+		close = true,
+		description = 'On encaisse un peu plus, un moment.',
+		client = {
+			image = 'vic5.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['vicodin_10'] = {
+		label = 'Vicodin 10 mg',
+		weight = 5,
+		close = true,
+		description = 'On encaisse nettement plus, un moment.',
+		client = {
+			image = 'vic10.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['morphine_15'] = {
+		label = 'Morphine 15 mg',
+		weight = 5,
+		close = true,
+		description = 'Comprimé. Le corps se blinde, un moment.',
+		client = {
+			image = 'morphine15.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['morphine_30'] = {
+		label = 'Morphine 30 mg',
+		weight = 5,
+		close = true,
+		description = 'Comprimé fort. Presque invulnérable, puis vidé.',
+		client = {
+			image = 'morphine30.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+	['sedatif'] = {
+		label = 'Sédatif',
+		weight = 120,
+		close = true,
+		description = 'Seringue. On ne sent plus les coups, un moment.',
+		client = {
+			image = 'sedative.png',
+			export = 'rz_soins.useMedicament',
+		},
+	},
+
+	-- ─── DROGUE : CULTURE ──────────────────────────────────
+	['graine_cannabis'] = {
+		label = 'Graine de cannabis',
+		weight = 10,
+		description = 'À planter dans un pot.',
+		client = {
+			image = 'weed_seed.png',
+		},
+	},
+	['pot_culture'] = {
+		label = 'Pot de culture',
+		weight = 1500,
+		stack = false,
+		description = 'Terre et pot. Il manque la graine.',
+		client = {
+			image = 'weed_pot.png',
+		},
+	},
+	['engrais'] = {
+		label = 'Engrais',
+		weight = 300,
+		description = 'Accélère la pousse.',
+		client = {
+			image = 'fertilizer.png',
+		},
+	},
+	['arrosoir_culture'] = {
+		label = 'Arrosoir de culture',
+		weight = 1200,
+		stack = false,
+		description = 'Pour les plants, pas pour le potager.',
+		client = {
+			image = 'water_can.png',
+		},
+	},
+	['truelle'] = {
+		label = 'Truelle',
+		weight = 600,
+		stack = false,
+		description = 'Pour planter et récolter.',
+		client = {
+			image = 'trowel.png',
+		},
+	},
+	['lampe_culture'] = {
+		label = 'Lampe de culture',
+		weight = 2500,
+		stack = false,
+		description = 'Lumière de croissance.',
+		client = {
+			image = 'light1.png',
+		},
+	},
+	['lampe_culture_pro'] = {
+		label = 'Lampe de culture pro',
+		weight = 3000,
+		stack = false,
+		description = 'Lumière de floraison.',
+		client = {
+			image = 'light2.png',
+		},
+	},
+	['tete_cannabis'] = {
+		label = 'Tête de cannabis',
+		weight = 50,
+		description = 'Récolte brute, à nettoyer.',
+		client = {
+			image = 'weed_bud.png',
+		},
+	},
+	['tete_cannabis_nettoyee'] = {
+		label = 'Tête de cannabis nettoyée',
+		weight = 40,
+		description = 'Prête à rouler ou à ensacher.',
+		client = {
+			image = 'clean_weed_bud.png',
+		},
+	},
+	['feuille_sechee'] = {
+		label = 'Feuille séchée',
+		weight = 30,
+		description = 'Feuille quelconque, pour couper.',
+		client = {
+			image = 'generic_leaf.png',
+		},
+	},
+	['feuilles_rouler'] = {
+		label = 'Feuilles à rouler',
+		weight = 20,
+		description = 'Pour les joints.',
+		client = {
+			image = 'weed_papers.png',
+		},
+	},
+	['papier_buvard'] = {
+		label = 'Papier buvard illustré',
+		weight = 20,
+		description = 'Support des buvards de LSD.',
+		client = {
+			image = 'art_papers.png',
+		},
+	},
+	['graines_pavot'] = {
+		label = 'Graines de pavot',
+		weight = 10,
+		description = 'À planter.',
+		client = {
+			image = 'poppy_seeds.png',
+		},
+	},
+	['plant_pavot'] = {
+		label = 'Plant de pavot',
+		weight = 200,
+		description = 'À inciser pour l\'opium.',
+		client = {
+			image = 'poppy_plant.png',
+		},
+	},
+	['graine_coca'] = {
+		label = 'Graine de coca',
+		weight = 10,
+		description = 'À planter.',
+		client = {
+			image = 'coke_seed.png',
+		},
+	},
+	['feuille_coca'] = {
+		label = 'Feuille de coca',
+		weight = 40,
+		description = 'Base de la pâte.',
+		client = {
+			image = 'coke_leaf.png',
+		},
+	},
+	['ergot_seigle'] = {
+		label = 'Ergot de seigle',
+		weight = 40,
+		description = 'Champignon parasite. Base du LSD.',
+		client = {
+			image = 'ergot_fungus.png',
+		},
+	},
+	['poudre_champignon'] = {
+		label = 'Poudre de champignon',
+		weight = 60,
+		description = 'Champignons séchés et broyés.',
+		client = {
+			image = 'mushroom_powder.png',
+		},
+	},
+
+	-- ─── DROGUE : CHIMIE ET OUTILS ─────────────────────────
+	['ammoniaque'] = {
+		label = 'Ammoniaque',
+		weight = 500,
+		description = 'Corrosif. Ne pas respirer.',
+		client = {
+			image = 'ammonia.png',
+		},
+	},
+	['anesthesiant'] = {
+		label = 'Anesthésiant',
+		weight = 300,
+		description = 'Base de la kétamine.',
+		client = {
+			image = 'anesthetic.png',
+		},
+	},
+	['solution_aniline'] = {
+		label = 'Solution d\'aniline',
+		weight = 400,
+		description = 'Réactif de synthèse.',
+		client = {
+			image = 'aniline_solution.png',
+		},
+	},
+	['bicarbonate'] = {
+		label = 'Bicarbonate de soude',
+		weight = 200,
+		description = 'Pour cuire le crack.',
+		client = {
+			image = 'baking_soda.png',
+		},
+	},
+	['produit_npp'] = {
+		label = 'Produit NPP',
+		weight = 400,
+		description = 'Précurseur du fentanyl.',
+		client = {
+			image = 'npp_chemical.png',
+		},
+	},
+	['huile_safrole'] = {
+		label = 'Huile de safrole',
+		weight = 400,
+		description = 'Précurseur de la MDMA.',
+		client = {
+			image = 'safrole_oil.png',
+		},
+	},
+	['benzoate_sodium'] = {
+		label = 'Benzoate de sodium',
+		weight = 300,
+		description = 'Réactif de purification.',
+		client = {
+			image = 'sodium_benzoate.png',
+		},
+	},
+	['table_chimie'] = {
+		label = 'Table de chimie',
+		weight = 8000,
+		stack = false,
+		description = 'Verrerie et brûleur. Se pose.',
+		client = {
+			image = 'chem_table.png',
+		},
+	},
+	['table_coke'] = {
+		label = 'Table à cocaïne',
+		weight = 8000,
+		stack = false,
+		description = 'Pour raffiner et presser. Se pose.',
+		client = {
+			image = 'coke_table.png',
+		},
+	},
+	['table_meth'] = {
+		label = 'Table à meth',
+		weight = 8000,
+		stack = false,
+		description = 'Pour cuisiner. Se pose.',
+		client = {
+			image = 'meth_table.png',
+		},
+	},
+	['table_conditionnement'] = {
+		label = 'Table de conditionnement',
+		weight = 6000,
+		stack = false,
+		description = 'Pour ensacher et rouler. Se pose.',
+		client = {
+			image = 'weed_table.png',
+		},
+	},
+	['plateau_meth'] = {
+		label = 'Plateau de meth',
+		weight = 800,
+		description = 'Cristaux en cours de séchage.',
+		client = {
+			image = 'meth_tray.png',
+		},
+	},
+	['sachet_plastique'] = {
+		label = 'Sachet plastique',
+		weight = 5,
+		description = 'Pour conditionner.',
+		client = {
+			image = 'plastic_bag.png',
+		},
+	},
+	['seringue_vide'] = {
+		label = 'Seringue vide',
+		weight = 40,
+		description = 'À charger.',
+		client = {
+			image = 'syringe.png',
+		},
+	},
+	['pipe'] = {
+		label = 'Pipe',
+		weight = 200,
+		stack = false,
+		durability = true,
+		description = 'Pour fumer l\'opium. S\'use.',
+		client = {
+			image = 'pipe.png',
+		},
+	},
+	['pipe_crack'] = {
+		label = 'Pipe à crack',
+		weight = 150,
+		stack = false,
+		durability = true,
+		description = 'Verre noirci. S\'use.',
+		client = {
+			image = 'crack_pipe.png',
+		},
+	},
+	['telephone_jetable'] = {
+		label = 'Téléphone jetable',
+		weight = 150,
+		stack = false,
+		description = 'Pour les contacts qu\'on ne garde pas.',
+		client = {
+			image = 'burner_phone.png',
+		},
+	},
+	['pepites_chocolat'] = {
+		label = 'Pépites de chocolat',
+		weight = 100,
+		description = 'Pour les cookies et le chocolat aux champignons.',
+		client = {
+			image = 'chocolate_chips.png',
+		},
+	},
+	['pate_cookie'] = {
+		label = 'Pâte à cookie',
+		weight = 200,
+		description = 'Crue. À enrichir.',
+		client = {
+			image = 'cookie_dough.png',
+		},
+	},
+	['lsd_liquide'] = {
+		label = 'LSD liquide',
+		weight = 50,
+		description = 'Une goutte par buvard.',
+		client = {
+			image = 'lsd_liquid.png',
+		},
+	},
+	['cristaux_mdma'] = {
+		label = 'Cristaux de MDMA',
+		weight = 60,
+		description = 'À presser en comprimés.',
+		client = {
+			image = 'ecstasy_crystals.png',
+		},
+	},
+	['pate_coca'] = {
+		label = 'Pâte de coca',
+		weight = 150,
+		description = 'Étape intermédiaire.',
+		client = {
+			image = 'coke_paste.png',
+		},
+	},
+	['cocaine_pure'] = {
+		label = 'Cocaïne pure',
+		weight = 100,
+		description = 'Poudre non conditionnée.',
+		client = {
+			image = 'coke.png',
+		},
+	},
+	['brique_cocaine'] = {
+		label = 'Brique de cocaïne',
+		weight = 1000,
+		description = 'Un kilo pressé. Se découpe en sachets.',
+		client = {
+			image = 'coke_brick.png',
+		},
+	},
+	['poupee_chargee'] = {
+		label = 'Poupée chargée',
+		weight = 900,
+		description = 'Une poupée, et ce qu\'elle cache.',
+		client = {
+			image = 'coke_doll.png',
+		},
+	},
+	['caillou_crack'] = {
+		label = 'Caillou de crack',
+		weight = 60,
+		description = 'Non conditionné.',
+		client = {
+			image = 'crack.png',
+		},
+	},
+	['heroine_pure'] = {
+		label = 'Héroïne pure',
+		weight = 100,
+		description = 'Poudre non conditionnée.',
+		client = {
+			image = 'heroin.png',
+		},
+	},
+	['fentanyl_pur'] = {
+		label = 'Fentanyl pur',
+		weight = 100,
+		description = 'Quelques grains suffisent.',
+		client = {
+			image = 'fentanyl.png',
+		},
+	},
+	['ketamine_pure'] = {
+		label = 'Kétamine pure',
+		weight = 100,
+		description = 'Poudre non conditionnée.',
+		client = {
+			image = 'ketamine.png',
+		},
+	},
+
+	-- ─── DROGUE : PRODUITS FINAUX (consommables) ───────────
+	-- Bonus cumulables, puis gueule de bois jusqu'à une saline. Effets dans rz_soins.
+	['joint'] = {
+		label = 'Joint',
+		weight = 10,
+		close = true,
+		description = 'Roulé serré. Détend, un bon moment.',
+		client = {
+			image = 'weed_joint.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['cookie_cannabis'] = {
+		label = 'Cookie au cannabis',
+		weight = 80,
+		close = true,
+		description = 'Ça monte lentement, ça dure.',
+		client = {
+			image = 'weed_cookie.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['sachet_weed'] = {
+		label = 'Sachet de weed',
+		weight = 60,
+		close = true,
+		description = 'Se vend, se fume.',
+		client = {
+			image = 'weed_bag.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['sachet_cocaine'] = {
+		label = 'Sachet de cocaïne',
+		weight = 60,
+		close = true,
+		description = 'Se vend, se sniffe.',
+		client = {
+			image = 'coke_bag.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['sachet_crack'] = {
+		label = 'Sachet de crack',
+		weight = 60,
+		close = true,
+		description = 'Se fume à la pipe à crack.',
+		client = {
+			image = 'crack_bag.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['seringue_crack'] = {
+		label = 'Seringue de crack',
+		weight = 120,
+		close = true,
+		description = 'Directement dans le sang.',
+		client = {
+			image = 'crack_syringe.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['sachet_heroine'] = {
+		label = 'Sachet d\'héroïne',
+		weight = 60,
+		close = true,
+		description = 'Se vend, se sniffe.',
+		client = {
+			image = 'heroin_bag.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['seringue_heroine'] = {
+		label = 'Seringue d\'héroïne',
+		weight = 120,
+		close = true,
+		description = 'La plus forte, la plus longue.',
+		client = {
+			image = 'heroin_syringe.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['sachet_fentanyl'] = {
+		label = 'Sachet de fentanyl',
+		weight = 60,
+		close = true,
+		description = 'On ne sent plus rien du tout.',
+		client = {
+			image = 'fentanyl_bag.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['sachet_ketamine'] = {
+		label = 'Sachet de kétamine',
+		weight = 60,
+		close = true,
+		description = 'Le corps devient lointain.',
+		client = {
+			image = 'ketamine_bag.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['seringue_meth'] = {
+		label = 'Seringue de meth',
+		weight = 120,
+		close = true,
+		description = 'Le cœur s\'emballe.',
+		client = {
+			image = 'meth_syringe.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['ecstasy'] = {
+		label = 'Comprimé d\'ecstasy',
+		weight = 5,
+		close = true,
+		description = 'Petite pilule pressée.',
+		client = {
+			image = 'ecstasy_pill.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['buvard_lsd'] = {
+		label = 'Buvard de LSD',
+		weight = 5,
+		close = true,
+		description = 'Un carré de papier.',
+		client = {
+			image = 'lsd.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['champignons'] = {
+		label = 'Champignons hallucinogènes',
+		weight = 40,
+		close = true,
+		description = 'Se mangent frais.',
+		client = {
+			image = 'mushrooms.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['chocolat_champignons'] = {
+		label = 'Chocolat aux champignons',
+		weight = 80,
+		close = true,
+		description = 'Plus doux, plus long.',
+		client = {
+			image = 'mushroom_chocolate.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+	['opium'] = {
+		label = 'Opium',
+		weight = 60,
+		close = true,
+		description = 'Se fume à la pipe.',
+		client = {
+			image = 'opium.png',
+			export = 'rz_soins.useDrogue',
+		},
+	},
+
+	-- ─── CHASSE (ars_hunting) ──────────────────────────────
+	-- La viande vient des items existants : viande_cerf_crue à la
+	-- récolte, steak_cerf au feu de camp.
+	['traqueur_animal'] = {
+		label = 'Traqueur d\'animaux',
+		weight = 200,
+		stack = false,
+		allowArmed = true,
+		description = 'Repère l\'animal le plus proche pendant une minute.',
+		client = {
+			image = 'traqueur_animal.png',
+		},
+	},
+	['feu_de_camp'] = {
+		label = 'Feu de camp',
+		weight = 1500,
+		stack = false,
+		allowArmed = true,
+		description = 'Se pose au sol. Pour cuire la viande. Se reprend.',
+		client = {
+			image = 'feu_de_camp.png',
+		},
+	},
+	['appat_chasse'] = {
+		label = 'Appât de chasse',
+		weight = 100,
+		allowArmed = true,
+		description = 'Attire l\'animal le plus proche pendant deux minutes.',
+		client = {
+			image = 'appat_chasse.png',
+		},
+	},
+	['peau_cerf_abimee'] = {
+		label = 'Peau de cerf abîmée',
+		weight = 200,
+		description = 'Trouée, tachée. Vaut trois fois rien.',
+		client = {
+			image = 'peau_cerf_abimee.png',
+		},
+	},
+	['peau_cerf_usee'] = {
+		label = 'Peau de cerf usée',
+		weight = 200,
+		description = 'Passable.',
+		client = {
+			image = 'peau_cerf_usee.png',
+		},
+	},
+	['peau_cerf_correcte'] = {
+		label = 'Peau de cerf correcte',
+		weight = 200,
+		description = 'Souple, quelques défauts.',
+		client = {
+			image = 'peau_cerf_correcte.png',
+		},
+	},
+	['peau_cerf_belle'] = {
+		label = 'Belle peau de cerf',
+		weight = 200,
+		description = 'Propre, entière.',
+		client = {
+			image = 'peau_cerf_belle.png',
+		},
+	},
+	['peau_cerf_parfaite'] = {
+		label = 'Peau de cerf parfaite',
+		weight = 200,
+		description = 'Sans une marque. Rare.',
+		client = {
+			image = 'peau_cerf_parfaite.png',
+		},
+	},
+	['bois_de_cerf'] = {
+		label = 'Bois de cerf',
+		weight = 600,
+		description = 'Trophée, ou matière première.',
+		client = {
+			image = 'bois_de_cerf.png',
+		},
+	},
+
 	-- ─── PÊCHE ─────────────────────────────────────────────
 	['ver_de_terre'] = {
 		label = 'Ver de terre',
@@ -1763,6 +2993,7 @@ return {
 		description = 'Radiocassette de récupération. Se pose au sol et joue ce qu\'on lui donne.',
 		client = {
 			image = 'radio.png',
+			export = 'rz_boombox.useBoombox',
 		},
 	},
 }

@@ -1,10 +1,10 @@
 lib.addCommand('freeze', {
-    help = 'Freeze the player',
+    help = 'Fige le joueur',
     params = {
         {
             name = 'target',
             type = 'playerId',
-            help = 'Target player\'s server id', 
+            help = 'ID serveur du joueur ciblé',
         },
     },
     restricted = 'group.admin'
@@ -20,12 +20,12 @@ lib.addCommand('freeze', {
 end)
 
 lib.addCommand('thaw', {
-    help = 'Unfreeze the player',
+    help = 'Libère le joueur',
     params = {
         {
             name = 'target',
             type = 'playerId',
-            help = 'Target player\'s server id', 
+            help = 'ID serveur du joueur ciblé',
         },
     },
     restricted = 'group.admin'

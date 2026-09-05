@@ -23,7 +23,6 @@ server_scripts {
 }
 
 ox_libs {
-    'locale',
     'table',
     'math',
 }

@@ -232,9 +232,9 @@ end)
 
 RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
     if type == 'cash' then
-        lib.notify({ description = 'Cash: $ ' .. amount, icon = 'dollar', type = 'success' })
+        lib.notify({ description = 'Liquide : $ ' .. amount, icon = 'dollar', type = 'success' })
     else
-        lib.notify({ description = 'Bank: $ ' .. amount, icon = 'dollar', type = 'success' })
+        lib.notify({ description = 'Banque : $ ' .. amount, icon = 'dollar', type = 'success' })
     end
 end)
 

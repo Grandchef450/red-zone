@@ -6,15 +6,16 @@ if config.versionCheck then lib.versionCheck('overextended/ox_fuel') end
 
 local ox_inventory = exports.ox_inventory
 
-local function setFuelState(netId, fuel)
-	local vehicle = NetworkGetEntityFromNetworkId(netId)
-
+---@param vehicle number
+---@param fuel number
+---@param reduceOnly? boolean Don't allow fuel to be increased, unless fuel state has not been initialised.
+local function setFuelState(vehicle, fuel, reduceOnly)
 	if vehicle == 0 or GetEntityType(vehicle) ~= 2 then
 		return
 	end
 
-	local state = Entity(vehicle)?.state
-	fuel = math.clamp(fuel, 0, 100)
+	local state = Entity(vehicle).state
+	fuel = math.clamp(fuel, 0, reduceOnly and state.fuel or 100)
 
 	state:set('fuel', fuel, true)
 end
@@ -27,9 +28,9 @@ local function defaultPaymentMethod(playerId, price)
 
 	if success then return true end
 
-	local money = ox_inventory:GetItemCount(source, 'money')
+	local money = ox_inventory:GetItemCount(playerId, 'money')
 
-	TriggerClientEvent('ox_lib:notify', source, {
+	TriggerClientEvent('ox_lib:notify', playerId, {
 		type = 'error',
 		description = locale('not_enough_money', price - money)
 	})
@@ -43,11 +44,11 @@ end)
 
 RegisterNetEvent('ox_fuel:pay', function(price, fuel, netid)
 	assert(type(price) == 'number', ('Price expected a number, received %s'):format(type(price)))
-
+	local source = source
 	if not payMoney(source, price) then return end
 
 	fuel = math.floor(fuel)
-	setFuelState(netid, fuel)
+	setFuelState(NetworkGetEntityFromNetworkId(netid), fuel)
 
 	TriggerClientEvent('ox_lib:notify', source, {
 		type = 'success',
@@ -56,6 +57,7 @@ RegisterNetEvent('ox_fuel:pay', function(price, fuel, netid)
 end)
 
 RegisterNetEvent('ox_fuel:fuelCan', function(hasCan, price)
+	local source = source
 	if hasCan then
 		local item = ox_inventory:GetCurrentWeapon(source)
 
@@ -99,8 +101,15 @@ RegisterNetEvent('ox_fuel:updateFuelCan', function(durability, netid, fuel)
 		item.metadata.ammo = durability
 
 		ox_inventory:SetMetadata(source, item.slot, item.metadata)
-		setFuelState(netid, fuel)
+		setFuelState(NetworkGetEntityFromNetworkId(netid), fuel)
 	end
 
 	-- player is sus?
+end)
+
+RegisterNetEvent('ox_fuel:setFuel', function(fuel)
+	local playerPed = GetPlayerPed(source)
+	local handle = GetVehiclePedIsIn(playerPed, false)
+
+	setFuelState(handle, fuel, true)
 end)

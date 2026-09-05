@@ -4,7 +4,6 @@ local CraftingBenches = {}
 local Items = require 'modules.items.client'
 local createBlip = require 'modules.utils.client'.CreateBlip
 local Utils = require 'modules.utils.client'
-local markerColour = { 150, 150, 30 }
 local prompt = {
     options = { icon = 'fa-wrench' },
     message = ('**%s**  \n%s'):format(locale('open_crafting_bench'), locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)))
@@ -43,14 +42,14 @@ local function createCraftingBench(id, data)
             if data.zones then
     			for i = 1, #data.zones do
     				local zone = data.zones[i]
-    				zone.name = ("craftingbench_%s:%s"):format(id, i)
+    				zone.name = ('craftingbench_%s:%s'):format(id, i)
     				zone.id = id
     				zone.index = i
     				zone.options = {
-    					{
+						{
     						label = zone.label or locale('open_crafting_bench'),
-    						canInteract = data.groups and function()
-    							return client.hasGroup(data.groups)
+    						canInteract = (zone.groups or data.groups) and function()
+    							return client.hasGroup(zone.groups or data.groups)
     						end or nil,
     						onSelect = function()
     							client.openInventory('crafting', { id = id, index = i })
@@ -80,7 +79,7 @@ local function createCraftingBench(id, data)
 					index = i,
 					inv = 'crafting',
                     prompt = prompt,
-                    marker = markerColour,
+                    marker = client.craftingmarker,
 					nearby = Utils.nearbyMarker
 				})
 

@@ -23,6 +23,4 @@ client_scripts {
     'client/main.lua',
 }
 
-ox_libs { 'locale' }
-
 dependencies { 'ox_lib' }

@@ -24,8 +24,6 @@ server_scripts {
     'server/gradeTools.lua',
 }
 
-ox_libs { 'locale' }
-
 dependencies {
     'ox_lib',
     'oxmysql',

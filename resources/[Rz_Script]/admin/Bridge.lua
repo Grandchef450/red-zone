@@ -90,6 +90,7 @@ if IsDuplicityVersion() then
 
     -- ── Supported housing resource names ─────────────────────────────────────
     housingList = {
+        "ps-housing",
         "vms_housing",
         "qs-housing",
         "bcs_housing",

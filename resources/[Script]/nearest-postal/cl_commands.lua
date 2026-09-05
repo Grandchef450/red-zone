@@ -8,8 +8,8 @@ local format = string.format
 --- [[ Nearest Postal Commands ]] ---
 ---
 
-TriggerEvent('chat:addSuggestion', '/postal', 'Set the GPS to a specific postal',
-             { { name = 'Postal Code', help = 'The postal code you would like to go to' } })
+TriggerEvent('chat:addSuggestion', '/postal', 'Régler le GPS vers un postal précis',
+             { { name = 'Code postal', help = 'Le code postal où vous voulez aller' } })
 
 RegisterCommand('postal', function(_, args)
     if #args < 1 then
@@ -20,7 +20,7 @@ RegisterCommand('postal', function(_, args)
             TriggerEvent('chat:addMessage', {
                 color = { 255, 0, 0 },
                 args = {
-                    'Postals',
+                    'Postal',
                     config.blip.deleteText
                 }
             })
@@ -53,7 +53,7 @@ RegisterCommand('postal', function(_, args)
         TriggerEvent('chat:addMessage', {
             color = { 255, 0, 0 },
             args = {
-                'Postals',
+                'Postal',
                 format(config.blip.drawRouteText, foundPostal.code)
             }
         })
@@ -61,7 +61,7 @@ RegisterCommand('postal', function(_, args)
         TriggerEvent('chat:addMessage', {
             color = { 255, 0, 0 },
             args = {
-                'Postals',
+                'Postal',
                 config.blip.notExistText
             }
         })

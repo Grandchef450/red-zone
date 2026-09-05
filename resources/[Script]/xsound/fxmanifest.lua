@@ -1,5 +1,15 @@
-server_script '@ElectronAC/src/include/server.lua'
-client_script '@ElectronAC/src/include/client.lua'
+--[[
+    ElectronAC reste verrouillé sur une autre IP et ne démarre pas
+    (ensure ElectronAC est commenté dans server.cfg). Une ressource
+    qui référence encore ses fichiers via @ElectronAC/... échoue au
+    chargement avec elle — xsound ne démarrait donc jamais, ce qui
+    coupait rz_boombox au passage (il en dépend).
+
+    Décommente les deux lignes le jour où ElectronAC fonctionne.
+]]
+
+-- server_script '@ElectronAC/src/include/server.lua'
+-- client_script '@ElectronAC/src/include/client.lua'
 
 
 

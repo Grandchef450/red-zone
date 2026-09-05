@@ -133,7 +133,7 @@ return {
         },
     },
     ['realestate'] = {
-        label = 'Real Estate',
+        label = 'Dynasty 8 Real Estate',
         type = 'realestate',
         defaultDuty = true,
         offDutyPay = false,

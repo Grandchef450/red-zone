@@ -1,11 +1,6 @@
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
+fx_version 'cerulean'
+game 'gta5'
+
 this_is_a_map 'yes'
 
-files {
-'peds.meta'
-}
-
-game 'gta5'
-fx_version 'cerulean'
-
-data_file 'PED_METADATA_FILE' 'peds.meta'
+-- Nettoyé le 2026-09-03 : peds.meta déclaré (files + PED_METADATA_FILE) mais absent.

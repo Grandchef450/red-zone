@@ -4,58 +4,8 @@ author 'OS-Mapping'
 
 this_is_a_map 'yes'
 
-files {
-    'r_2k12_kub.ydr',
-    'r_2k12_kub.ytyp',
-    'r_mi24_hind_crashed_woodland.ydr',
-    'r_mi24_hind_crashed_woodland.ytyp',
-    'r4bunker1.ydr',
-    'r4bunker1.ytyp',
-    'r4bunker2.ydr',
-    'r4bunker2.ytyp',
-    'r4bunker3.ydr',
-    'r4bunker3.ytyp',
-    'r4houser1.ydr',
-    'r4houser1.ytyp',
-    'r4housemed1.ydr',
-    'r4housemed1.ytyp',
-    'r4housemed2.ydr',
-    'r4housemed2.ytyp',
-    'r4housemed3.ydr',
-    'r4housemed3.ytyp',
-    'r4housemed4.ydr',
-    'r4housemed4.ytyp',
-    'r4housesm1.ydr',
-    'r4housesm1.ytyp',
-    'r4signfried.ydr',
-    'r4signfried.ytyp',
-    'sw2bmp2.ydr',
-    'sw2bmp2.ytyp',
-    'swbmp2.ydr',
-    'swbmp2.ytyp',
-    'swbtr80wheel1.ydr',
-    'swbtr80wheel1.ytyp',
-    'swbtr80wheel2.ydr',
-    'swbtr80wheel2.ytyp',
-    'swbtr80wheel3.ydr',
-    'swbtr80wheel3.ytyp',
-    'swbtr80wreck.ydr',
-    'swbtr80wreck.ytyp',
-    'swbtr80wreck2.ydr',
-    'swbtr80wreck2.ytyp',
-    'swbtr80wreck3.ydr',
-    'swbtr80wreck3.ytyp',
-    'swflak3.ydr',
-    'swflak3.ytyp',
-    'swhmmwv.ydr',
-    'swhmmwv.ytyp',
-    'swmlrs.ydr',
-    'swmlrs.ytyp',
-    'swtigr2.ydr',
-    'swtigr2.ytyp',
-    'swtigrwreck.ydr',
-    'swtigrwreck.ytyp',
-    'swtigrwreck2.ydr'
-}
+-- Nettoyé le 2026-09-03 : files{} racine retiré ; DLC_ITYP_REQUEST corrigé vers les .ytyp de stream/.
+-- Les fichiers de stream/ sont diffusés automatiquement, inutile
+-- de les lister dans files{}.
 
-data_file 'DLC_ITYP_REQUEST' 'Citysandy.ymap'
+data_file 'DLC_ITYP_REQUEST' 'stream/**.ytyp'

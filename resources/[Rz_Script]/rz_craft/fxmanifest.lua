@@ -26,12 +26,7 @@ server_scripts {
     'server/admin.lua',
 }
 
-files {
-    'locales/*.json',
-}
-
 ox_libs {
-    'locale',
     'table',
     'math',
 }

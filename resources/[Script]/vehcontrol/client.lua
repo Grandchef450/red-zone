@@ -273,15 +273,15 @@ end
 -----------------------------------------------------------------------------
 if UseCommands then
 	-- ENGINE
-	TriggerEvent('chat:addSuggestion', '/engine', 'Start/Stop Engine')
+	TriggerEvent('chat:addSuggestion', '/engine', 'Démarrer/Couper le moteur')
 
 	RegisterCommand("engine", function(source, args, rawCommand)
 		EngineControl()
 	end, false)
 
 	-- DOORS
-	TriggerEvent('chat:addSuggestion', '/door', 'Open/Close Vehicle Door', {
-		{ name="ID", help="1) Driver, 2) Passenger, 3) Driver Side Rear, 4) Passenger Side Rear" }
+	TriggerEvent('chat:addSuggestion', '/door', 'Ouvrir/Fermer une portière', {
+		{ name="ID", help="1) Conducteur, 2) Passager, 3) Arrière conducteur, 4) Arrière passager" }
 	})
 
 	RegisterCommand("door", function(source, args, rawCommand)
@@ -297,13 +297,13 @@ if UseCommands then
 				DoorControl(3)
 			end
 		else
-			TriggerEvent("chatMessage", "Usage: ", {255, 0, 0}, "/door [door id]")
+			TriggerEvent("chatMessage", "Utilisation : ", {255, 0, 0}, "/door [id de la portière]")
 		end
 	end, false)
 
 	-- SEAT
-	TriggerEvent('chat:addSuggestion', '/seat', 'Move to a seat', {
-		{ name="ID", help="1) Driver, 2) Passenger, 3) Driver Side Rear, 4) Passenger Side Rear" }
+	TriggerEvent('chat:addSuggestion', '/seat', 'Changer de siège', {
+		{ name="ID", help="1) Conducteur, 2) Passager, 3) Arrière conducteur, 4) Arrière passager" }
 	})
 
 	RegisterCommand("seat", function(source, args, rawCommand)
@@ -319,13 +319,13 @@ if UseCommands then
 				SeatControl(2)
 			end
 		else
-			TriggerEvent("chatMessage", "Usage: ", {255, 0, 0}, "/seat [seat id]")
+			TriggerEvent("chatMessage", "Utilisation : ", {255, 0, 0}, "/seat [id du siège]")
 		end
 	end, false)
 
 	-- WINDOWS
-	TriggerEvent('chat:addSuggestion', '/window', 'Roll Up/Down Window', {
-		{ name="ID", help="1) Driver, 2) Passenger, 3) Driver Side Rear, 4) Passenger Side Rear" }
+	TriggerEvent('chat:addSuggestion', '/window', 'Monter/Descendre une vitre', {
+		{ name="ID", help="1) Conducteur, 2) Passager, 3) Arrière conducteur, 4) Arrière passager" }
 	})
 
 	RegisterCommand("window", function(source, args, rawCommand)
@@ -342,40 +342,40 @@ if UseCommands then
 				WindowControl(3, 3)
 			end
 		else
-			TriggerEvent("chatMessage", "Usage: ", {255, 0, 0}, "/window [door id]")
+			TriggerEvent("chatMessage", "Utilisation : ", {255, 0, 0}, "/window [id de la vitre]")
 		end
 	end, false)
 
 	-- HOOD
-	TriggerEvent('chat:addSuggestion', '/hood', 'Open/Close Hood')
+	TriggerEvent('chat:addSuggestion', '/hood', 'Ouvrir/Fermer le capot')
 
 	RegisterCommand("hood", function(source, args, rawCommand)
 		DoorControl(4)
 	end, false)
 
 	-- TRUNK
-	TriggerEvent('chat:addSuggestion', '/trunk', 'Open/Close Trunk')
+	TriggerEvent('chat:addSuggestion', '/trunk', 'Ouvrir/Fermer le coffre')
 
 	RegisterCommand("trunk", function(source, args, rawCommand)
 		DoorControl(5)
 	end, false)
 
 	-- FRONT WINDOWS
-	TriggerEvent('chat:addSuggestion', '/windowfront', 'Roll Up/Down Front Windows')
+	TriggerEvent('chat:addSuggestion', '/windowfront', 'Monter/Descendre les vitres avant')
 
 	RegisterCommand("windowfront", function(source, args, rawCommand)
 		FrontWindowControl()
 	end, false)
 
 	-- BACK WINDOWS
-	TriggerEvent('chat:addSuggestion', '/windowback', 'Roll Up/Down Back Windows')
+	TriggerEvent('chat:addSuggestion', '/windowback', 'Monter/Descendre les vitres arrière')
 
 	RegisterCommand("windowback", function(source, args, rawCommand)
 		BackWindowControl()
 	end, false)
 
 	-- ALL WINDOWS
-	TriggerEvent('chat:addSuggestion', '/windowall', 'Roll Up/Down All Windows')
+	TriggerEvent('chat:addSuggestion', '/windowall', 'Monter/Descendre toutes les vitres')
 
 	RegisterCommand("windowall", function(source, args, rawCommand)
 		AllWindowControl()

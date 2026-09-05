@@ -27,6 +27,7 @@ Config.Bags = {
     sac_cafe_20    = { slots = 20,  opens = 400  },  --  4
     sac_survie_24  = { slots = 24,  opens = 500  },  --  5
     sac_survie_32  = { slots = 32,  opens = 800  },  --  8
+    boite_medical_20 = { slots = 20, opens = 600 },  --  6  (boîte médicale, rz_soins)
     sac_medical_50 = { slots = 50,  opens = 1000 },  -- 10
     sac_survie_64  = { slots = 64,  opens = 1200 },  -- 12
     sac_survie_72  = { slots = 72,  opens = 1800 },  -- 18
